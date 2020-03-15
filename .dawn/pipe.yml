@@ -1,0 +1,43 @@
+dev:
+  - name: clean
+    target:
+      - debug
+      - types
+  - name: typescript
+  - name: webpack
+    output: ./debug/
+    common:
+      disabled: true
+    entry: ./examples/*.tsx
+    template: ./assets/*.html
+    watch: true
+  - name: server
+    port: 7007
+    public: ./debug
+  - name: browser-sync
+
+build:
+  - name: clean
+    target:
+      - debug
+      - dist
+      - types
+  - name: shell
+    script:
+      - tsc --locale zh-cn -d --esModuleInterop
+
+test:
+  - name: clean
+    target:
+      - debug
+      - dist
+      - types
+  - name: tslint
+  - name: unit
+
+publish:
+  - name: shell
+    script:
+      - dn test
+      - dn build
+      - npm pu --registry=http://registry.npmjs.org
