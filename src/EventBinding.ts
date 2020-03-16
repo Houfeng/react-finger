@@ -2,39 +2,33 @@ import { END_EVENT_NAME, MOVE_EVENT_NAME, START_EVENT_NAME } from "./Constants";
 import { ITouchProps } from "./ITouchProps";
 import { TouchOptions } from "./TouchOptions";
 import { ICalcInfo } from "./ICalcInfo";
-import { ITouchEvent } from "./ITouchEvent";
-import { getEventTarget } from "./ITouchTarget";
+import { ITouchEvent, getTouchPoinsts } from "./ITouchEvent";
+import { getEventOwner } from "./ITouchOwner";
 
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
-    const point = event.changedTouches ? event.changedTouches[0] : event;
-    const target = getEventTarget(event);
-    target.startPoint = target.endPoint = {
-      x: point.pageX,
-      y: point.pageY,
-      timeStamp: event.timeStamp
-    };
+    const owner = getEventOwner(event);
+    owner.startPoints = owner.endPoints = getTouchPoinsts(event);
     const { onTapHold, onPointDown } = props;
     if (onTapHold) {
-      target.holdTimer = setTimeout(
-        () => onTapHold(event),
-        TouchOptions.holdDurationThreshold
-      );
+      owner.startHoldTimer(() => onTapHold(event));
     }
-    // 模拟鼠标事件
-    if (onPointDown) onPointDown(event);
+    if (onPointDown) {
+      onPointDown(event);
+    }
   };
 }
 
 export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
-    const target = getEventTarget(event);
+    const target = getEventOwner(event);
     const info = calcTouchInfo(event);
     const { onPointMove } = props;
-    if (info.isSwipeMove) clearTimeout(target.holdTimer);
-    // 模拟鼠标事件
+    if (info.isSwipeMove) {
+      target.clearHoldTimer();
+    }
     if (target.isPointDown && onPointMove) {
       onPointMove(event);
     }
@@ -44,15 +38,15 @@ export function createMoveHandler(props: ITouchProps) {
 export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
-    const target = getEventTarget(event);
+    const owner = getEventOwner(event);
+    owner.clearHoldTimer();
     const info = calcTouchInfo(event);
-    clearTimeout(target.holdTimer);
     const { onPointUp, onSwipe, onTap, onDoubleTap } = props;
     const onSwipeX = props["onSwipe" + info.direction];
     // 模拟鼠标事件
     if (onPointUp) {
       onPointUp(event);
-      target.isPointDown = false;
+      owner.isPointDown = false;
     }
     // 根据计算结果判断
     if (info.isSwipeTime && info.isSwipeMove) {
@@ -64,15 +58,15 @@ export function createEndHandler(props: ITouchProps) {
       if (onTap) onTap(event);
       if (onDoubleTap) {
         // 处理 “双击”
-        target.doubleTap =
-          target.prevTapTime &&
-          info.timeStamp - target.prevTapTime <=
-            TouchOptions.dblDurationThreshold;
-        if (target.doubleTap) {
+        owner.isDoubleTap =
+          owner.lastTapTime &&
+          info.timeStamp - owner.lastTapTime <=
+          TouchOptions.dblDurationThreshold;
+        if (owner.isDoubleTap) {
           onDoubleTap(event);
-          target.prevTapTime = null;
+          owner.lastTapTime = null;
         } else {
-          target.prevTapTime = target.endPoint.timeStamp;
+          owner.lastTapTime = owner.endPoint.timeStamp;
         }
       }
     }
@@ -81,22 +75,17 @@ export function createEndHandler(props: ITouchProps) {
 
 export function calcTouchInfo(event: any) {
   event = Object.create(event);
-  const point = event.changedTouches ? event.changedTouches[0] : event;
-  const target = getEventTarget(event);
-  target.endPoint = {
-    x: point.pageX,
-    y: point.pageY,
-    timeStamp: event.timeStamp
-  };
+  const owner = getEventOwner(event);
+  owner.endPoints = getTouchPoinsts(event);
   // 一些计算结果
   const info: ICalcInfo = {};
-  info.timeStamp = target.endPoint ? target.endPoint.timeStamp : null;
-  info.existStartAndStop = !!(target.endPoint && target.startPoint);
+  info.timeStamp = owner.endPoint ? owner.endPoint.timeStamp : null;
+  info.existStartAndStop = !!(owner.endPoint && owner.startPoint);
   info.horizontalDistance = info.existStartAndStop
-    ? target.endPoint.x - target.startPoint.x
+    ? owner.endPoint.x - owner.startPoint.x
     : 0;
   info.verticalDistance = info.existStartAndStop
-    ? target.endPoint.y - target.startPoint.y
+    ? owner.endPoint.y - owner.startPoint.y
     : 0;
   info.horizontalDistanceValue = Math.abs(info.horizontalDistance);
   info.verticalDistanceVlaue = Math.abs(info.verticalDistance);
@@ -105,15 +94,15 @@ export function calcTouchInfo(event: any) {
   info.isVertical = !info.isHorizontal;
   info.isSwipeMove =
     info.horizontalDistanceValue >=
-      TouchOptions.swipeHorizontalDistanceThreshold ||
+    TouchOptions.swipeHorizontalDistanceThreshold ||
     info.verticalDistanceVlaue >= TouchOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
-    ? target.endPoint.timeStamp - target.startPoint.timeStamp <=
-      TouchOptions.swipeDurationThreshold
+    ? owner.endPoint.timeStamp - owner.startPoint.timeStamp <=
+    TouchOptions.swipeDurationThreshold
     : true;
   info.isHoldTime = info.existStartAndStop
-    ? target.endPoint.timeStamp - target.startPoint.timeStamp >=
-      TouchOptions.holdDurationThreshold
+    ? owner.endPoint.timeStamp - owner.startPoint.timeStamp >=
+    TouchOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素
   if (info.isHorizontal && info.horizontalDistance > 0) {

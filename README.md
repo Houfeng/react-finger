@@ -1,6 +1,6 @@
 # Mota Touch
 
-Mota Touch 基于 Mota 同时兼容 PC & Mobile 的事件扩展，让基于 React + Mota 的移动应用
+Mota Touch 是基于 Mota 同时兼容 PC & Mobile 的事件扩展，让基于 React + Mota 的移动应用
 开发变得更加便捷。
 
 ## 基本使用
@@ -46,8 +46,8 @@ const App = touch(()=>{
   const onTap = ()=>{
     console.log('onTap', event);
   }
-  return <div onTap={this.onTap}></div>
-});
+  return <div onTap={onTap}></div>
+},{});
 
 ```
 

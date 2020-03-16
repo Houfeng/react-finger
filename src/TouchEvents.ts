@@ -9,6 +9,7 @@ export const TouchEventNameList = [
   "onSwipeRight",
   "onSwipeDown",
   "onSwipeLeft",
+  "onScale",
   "onPointDown",
   "onPointMove",
   "onPointUp"
@@ -23,6 +24,7 @@ export type TouchEventNames =
   | "onSwipeRight"
   | "onSwipeDown"
   | "onSwipeLeft"
+  | "onScale"
   | "onPointDown"
   | "onPointMove"
   | "onPointUp";
