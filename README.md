@@ -35,7 +35,7 @@ export class App extends React.Component {
 
 ```
 
-在类组件中使用
+在函数组件中使用
 
 ```jsx
 import React from 'react';
