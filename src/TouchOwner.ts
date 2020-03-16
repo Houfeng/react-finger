@@ -34,7 +34,6 @@ export class TouchOwner implements TouchOwner {
     Object.assign(event, this);
     handlers.forEach(handler => handler && handler(event));
   }
-
 }
 
 export function getEventOwner(event: ITouchEvent): TouchOwner {

@@ -38,7 +38,6 @@ export function findTouchEvents(props: ITouchProps) {
   );
 }
 
-
 export interface ITouchEvent<T extends HTMLElement = HTMLElement>
   extends TouchEvent<T> {
   pageX: number;
