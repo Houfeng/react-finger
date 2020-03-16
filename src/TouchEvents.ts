@@ -49,7 +49,7 @@ export interface ITouchEvent<T extends HTMLElement = HTMLElement>
 
 export function getTouchPoinsts(event: ITouchEvent): ITouchPoint[] {
   const { changedTouches } = event;
-  const list: any = changedTouches ? changedTouches : [event];
+  const list: any = changedTouches ? [].slice.call(changedTouches) : [event];
   return list.map((item: Touch) => ({
     x: item.pageX,
     y: item.pageY,

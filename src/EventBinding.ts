@@ -53,7 +53,7 @@ export function createEndHandler(props: ITouchProps) {
         owner.isDoubleTap =
           owner.lastTapTime &&
           info.timeStamp - owner.lastTapTime <=
-            TouchOptions.dblDurationThreshold;
+          TouchOptions.dblDurationThreshold;
         if (owner.isDoubleTap) {
           owner.emit(event, onDoubleTap);
           owner.lastTapTime = null;
@@ -86,15 +86,15 @@ export function calcTouchInfo(event: any) {
   info.isVertical = !info.isHorizontal;
   info.isSwipeMove =
     info.horizontalDistanceValue >=
-      TouchOptions.swipeHorizontalDistanceThreshold ||
+    TouchOptions.swipeHorizontalDistanceThreshold ||
     info.verticalDistanceVlaue >= TouchOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
     ? owner.endPoint.timeStamp - owner.startPoint.timeStamp <=
-      TouchOptions.swipeDurationThreshold
+    TouchOptions.swipeDurationThreshold
     : true;
   info.isHoldTime = info.existStartAndStop
     ? owner.endPoint.timeStamp - owner.startPoint.timeStamp >=
-      TouchOptions.holdDurationThreshold
+    TouchOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素
   if (info.isHorizontal && info.horizontalDistance > 0) {
