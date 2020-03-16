@@ -7,3 +7,9 @@ debug/
 src/
 assets/
 test/
+examples/
+tslint.json
+tsconfig.json
+.eslintrc.yml
+server.yml
+.dawn
