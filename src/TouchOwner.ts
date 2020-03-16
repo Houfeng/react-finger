@@ -11,6 +11,7 @@ export class TouchOwner implements TouchOwner {
   public isDoubleTap?: boolean;
   public isSwipe?: boolean;
   public direction?: string;
+  public scale?: number;
   protected holdTimer?: number;
 
   public get startPoint() {

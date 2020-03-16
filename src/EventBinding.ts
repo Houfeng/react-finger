@@ -4,6 +4,7 @@ import { TouchOptions } from "./TouchOptions";
 import { ICalcInfo } from "./ICalcInfo";
 import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
 import { getEventOwner } from "./TouchOwner";
+import { calcDistance } from "./VectorHelper";
 
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
@@ -25,8 +26,14 @@ export function createMoveHandler(props: ITouchProps) {
     const owner = getEventOwner(event);
     const info = calcTouchInfo(event);
     if (info.isSwipeMove) owner.clearHoldTimer();
-    const { onPointMove } = props;
+    const { onPointMove, onScale } = props;
     owner.emit(event, onPointMove);
+    if (owner.endPoints.length === 2 && owner.startPoints.length == 2) {
+      const origin = calcDistance(owner.startPoints[0], owner.startPoints[1]);
+      const latest = calcDistance(owner.endPoints[0], owner.endPoints[1])
+      owner.scale = origin / latest;
+      owner.emit(event, onScale);
+    }
   };
 }
 

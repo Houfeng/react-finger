@@ -12,7 +12,7 @@ dev:
     template: ./assets/*.html
     watch: true
   - name: server
-    port: 7007
+    port: 5006
     public: ./debug
   - name: browser-sync
 
