@@ -12,4 +12,5 @@ tslint.json
 tsconfig.json
 .eslintrc.yml
 server.yml
-.dawn
+.dawn/
+*.js.map
