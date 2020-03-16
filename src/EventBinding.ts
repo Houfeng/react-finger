@@ -28,7 +28,7 @@ export function createMoveHandler(props: ITouchProps) {
     if (info.isSwipeMove) owner.clearHoldTimer();
     const { onPointMove, onScale } = props;
     owner.emit(event, onPointMove);
-    if (owner.endPoints.length === 2 && owner.startPoints.length == 2) {
+    if (owner.endPoints.length === 2 && owner.startPoints.length === 2) {
       const origin = calcDistance(owner.startPoints[0], owner.startPoints[1]);
       const latest = calcDistance(owner.endPoints[0], owner.endPoints[1])
       owner.scale = origin / latest;
@@ -57,10 +57,9 @@ export function createEndHandler(props: ITouchProps) {
       owner.emit(event, onTap);
       if (onDoubleTap) {
         // 处理 “双击”
-        owner.isDoubleTap =
-          owner.lastTapTime &&
-          info.timeStamp - owner.lastTapTime <=
-          TouchOptions.dblDurationThreshold;
+        owner.isDoubleTap = owner.lastTapTime &&
+          (info.timeStamp - owner.lastTapTime <=
+            TouchOptions.dblDurationThreshold);
         if (owner.isDoubleTap) {
           owner.emit(event, onDoubleTap);
           owner.lastTapTime = null;

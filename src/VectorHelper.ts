@@ -1,4 +1,4 @@
-import { ITouchPoint } from './ITouchPoint';
+import { ITouchPoint } from "./ITouchPoint";
 
 export function calcDistance(from: ITouchPoint, to: ITouchPoint) {
   const x = to.x - from.x;
