@@ -64,6 +64,7 @@ Mota Touch 支持多种常用的手势事件，并且所有事件都自动兼容
   "onSwipeRight",
   "onSwipeDown",
   "onSwipeLeft",
+  "onScale",
   "onPointDown",
   "onPointMove",
   "onPointUp"
