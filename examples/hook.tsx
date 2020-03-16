@@ -9,7 +9,7 @@ export const App = touch(function App() {
   }
   return <div style={{
     width: 300,
-    height: 200,
+    height: 400,
     margin: "auto",
     border: "8px solid #333"
   }}

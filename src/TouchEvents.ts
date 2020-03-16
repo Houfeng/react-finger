@@ -1,6 +1,7 @@
 import { ITouchProps } from "./ITouchProps";
 import { TouchEvent, TouchList } from "react";
 import { ITouchPoint } from "./ITouchPoint";
+import { TouchOwner } from "./TouchOwner";
 
 export const TouchEventNameList = [
   "onTap",
@@ -39,7 +40,8 @@ export function findTouchEvents(props: ITouchProps) {
 }
 
 export interface ITouchEvent<T extends HTMLElement = HTMLElement>
-  extends TouchEvent<T> {
+  extends TouchEvent<T>,
+    TouchOwner {
   pageX: number;
   pageY: number;
   changedTouches: TouchList;

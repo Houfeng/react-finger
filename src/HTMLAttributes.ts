@@ -11,6 +11,7 @@ declare module "react" {
     onSwipeRight?: ITouchHandler;
     onSwipeDown?: ITouchHandler;
     onSwipeLeft?: ITouchHandler;
+    onScale?: ITouchHandler;
     onPointDown?: ITouchHandler;
     onPointMove?: ITouchHandler;
     onPointUp?: ITouchHandler;
@@ -26,6 +27,7 @@ declare module "react" {
     onSwipeRight?: ITouchHandler;
     onSwipeDown?: ITouchHandler;
     onSwipeLeft?: ITouchHandler;
+    onScale?: ITouchHandler;
     onPointDown?: ITouchHandler;
     onPointMove?: ITouchHandler;
     onPointUp?: ITouchHandler;

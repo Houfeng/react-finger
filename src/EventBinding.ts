@@ -28,10 +28,14 @@ export function createMoveHandler(props: ITouchProps) {
     if (info.isSwipeMove) owner.clearHoldTimer();
     const { onPointMove, onScale } = props;
     owner.emit(event, onPointMove);
-    if (owner.endPoints.length === 2 && owner.startPoints.length === 2) {
+    if (
+      owner.isPointDown &&
+      owner.endPoints.length === 2 &&
+      owner.startPoints.length === 2
+    ) {
       const origin = calcDistance(owner.startPoints[0], owner.startPoints[1]);
-      const latest = calcDistance(owner.endPoints[0], owner.endPoints[1])
-      owner.scale = origin / latest;
+      const latest = calcDistance(owner.endPoints[0], owner.endPoints[1]);
+      owner.scale = latest / origin;
       owner.emit(event, onScale);
     }
   };
@@ -57,9 +61,10 @@ export function createEndHandler(props: ITouchProps) {
       owner.emit(event, onTap);
       if (onDoubleTap) {
         // 处理 “双击”
-        owner.isDoubleTap = owner.lastTapTime &&
-          (info.timeStamp - owner.lastTapTime <=
-            TouchOptions.dblDurationThreshold);
+        owner.isDoubleTap =
+          owner.lastTapTime &&
+          info.timeStamp - owner.lastTapTime <=
+            TouchOptions.dblDurationThreshold;
         if (owner.isDoubleTap) {
           owner.emit(event, onDoubleTap);
           owner.lastTapTime = null;
@@ -92,15 +97,15 @@ export function calcTouchInfo(event: any) {
   info.isVertical = !info.isHorizontal;
   info.isSwipeMove =
     info.horizontalDistanceValue >=
-    TouchOptions.swipeHorizontalDistanceThreshold ||
+      TouchOptions.swipeHorizontalDistanceThreshold ||
     info.verticalDistanceVlaue >= TouchOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
     ? owner.endPoint.timeStamp - owner.startPoint.timeStamp <=
-    TouchOptions.swipeDurationThreshold
+      TouchOptions.swipeDurationThreshold
     : true;
   info.isHoldTime = info.existStartAndStop
     ? owner.endPoint.timeStamp - owner.startPoint.timeStamp >=
-    TouchOptions.holdDurationThreshold
+      TouchOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素
   if (info.isHorizontal && info.horizontalDistance > 0) {
@@ -116,6 +121,10 @@ export function calcTouchInfo(event: any) {
 }
 
 export function createAttachProps(props: ITouchProps): ITouchProps {
+  // fix: ios 10+
+  if (props.onScale) {
+    document.addEventListener("gesturestart", event => event.preventDefault());
+  }
   return {
     [START_EVENT_NAME]: createStartHandler(props),
     [MOVE_EVENT_NAME]: createMoveHandler(props),
