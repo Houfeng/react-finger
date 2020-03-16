@@ -7,6 +7,7 @@ import { getEventTarget } from "./ITouchTarget";
 
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
+    event = Object.create(event);
     const point = event.changedTouches ? event.changedTouches[0] : event;
     const target = getEventTarget(event);
     target.startPoint = target.endPoint = {
@@ -28,6 +29,7 @@ export function createStartHandler(props: ITouchProps) {
 
 export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
+    event = Object.create(event);
     const target = getEventTarget(event);
     const info = calcTouchInfo(event);
     const { onPointMove } = props;
@@ -41,11 +43,12 @@ export function createMoveHandler(props: ITouchProps) {
 
 export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
+    event = Object.create(event);
     const target = getEventTarget(event);
     const info = calcTouchInfo(event);
     clearTimeout(target.holdTimer);
     const { onPointUp, onSwipe, onTap, onDoubleTap } = props;
-    const onSwipeX = props["onSwipe" + event.direction];
+    const onSwipeX = props["onSwipe" + info.direction];
     // 模拟鼠标事件
     if (onPointUp) {
       onPointUp(event);
@@ -77,6 +80,7 @@ export function createEndHandler(props: ITouchProps) {
 }
 
 export function calcTouchInfo(event: any) {
+  event = Object.create(event);
   const point = event.changedTouches ? event.changedTouches[0] : event;
   const target = getEventTarget(event);
   target.endPoint = {
