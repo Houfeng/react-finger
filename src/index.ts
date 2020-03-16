@@ -3,7 +3,6 @@ import "./HTMLAttributes";
 export * from "./EventBinding";
 export * from "./Constants";
 export * from "./ICalcInfo";
-export * from "./ITouchEvent";
 export * from "./ITouchHandler";
 export * from "./ITouchPoint";
 export * from "./ITouchProps";

@@ -1,6 +1,7 @@
 import { ITouchPoint } from "./ITouchPoint";
-import { ITouchEvent } from "./ITouchEvent";
+import { ITouchEvent } from "./TouchEvents";
 import { TouchOptions } from "./TouchOptions";
+import { ITouchHandler } from "./ITouchHandler";
 
 export class TouchOwner implements TouchOwner {
   public startPoints?: ITouchPoint[];
@@ -8,6 +9,8 @@ export class TouchOwner implements TouchOwner {
   public isPointDown?: boolean;
   public lastTapTime?: number;
   public isDoubleTap?: boolean;
+  public isSwipe?: boolean;
+  public direction?: string;
   protected holdTimer?: number;
 
   public get startPoint() {
@@ -25,6 +28,13 @@ export class TouchOwner implements TouchOwner {
   public clearHoldTimer() {
     clearTimeout(this.holdTimer);
   }
+
+  public emit(event: ITouchEvent, ...handlers: ITouchHandler[]) {
+    if (!handlers) return;
+    Object.assign(event, this);
+    handlers.forEach(handler => handler && handler(event));
+  }
+
 }
 
 export function getEventOwner(event: ITouchEvent): TouchOwner {

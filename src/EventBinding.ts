@@ -2,36 +2,31 @@ import { END_EVENT_NAME, MOVE_EVENT_NAME, START_EVENT_NAME } from "./Constants";
 import { ITouchProps } from "./ITouchProps";
 import { TouchOptions } from "./TouchOptions";
 import { ICalcInfo } from "./ICalcInfo";
-import { ITouchEvent, getTouchPoinsts } from "./ITouchEvent";
-import { getEventOwner } from "./ITouchOwner";
+import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
+import { getEventOwner } from "./TouchOwner";
 
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
     const owner = getEventOwner(event);
     owner.startPoints = owner.endPoints = getTouchPoinsts(event);
+    owner.isPointDown = true;
     const { onTapHold, onPointDown } = props;
     if (onTapHold) {
-      owner.startHoldTimer(() => onTapHold(event));
+      owner.startHoldTimer(() => owner.emit(event, onTapHold));
     }
-    if (onPointDown) {
-      onPointDown(event);
-    }
+    owner.emit(event, onPointDown);
   };
 }
 
 export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
-    const target = getEventOwner(event);
+    const owner = getEventOwner(event);
     const info = calcTouchInfo(event);
+    if (info.isSwipeMove) owner.clearHoldTimer();
     const { onPointMove } = props;
-    if (info.isSwipeMove) {
-      target.clearHoldTimer();
-    }
-    if (target.isPointDown && onPointMove) {
-      onPointMove(event);
-    }
+    owner.emit(event, onPointMove);
   };
 }
 
@@ -40,22 +35,19 @@ export function createEndHandler(props: ITouchProps) {
     event = Object.create(event);
     const owner = getEventOwner(event);
     owner.clearHoldTimer();
+    owner.isPointDown = false;
     const info = calcTouchInfo(event);
     const { onPointUp, onSwipe, onTap, onDoubleTap } = props;
     const onSwipeX = props["onSwipe" + info.direction];
-    // 模拟鼠标事件
-    if (onPointUp) {
-      onPointUp(event);
-      owner.isPointDown = false;
-    }
+    owner.emit(event, onPointUp);
     // 根据计算结果判断
     if (info.isSwipeTime && info.isSwipeMove) {
-      event.swipe = true;
-      event.direction = info.direction;
-      if (onSwipe) onSwipe(event);
-      if (onSwipeX) onSwipeX(event);
+      owner.isSwipe = true;
+      owner.direction = info.direction;
+      owner.emit(event, onSwipe);
+      owner.emit(event, onSwipeX);
     } else if (info.isSwipeTime && !info.isSwipeMove && !info.isHoldTime) {
-      if (onTap) onTap(event);
+      owner.emit(event, onTap);
       if (onDoubleTap) {
         // 处理 “双击”
         owner.isDoubleTap =
@@ -63,7 +55,7 @@ export function createEndHandler(props: ITouchProps) {
           info.timeStamp - owner.lastTapTime <=
           TouchOptions.dblDurationThreshold;
         if (owner.isDoubleTap) {
-          onDoubleTap(event);
+          owner.emit(event, onDoubleTap);
           owner.lastTapTime = null;
         } else {
           owner.lastTapTime = owner.endPoint.timeStamp;
