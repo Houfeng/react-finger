@@ -55,9 +55,7 @@ const App = touch(()=>{
 
 Mota Touch 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
 
-<style>table {width:100%;}</style>
-
-事件 | 设备 | 说明  
+事件&nbsp;&nbsp;&nbsp;&nbsp; | 设备&nbsp;&nbsp;&nbsp;&nbsp; | 说明&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 ------- | ------- | -------  
 onTap | MOBILE & PC | 点击 
 onTapHold | MOBILE & PC | 长按  
