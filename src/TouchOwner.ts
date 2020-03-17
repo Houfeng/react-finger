@@ -13,6 +13,8 @@ export class TouchOwner implements TouchOwner {
   public isPinch?: boolean;
   public direction?: string;
   public scale?: number;
+  public distanceX?: number;
+  public distanceY?: number;
   protected holdTimer?: number;
 
   public get startPoint() {
