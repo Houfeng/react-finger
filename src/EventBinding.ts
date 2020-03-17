@@ -10,7 +10,7 @@ export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
     const owner = getEventOwner(event);
-    owner.startPoints = owner.endPoints = getTouchPoinsts(event);
+    owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
     const { onTapHold, onPointDown } = props;
     if (onTapHold) {
@@ -30,11 +30,11 @@ export function createMoveHandler(props: ITouchProps) {
     owner.emit(event, onPointMove);
     if (
       owner.isPointDown &&
-      owner.endPoints.length === 2 &&
+      owner.lastPoints.length === 2 &&
       owner.startPoints.length === 2
     ) {
       const origin = calcDistance(owner.startPoints[0], owner.startPoints[1]);
-      const latest = calcDistance(owner.endPoints[0], owner.endPoints[1]);
+      const latest = calcDistance(owner.lastPoints[0], owner.lastPoints[1]);
       owner.scale = latest / origin;
       owner.emit(event, onScale);
     }
@@ -69,7 +69,7 @@ export function createEndHandler(props: ITouchProps) {
           owner.emit(event, onDoubleTap);
           owner.lastTapTime = null;
         } else {
-          owner.lastTapTime = owner.endPoint.timeStamp;
+          owner.lastTapTime = owner.lastPoint.timeStamp;
         }
       }
     }
@@ -79,16 +79,16 @@ export function createEndHandler(props: ITouchProps) {
 export function calcTouchInfo(event: any) {
   event = Object.create(event);
   const owner = getEventOwner(event);
-  owner.endPoints = getTouchPoinsts(event);
+  owner.lastPoints = getTouchPoinsts(event);
   // 一些计算结果
   const info: ICalcInfo = {};
-  info.timeStamp = owner.endPoint ? owner.endPoint.timeStamp : null;
-  info.existStartAndStop = !!(owner.endPoint && owner.startPoint);
+  info.timeStamp = owner.lastPoint ? owner.lastPoint.timeStamp : null;
+  info.existStartAndStop = !!(owner.lastPoint && owner.startPoint);
   info.horizontalDistance = info.existStartAndStop
-    ? owner.endPoint.x - owner.startPoint.x
+    ? owner.lastPoint.x - owner.startPoint.x
     : 0;
   info.verticalDistance = info.existStartAndStop
-    ? owner.endPoint.y - owner.startPoint.y
+    ? owner.lastPoint.y - owner.startPoint.y
     : 0;
   info.horizontalDistanceValue = Math.abs(info.horizontalDistance);
   info.verticalDistanceVlaue = Math.abs(info.verticalDistance);
@@ -100,11 +100,11 @@ export function calcTouchInfo(event: any) {
       TouchOptions.swipeHorizontalDistanceThreshold ||
     info.verticalDistanceVlaue >= TouchOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
-    ? owner.endPoint.timeStamp - owner.startPoint.timeStamp <=
+    ? owner.lastPoint.timeStamp - owner.startPoint.timeStamp <=
       TouchOptions.swipeDurationThreshold
     : true;
   info.isHoldTime = info.existStartAndStop
-    ? owner.endPoint.timeStamp - owner.startPoint.timeStamp >=
+    ? owner.lastPoint.timeStamp - owner.startPoint.timeStamp >=
       TouchOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素

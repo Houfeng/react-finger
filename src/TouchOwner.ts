@@ -5,7 +5,7 @@ import { ITouchHandler } from "./ITouchHandler";
 
 export class TouchOwner implements TouchOwner {
   public startPoints?: ITouchPoint[];
-  public endPoints?: ITouchPoint[];
+  public lastPoints?: ITouchPoint[];
   public isPointDown?: boolean;
   public lastTapTime?: number;
   public isDoubleTap?: boolean;
@@ -18,8 +18,8 @@ export class TouchOwner implements TouchOwner {
     return this.startPoints?.[0];
   }
 
-  public get endPoint() {
-    return this.endPoints?.[0];
+  public get lastPoint() {
+    return this.lastPoints?.[0];
   }
 
   public startHoldTimer(done: Function) {
