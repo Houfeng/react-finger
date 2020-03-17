@@ -12,11 +12,16 @@ export function createStartHandler(props: ITouchProps) {
     const owner = getEventOwner(event);
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
-    const { onTapHold, onPointDown } = props;
+    const { onTapHold, onPointDown, onPinchStart } = props;
     if (onTapHold) {
       owner.startHoldTimer(() => owner.emit(event, onTapHold));
     }
     owner.emit(event, onPointDown);
+    // Pinch
+    if (owner.lastPoints.length === 2 && owner.startPoints.length === 2) {
+      owner.isPinch = true;
+      owner.emit(event, onPinchStart);
+    }
   };
 }
 
@@ -27,17 +32,18 @@ export function createMoveHandler(props: ITouchProps) {
     owner.lastPoints = getTouchPoinsts(event);
     const info = calcTouchInfo(owner);
     if (info.isSwipeMove) owner.clearHoldTimer();
-    const { onPointMove, onScale } = props;
+    const { onPointMove, onPinch } = props;
     owner.emit(event, onPointMove);
     if (
       owner.isPointDown &&
       owner.lastPoints.length === 2 &&
       owner.startPoints.length === 2
     ) {
+      owner.isPinch = true;
       const origin = calcDistance(owner.startPoints[0], owner.startPoints[1]);
       const latest = calcDistance(owner.lastPoints[0], owner.lastPoints[1]);
       owner.scale = latest / origin;
-      owner.emit(event, onScale);
+      owner.emit(event, onPinch);
     }
   };
 }
@@ -49,9 +55,13 @@ export function createEndHandler(props: ITouchProps) {
     const info = calcTouchInfo(owner);
     owner.isPointDown = false;
     owner.clearHoldTimer();
-    const { onPointUp, onSwipe, onTap, onDoubleTap } = props;
+    const { onPointUp, onSwipe, onTap, onDoubleTap, onPinchEnd } = props;
     const onSwipeX = props["onSwipe" + info.direction];
     owner.emit(event, onPointUp);
+    // Pinch 事件
+    if (owner.isPinch) {
+      owner.emit(event, onPinchEnd);
+    }
     // 根据计算结果判断
     if (info.isSwipeTime && info.isSwipeMove) {
       owner.isSwipe = true;
@@ -119,7 +129,8 @@ export function calcTouchInfo(owner: TouchOwner) {
 
 export function createAttachProps(props: ITouchProps): ITouchProps {
   // fix: ios 10+
-  if (props.onScale) {
+  const { onPinchStart, onPinch, onPinchEnd } = props;
+  if (onPinchStart || onPinch || onPinchEnd) {
     document.addEventListener("gesturestart", event => event.preventDefault());
   }
   return {

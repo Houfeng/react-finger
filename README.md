@@ -56,16 +56,22 @@ const App = touch(()=>{
 Mota Touch 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
 
 ```ts
-  "onTap",
-  "onTapHold",
-  "onDoubleTap",
-  "onSwipe",
-  "onSwipeUp",
-  "onSwipeRight",
-  "onSwipeDown",
-  "onSwipeLeft",
-  "onScale",
-  "onPointDown",
-  "onPointMove",
-  "onPointUp"
+// tap
+onTap?: ITouchHandler;
+onTapHold?: ITouchHandler;
+onDoubleTap?: ITouchHandler;
+// swipe
+onSwipe?: ITouchHandler;
+onSwipeUp?: ITouchHandler;
+onSwipeRight?: ITouchHandler;
+onSwipeDown?: ITouchHandler;
+onSwipeLeft?: ITouchHandler;
+// pinch
+onPinchStart?: ITouchHandler;
+onPinch?: ITouchHandler;
+onPinchEnd?: ITouchHandler;
+// point
+onPointDown?: ITouchHandler;
+onPointMove?: ITouchHandler;
+onPointUp?: ITouchHandler;
 ```

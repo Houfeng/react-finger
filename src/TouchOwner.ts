@@ -10,6 +10,7 @@ export class TouchOwner implements TouchOwner {
   public lastTapTime?: number;
   public isDoubleTap?: boolean;
   public isSwipe?: boolean;
+  public isPinch?: boolean;
   public direction?: string;
   public scale?: number;
   protected holdTimer?: number;

@@ -11,7 +11,9 @@ export const App = touch(function App() {
     width: 260,
     height: 200,
     margin: "auto",
-    border: "8px solid #333"
+    border: "8px solid #333",
+    transitionDuration: ".3s",
+    background: "#fff",
   }}
     onSwipeLeft={() => { console.log('onSwipeLeft') }}
     onSwipeRight={() => { console.log('onSwipeRight') }}
