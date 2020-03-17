@@ -3,7 +3,7 @@ import { ITouchProps } from "./ITouchProps";
 import { TouchOptions } from "./TouchOptions";
 import { ICalcInfo } from "./ICalcInfo";
 import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
-import { getEventOwner } from "./TouchOwner";
+import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { calcDistance } from "./VectorHelper";
 
 export function createStartHandler(props: ITouchProps) {
@@ -24,7 +24,8 @@ export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
     const owner = getEventOwner(event);
-    const info = calcTouchInfo(event);
+    owner.lastPoints = getTouchPoinsts(event);
+    const info = calcTouchInfo(owner);
     if (info.isSwipeMove) owner.clearHoldTimer();
     const { onPointMove, onScale } = props;
     owner.emit(event, onPointMove);
@@ -45,9 +46,9 @@ export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = Object.create(event);
     const owner = getEventOwner(event);
-    owner.clearHoldTimer();
+    const info = calcTouchInfo(owner);
     owner.isPointDown = false;
-    const info = calcTouchInfo(event);
+    owner.clearHoldTimer();
     const { onPointUp, onSwipe, onTap, onDoubleTap } = props;
     const onSwipeX = props["onSwipe" + info.direction];
     owner.emit(event, onPointUp);
@@ -76,11 +77,7 @@ export function createEndHandler(props: ITouchProps) {
   };
 }
 
-export function calcTouchInfo(event: any) {
-  event = Object.create(event);
-  const owner = getEventOwner(event);
-  owner.lastPoints = getTouchPoinsts(event);
-  // 一些计算结果
+export function calcTouchInfo(owner: TouchOwner) {
   const info: ICalcInfo = {};
   info.timeStamp = owner.lastPoint ? owner.lastPoint.timeStamp : null;
   info.existStartAndStop = !!(owner.lastPoint && owner.startPoint);

@@ -8,8 +8,8 @@ export const App = touch(function App() {
     console.log('onTap');
   }
   return <div style={{
-    width: 300,
-    height: 400,
+    width: 260,
+    height: 200,
     margin: "auto",
     border: "8px solid #333"
   }}

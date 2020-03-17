@@ -19,20 +19,23 @@ export class App extends React.Component {
 
   onScale = (event: ITouchEvent) => {
     event.preventDefault();
+    event.stopPropagation();
     this.model.scale = event.scale;
-    console.log('onScale', event.scale);
   }
 
   render() {
     return <div style={{
-      width: 300,
-      height: 400,
+      width: 260,
+      height: 200,
       margin: "auto",
       border: "8px solid #333",
-      transform: `scale(${this.model.scale})`
+      transitionDuration: ".3s",
+      transform: `scale(${this.model.scale}) translateZ(0)`
     }}
+      onSwipeLeft={this.onTap}
       onScale={this.onScale}
       onTap={this.onTap}>
+      {this.model.scale}
     </div>
   }
 }
