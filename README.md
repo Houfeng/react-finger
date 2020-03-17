@@ -55,7 +55,6 @@ const App = touch(()=>{
 
 Mota Touch 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
 
-```ts
 事件 | 设备 | 说明  
 ------- | ------- | -------  
 onTap | MOBILE & PC | 点击 
@@ -72,4 +71,3 @@ onPinchEnd | MOBILE | 手势结束（两点）
 onPointDown | MOBILE & PC | 在按下时
 onPointMove | MOBILE & PC | 在移动时
 onPointUp |  MOBILE & PC | 在弹起时
-```
