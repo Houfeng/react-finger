@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { model } from "mota";
 import { touch, ITouchEvent } from "../src";
 // import "../src/HTMLAttributes";
+import { EventProxy } from '../src/EventProxy';
 
 const root = document.getElementById("root");
 const data = {
@@ -42,11 +43,12 @@ export class App extends React.Component {
       transform: `scale(${scale}) translateZ(0)`
     }}
       onSwipeLeft={this.onTap}
-      onPinch={this.onPinch}
-      onPinchEnd={this.onPinchEnd}
       onTap={this.onTap}>
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
+      <EventProxy target={document}
+        onPinch={this.onPinch}
+        onPinchEnd={this.onPinchEnd} />
     </div>
   }
 }

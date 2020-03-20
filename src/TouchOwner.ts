@@ -41,7 +41,7 @@ export class TouchOwner implements TouchOwner {
 }
 
 export function getEventOwner(event: ITouchEvent): TouchOwner {
-  const target = event.target as any;
+  const target = event.currentTarget as any;
   if (!target.__mota_touch__) {
     target.__mota_touch__ = new TouchOwner();
   }

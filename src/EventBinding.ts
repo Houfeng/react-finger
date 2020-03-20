@@ -6,9 +6,13 @@ import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
 import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { calcDistance } from "./VectorHelper";
 
+export function createEvent(event: ITouchEvent) {
+  return event instanceof Event ? event : Object.create(event);
+}
+
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
-    event = Object.create(event);
+    event = createEvent(event);
     const owner = getEventOwner(event);
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
@@ -29,7 +33,7 @@ export function createStartHandler(props: ITouchProps) {
 
 export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
-    event = Object.create(event);
+    event = createEvent(event);
     const owner = getEventOwner(event);
     owner.lastPoints = getTouchPoinsts(event);
     const { onPointMove, onPinch } = props;
@@ -56,7 +60,7 @@ export function createMoveHandler(props: ITouchProps) {
 
 export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
-    event = Object.create(event);
+    event = createEvent(event);
     const owner = getEventOwner(event);
     const info = calcTouchInfo(owner);
     owner.isPointDown = false;
