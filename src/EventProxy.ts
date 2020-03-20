@@ -25,7 +25,6 @@ export class EventProxy<T extends EventTarget = Document> extends PureComponent<
       },
       []
     );
-    console.log(this.handlers);
   }
 
   protected bind() {
