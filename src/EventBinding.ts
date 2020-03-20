@@ -16,8 +16,8 @@ export function createStartHandler(props: ITouchProps) {
     const owner = getEventOwner(event);
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
-    owner.distanceX = Math.abs(owner.lastPoint.x - owner.startPoint?.x);
-    owner.distanceY = Math.abs(owner.lastPoint.y - owner.startPoint?.y);
+    owner.moveX = owner.lastPoint.x - owner.startPoint?.x;
+    owner.moveY = owner.lastPoint.y - owner.startPoint?.y;
     const { onTapHold, onPointDown, onPinchStart } = props;
     if (onTapHold) {
       owner.startHoldTimer(() => owner.emit(event, onTapHold));
@@ -41,8 +41,8 @@ export function createMoveHandler(props: ITouchProps) {
     if (owner.isPointDown) {
       const info = calcTouchInfo(owner);
       if (info.isSwipeMove) owner.clearHoldTimer();
-      owner.distanceX = Math.abs(owner.lastPoint.x - owner.startPoint?.x);
-      owner.distanceY = Math.abs(owner.lastPoint.y - owner.startPoint?.y);
+      owner.moveX = owner.lastPoint.x - owner.startPoint?.x;
+      owner.moveY = owner.lastPoint.y - owner.startPoint?.y;
     }
     if (
       owner.isPointDown &&

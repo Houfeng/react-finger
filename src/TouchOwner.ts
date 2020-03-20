@@ -13,8 +13,8 @@ export class TouchOwner implements TouchOwner {
   public isPinch?: boolean;
   public direction?: string;
   public scale?: number;
-  public distanceX?: number;
-  public distanceY?: number;
+  public moveX?: number;
+  public moveY?: number;
   protected holdTimer?: number;
 
   public get startPoint() {
@@ -37,6 +37,14 @@ export class TouchOwner implements TouchOwner {
     if (!handlers) return;
     Object.assign(event, this);
     handlers.forEach(handler => handler && handler(event));
+  }
+
+  public get distanceX() {
+    return Math.abs(this.moveX);
+  }
+
+  public get distanceY() {
+    return Math.abs(this.moveY);
   }
 }
 
