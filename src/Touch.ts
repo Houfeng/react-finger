@@ -14,7 +14,5 @@ export const touch = createFitter((type: string, props: ITouchProps) => {
       handler(...args);
     };
   });
-  touchEvents.forEach(([name]) => {
-    delete props[name];
-  });
+  touchEvents.forEach(([name]) => delete props[name]);
 });

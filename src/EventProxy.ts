@@ -3,7 +3,19 @@ import { isFunction } from "util";
 
 export interface IEventProxyProps<T extends EventTarget = Document>
   extends React.DOMAttributes<T> {
-  target: T;
+  /**
+   * 指向同一个 target 的所有 EventProxy 的 key 必需全局唯一
+   */
+  key: string;
+
+  /**
+   * 代理到的目标对象，默认是 document
+   */
+  target?: T;
+
+  /**
+   * 是否为 Capture 阶段
+   */
   useCapture?: boolean;
   [name: string]: any;
 }
@@ -11,6 +23,8 @@ export interface IEventProxyProps<T extends EventTarget = Document>
 export class EventProxy<T extends EventTarget = Document> extends PureComponent<
   IEventProxyProps<T>
 > {
+  static defaultProps = { target: document };
+
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: T;
   protected useCapture?: boolean;

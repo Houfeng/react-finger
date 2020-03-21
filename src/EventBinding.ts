@@ -13,7 +13,7 @@ export function createEvent(event: ITouchEvent) {
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
-    const owner = getEventOwner(event);
+    const owner = getEventOwner(event, props);
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
     owner.moveX = owner.lastPoint.x - owner.startPoint?.x;
@@ -34,7 +34,7 @@ export function createStartHandler(props: ITouchProps) {
 export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
-    const owner = getEventOwner(event);
+    const owner = getEventOwner(event, props);
     owner.lastPoints = getTouchPoinsts(event);
     const { onPointMove, onPinch } = props;
     owner.emit(event, onPointMove);
@@ -61,7 +61,7 @@ export function createMoveHandler(props: ITouchProps) {
 export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
-    const owner = getEventOwner(event);
+    const owner = getEventOwner(event, props);
     const info = calcTouchInfo(owner);
     owner.isPointDown = false;
     owner.clearHoldTimer();

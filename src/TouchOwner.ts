@@ -2,6 +2,7 @@ import { ITouchPoint } from "./ITouchPoint";
 import { ITouchEvent } from "./TouchEvents";
 import { TouchOptions } from "./TouchOptions";
 import { ITouchHandler } from "./ITouchHandler";
+import { ITouchProps } from "./ITouchProps";
 
 export class TouchOwner implements TouchOwner {
   public startPoints?: ITouchPoint[];
@@ -15,7 +16,7 @@ export class TouchOwner implements TouchOwner {
   public scale?: number;
   public moveX?: number;
   public moveY?: number;
-  protected holdTimer?: number;
+  public holdTimer?: number;
 
   public get startPoint() {
     return this.startPoints?.[0];
@@ -48,10 +49,14 @@ export class TouchOwner implements TouchOwner {
   }
 }
 
-export function getEventOwner(event: ITouchEvent): TouchOwner {
+export function getEventOwner(
+  event: ITouchEvent,
+  props: ITouchProps
+): TouchOwner {
+  const mountKey = `__mota_touch_${String(props?.key || "default")}__`;
   const target = event.currentTarget as any;
-  if (!target.__mota_touch__) {
-    target.__mota_touch__ = new TouchOwner();
+  if (!target[mountKey]) {
+    target[mountKey] = new TouchOwner();
   }
-  return target.__mota_touch__;
+  return target[mountKey];
 }
