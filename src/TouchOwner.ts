@@ -53,10 +53,9 @@ export function getEventOwner(
   event: ITouchEvent,
   props: ITouchProps
 ): TouchOwner {
-  const mountKey = `__mota_touch_${String(props?.key || "default")}__`;
-  const target = event.currentTarget as any;
-  if (!target[mountKey]) {
-    target[mountKey] = new TouchOwner();
-  }
-  return target[mountKey];
+  const { motaTouchKey, motaTouchHost } = { ...props } as any;
+  const key = `__mota_touch_${String(motaTouchKey || "default")}__`;
+  const host = motaTouchHost || (event.currentTarget as any);
+  if (!host[key]) host[key] = new TouchOwner();
+  return host[key];
 }

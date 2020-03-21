@@ -3,7 +3,8 @@ import { createFitter } from "mota";
 import { findTouchEvents } from "./TouchEvents";
 import { ITouchProps } from "./ITouchProps";
 
-export const touch = createFitter((type: string, props: ITouchProps) => {
+export const touch = createFitter((type: any, props: ITouchProps) => {
+  if (type.setMotaTouch) return type.setMotaTouch(touch);
   const touchEvents = findTouchEvents(props);
   if (!type || touchEvents.length < 1) return;
   const attachProps = createAttachProps({ ...props });

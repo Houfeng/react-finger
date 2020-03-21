@@ -1,30 +1,16 @@
-import React, { PureComponent, createElement, Fragment } from "react";
+import React, { Fragment, createElement, ReactNode } from "react";
 import { isFunction } from "util";
 
 export interface IEventProxyProps<T extends EventTarget = Document>
   extends React.DOMAttributes<T> {
-  /**
-   * 指向同一个 target 的所有 EventProxy 的 key 必需全局唯一
-   */
-  key: string;
-
-  /**
-   * 代理到的目标对象，默认是 document
-   */
   target?: T;
-
-  /**
-   * 是否为 Capture 阶段
-   */
   useCapture?: boolean;
   [name: string]: any;
 }
 
-export class EventProxy<T extends EventTarget = Document> extends PureComponent<
-  IEventProxyProps<T>
-> {
-  static defaultProps = { target: document };
-
+export class EventProxyInner<
+  T extends EventTarget = Document
+> extends React.PureComponent<IEventProxyProps<T>> {
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: T;
   protected useCapture?: boolean;
@@ -74,6 +60,18 @@ export class EventProxy<T extends EventTarget = Document> extends PureComponent<
   }
 
   render() {
-    return createElement(Fragment);
+    return React.createElement(React.Fragment);
+  }
+}
+
+export class EventProxy extends React.PureComponent<IEventProxyProps> {
+  static touch: (...args: any[]) => ReactNode = null;
+  static setMotaTouch = (value: any) => (EventProxy.touch = value);
+  render() {
+    const { target = document, ...others } = this.props;
+    const { touch } = EventProxy;
+    if (!touch) return createElement(Fragment);
+    const props = { ...others, target, motaTouchHost: this };
+    return touch(createElement(EventProxyInner, props), {});
   }
 }

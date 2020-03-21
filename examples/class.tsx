@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { model } from "mota";
-import { touch, ITouchEvent } from "../src";
-// import "../src/HTMLAttributes";
-import { EventProxy } from '../src/EventProxy';
+import { touch, ITouchEvent, EventProxy } from "../src";
 
 const root = document.getElementById("root");
 const data = {
@@ -50,11 +48,11 @@ export class App extends React.Component {
       onTap={this.onTap}>
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
-      <EventProxy key="0"
+      <EventProxy
         onPinch={this.onPinch}
         onPinchEnd={this.onPinchEnd} />
-      <EventProxy key="1" onDoubleTap={this.onDocTap} />
-      <EventProxy key="2" onDoubleTap={this.onDocTap} />
+      <EventProxy onDoubleTap={this.onDocTap} />
+      <EventProxy onDoubleTap={this.onDocTap} />
     </div>
   }
 }
