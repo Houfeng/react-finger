@@ -1,15 +1,28 @@
-import React, { Fragment, createElement, ReactNode } from "react";
+import React, {
+  Fragment,
+  createElement,
+  ReactNode,
+  HTMLAttributes
+} from "react";
 import { isFunction } from "util";
 
-export interface IEventProxyProps<T extends EventTarget = Document>
-  extends React.DOMAttributes<T> {
+export type EventProxyTarget =
+  | EventTarget
+  | Document
+  | Window
+  | typeof globalThis
+  | HTMLElement;
+
+export interface IEventProxyProps<
+  T extends EventProxyTarget = EventProxyTarget
+> extends HTMLAttributes<T> {
   target?: T;
   useCapture?: boolean;
   [name: string]: any;
 }
 
 export class EventProxyInner<
-  T extends EventTarget = Document
+  T extends EventProxyTarget = EventProxyTarget
 > extends React.PureComponent<IEventProxyProps<T>> {
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: T;
