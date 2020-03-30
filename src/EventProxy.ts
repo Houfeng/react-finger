@@ -4,7 +4,7 @@ import React, {
   ReactNode,
   HTMLAttributes
 } from "react";
-import { isFunction } from "util";
+import { isFunction } from "ntils";
 
 export type EventProxyTarget =
   | EventTarget

@@ -1,7 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import styled from "styled-components";
 import { model } from "mota";
 import { touch, ITouchEvent, EventProxy } from "../src";
+
+const Block = styled.div`
+  background: red;
+`;
 
 const root = document.getElementById("root");
 const data = {
@@ -53,6 +58,7 @@ export class App extends React.Component {
         onPinchEnd={this.onPinchEnd} />
       <EventProxy onDoubleTap={this.onDocTap} />
       <EventProxy onDoubleTap={this.onDocTap} />
+      <Block />
     </div>
   }
 }

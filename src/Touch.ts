@@ -2,9 +2,12 @@ import { createAttachProps } from "./EventBinding";
 import { createFitter } from "mota";
 import { findTouchEvents } from "./TouchEvents";
 import { ITouchProps } from "./ITouchProps";
+import { isString } from "ntils";
+import { TouchOptions } from "./TouchOptions";
 
 export const touch = createFitter((type: any, props: ITouchProps) => {
   if (type.setMotaTouch) return type.setMotaTouch(touch);
+  if (!isString(type) && !TouchOptions.allow(type)) return;
   const touchEvents = findTouchEvents(props);
   if (!type || touchEvents.length < 1) return;
   const attachProps = createAttachProps({ ...props });
