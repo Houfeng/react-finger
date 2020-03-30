@@ -24,6 +24,8 @@ export interface IEventProxyProps<
 export class EventProxyInner<
   T extends EventProxyTarget = EventProxyTarget
 > extends React.PureComponent<IEventProxyProps<T>> {
+  public static motaTouch = true;
+
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: T;
   protected useCapture?: boolean;
