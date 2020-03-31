@@ -8,6 +8,11 @@ const Block = styled.div`
   background: red;
 `;
 
+console.log(React.createElement(Block));
+console.log(console.log(React.createElement(React.forwardRef(() => {
+  return <h1></h1>
+}))))
+
 const root = document.getElementById("root");
 const data = {
   originScale: 1,
@@ -58,7 +63,7 @@ export class App extends React.Component {
         onPinchEnd={this.onPinchEnd} />
       <EventProxy onDoubleTap={this.onDocTap} />
       <EventProxy onDoubleTap={this.onDocTap} />
-      <Block />
+      <Block onTap={() => console.log("test")} >测试</Block>
     </div>
   }
 }

@@ -2,26 +2,26 @@ import { createAttachProps } from "./EventBinding";
 import { createFitter } from "mota";
 import { findTouchEvents } from "./TouchEvents";
 import { ITouchProps } from "./ITouchProps";
-import { isString } from "ntils";
-import { TouchOptions } from "./TouchOptions";
+import { isString, isBoolean } from "ntils";
 
-export function isForward(type: any) {
-  return String(type && type.$$typeof) === "Symbol(react.forward_ref)";
+export function isElementForward(type: any) {
+  return type && isString(type.target);
 }
 
-export function allowTouch(type: any) {
+export function allowTouch(type: any, props: ITouchProps) {
   if (!type) return false;
+  if (isBoolean(type.motaTouch)) return type.motaTouch;
   return (
     isString(type) ||
-    type.motaTouch ||
-    isForward(type) ||
-    TouchOptions.allow(type)
+    isElementForward(type) ||
+    props["data-touch"] ||
+    props["x-touch"]
   );
 }
 
 export const touch = createFitter((type: any, props: ITouchProps) => {
   if (type.setMotaTouch) return type.setMotaTouch(touch);
-  if (!allowTouch(type)) return;
+  if (!allowTouch(type, props)) return;
   const touchEvents = findTouchEvents(props);
   if (!type || touchEvents.length < 1) return;
   const attachProps = createAttachProps({ ...props });
