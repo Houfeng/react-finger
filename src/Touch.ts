@@ -14,8 +14,8 @@ export function allowTouch(type: any, props: ITouchProps) {
   return (
     isString(type) ||
     isElementForward(type) ||
-    props["data-touch"] ||
-    props["x-touch"]
+    (props && props["data-touch"]) ||
+    (props && props["x-touch"])
   );
 }
 
@@ -32,5 +32,7 @@ export const touch = createFitter((type: any, props: ITouchProps) => {
       handler(...args);
     };
   });
+  delete props["data-touch"];
+  delete props["x-touch"];
   touchEvents.forEach(([name]) => delete props[name]);
 });
