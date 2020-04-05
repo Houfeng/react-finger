@@ -1,6 +1,6 @@
 {
   "name": "mota-touch",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
@@ -34,7 +34,7 @@
     "typescript": "3.7.5"
   },
   "dependencies": {
-    "mota": "^4.2.2",
+    "mota": "^4.2.3",
     "ntils": "^5.1.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3"
