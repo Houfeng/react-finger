@@ -43,6 +43,11 @@ export class App extends React.Component {
     console.log('onDocTap');
   }
 
+  onPointDown = (event: ITouchEvent) => {
+    console.log("onPointDown", event);
+    debugger;
+  }
+
   render() {
     const { originScale, scale } = this.model;
     return <div style={{
@@ -59,6 +64,7 @@ export class App extends React.Component {
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
       <EventProxy
+        onPointDown={this.onPointDown}
         onPinch={this.onPinch}
         onPinchEnd={this.onPinchEnd} />
       <EventProxy onDoubleTap={this.onDocTap} />

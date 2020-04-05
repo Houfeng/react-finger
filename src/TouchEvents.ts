@@ -50,6 +50,8 @@ export interface ITouchEvent<T extends HTMLElement = HTMLElement>
   pageY: number;
   clientX: number;
   clientY: number;
+  screenX: number;
+  screenY: number;
   timeStamp: number;
   [name: string]: any;
 }
@@ -58,12 +60,10 @@ export function getTouchPoinsts(event: ITouchEvent): ITouchPoint[] {
   const { targetTouches } = event;
   const list: any = targetTouches ? [].slice.call(targetTouches) : [event];
   return list.map((item: Touch) => {
-    const point: ITouchPoint = Object.create(item);
-    Object.assign(point, {
-      x: item.pageX,
-      y: item.pageY,
-      timeStamp: event.timeStamp
-    });
+    const point: any = item;
+    if (!("x" in point)) point.x = item.clientX;
+    if (!("y" in point)) point.y = item.clientY;
+    if (!("timeStamp" in point)) point.timeStamp = event.timeStamp;
     return point;
   });
 }

@@ -3,6 +3,7 @@ import { ITouchEvent } from "./TouchEvents";
 import { TouchOptions } from "./TouchOptions";
 import { ITouchHandler } from "./ITouchHandler";
 import { ITouchProps } from "./ITouchProps";
+import { isFunction } from "ntils";
 
 export class TouchOwner {
   public startPoints?: ITouchPoint[];
@@ -17,6 +18,10 @@ export class TouchOwner {
   public moveX?: number;
   public moveY?: number;
   public holdTimer?: number;
+  protected extendsKeys = [
+    ...Object.keys(this),
+    ...Object.keys(Object.getPrototypeOf(this))
+  ];
 
   public get startPoint() {
     return this.startPoints?.[0];
@@ -36,8 +41,9 @@ export class TouchOwner {
 
   public emit(event: ITouchEvent, ...handlers: ITouchHandler[]) {
     if (!handlers) return;
-    Object.keys(this).forEach(key => {
-      if (!(key in event)) (event as any)[key] = (this as any)[key];
+    this.extendsKeys.forEach(key => {
+      if (key in event || isFunction(event[key])) return;
+      event[key] = (this as any)[key];
     });
     handlers.forEach(handler => handler && handler(event));
   }
