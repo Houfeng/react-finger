@@ -64,12 +64,28 @@ export class TouchOwner {
     return this.lastPoint.clientY;
   }
 
+  public get x() {
+    return this.clientX;
+  }
+
+  public get y() {
+    return this.clientY;
+  }
+
   public get pageX() {
     return this.lastPoint.pageX;
   }
 
   public get pageY() {
     return this.lastPoint.pageY;
+  }
+
+  public get screenX() {
+    return this.lastPoint.screenX;
+  }
+
+  public get screenY() {
+    return this.lastPoint.screenY;
   }
 }
 
