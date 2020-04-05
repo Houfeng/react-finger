@@ -4,7 +4,7 @@ import { TouchOptions } from "./TouchOptions";
 import { ITouchHandler } from "./ITouchHandler";
 import { ITouchProps } from "./ITouchProps";
 
-export class TouchOwner implements TouchOwner {
+export class TouchOwner {
   public startPoints?: ITouchPoint[];
   public lastPoints?: ITouchPoint[];
   public isPointDown?: boolean;
@@ -36,7 +36,9 @@ export class TouchOwner implements TouchOwner {
 
   public emit(event: ITouchEvent, ...handlers: ITouchHandler[]) {
     if (!handlers) return;
-    Object.assign(event, this);
+    Object.keys(this).forEach(key => {
+      if (!(key in event)) (event as any)[key] = (this as any)[key];
+    });
     handlers.forEach(handler => handler && handler(event));
   }
 
@@ -46,6 +48,22 @@ export class TouchOwner implements TouchOwner {
 
   public get distanceY() {
     return Math.abs(this.moveY);
+  }
+
+  public get clientX() {
+    return this.lastPoint.clientX;
+  }
+
+  public get clientY() {
+    return this.lastPoint.clientY;
+  }
+
+  public get pageX() {
+    return this.lastPoint.pageX;
+  }
+
+  public get pageY() {
+    return this.lastPoint.pageY;
   }
 }
 
