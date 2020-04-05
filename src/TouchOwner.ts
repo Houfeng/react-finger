@@ -42,8 +42,9 @@ export class TouchOwner {
   public emit(event: ITouchEvent, ...handlers: ITouchHandler[]) {
     if (!handlers) return;
     this.extendsKeys.forEach(key => {
-      if (key in event || isFunction(event[key])) return;
-      event[key] = (this as any)[key];
+      const value = (this as any)[key];
+      if (key in event || isFunction(value)) return;
+      event[key] = value;
     });
     handlers.forEach(handler => handler && handler(event));
   }

@@ -46,12 +46,6 @@ export function findTouchEvents(props: ITouchProps) {
 export interface ITouchEvent<T extends HTMLElement = HTMLElement>
   extends TouchEvent<T>,
     TouchOwner {
-  pageX: number;
-  pageY: number;
-  clientX: number;
-  clientY: number;
-  screenX: number;
-  screenY: number;
   timeStamp: number;
   [name: string]: any;
 }
