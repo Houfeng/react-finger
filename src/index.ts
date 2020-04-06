@@ -9,5 +9,6 @@ export * from "./TouchEvents";
 export * from "./TouchOptions";
 export * from "./TouchOwner";
 export * from "./Constants";
+export * from "./utils";
 export * from "./EventProxy";
 export * from "./EventBinding";
