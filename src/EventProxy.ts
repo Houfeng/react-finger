@@ -4,7 +4,7 @@ import React, {
   ReactNode,
   HTMLAttributes
 } from "react";
-import { isFunction } from "ntils";
+import { isFunction, isNull } from "ntils";
 
 export type EventProxyTarget =
   | EventTarget
@@ -17,7 +17,13 @@ export interface IEventProxyProps<
   T extends EventProxyTarget = EventProxyTarget
 > extends HTMLAttributes<T> {
   target?: T;
+  /**
+   * @deprecated Please use 'capture' instead
+   */
   useCapture?: boolean;
+  capture?: boolean;
+  passive?: boolean;
+  once?: boolean;
   [name: string]: any;
 }
 
@@ -28,11 +34,14 @@ export class EventProxyInner<
 
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: T;
-  protected useCapture?: boolean;
+  protected options?: boolean | AddEventListenerOptions;
 
   protected save() {
-    this.target = this.props.target;
-    this.useCapture = this.props.useCapture || false;
+    const { target, useCapture = false } = this.props;
+    const { capture = useCapture, passive, once } = this.props;
+    this.target = target;
+    this.options =
+      isNull(passive) && isNull(once) ? capture : { capture, passive, once };
     this.handlers = Object.entries(this.props).reduce(
       (list, [name, handler]) => {
         if (!isFunction(handler) || !name.startsWith("on")) return list;
@@ -46,14 +55,14 @@ export class EventProxyInner<
     this.save();
     if (!this.target || !this.handlers) return;
     this.handlers.forEach(([name, handler]) => {
-      this.target.addEventListener(name, handler, this.useCapture);
+      this.target.addEventListener(name, handler, this.options);
     });
   }
 
   protected unbind() {
     if (!this.target || !this.handlers) return;
     this.handlers.forEach(([name, handler]) => {
-      this.target.removeEventListener(name, handler, this.useCapture);
+      this.target.removeEventListener(name, handler, this.options);
     });
   }
 
