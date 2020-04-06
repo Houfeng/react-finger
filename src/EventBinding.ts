@@ -7,6 +7,7 @@ import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { calcDistance } from "./VectorHelper";
 
 export function createEvent(event: ITouchEvent) {
+  if (event.persist) event.persist();
   return event instanceof Event ? event : Object.create(event);
 }
 
