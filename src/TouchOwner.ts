@@ -58,11 +58,11 @@ export class TouchOwner {
   }
 
   public get clientX() {
-    return this.lastPoint.clientX;
+    return this.lastPoint?.clientX;
   }
 
   public get clientY() {
-    return this.lastPoint.clientY;
+    return this.lastPoint?.clientY;
   }
 
   public get x() {
@@ -74,19 +74,19 @@ export class TouchOwner {
   }
 
   public get pageX() {
-    return this.lastPoint.pageX;
+    return this.lastPoint?.pageX;
   }
 
   public get pageY() {
-    return this.lastPoint.pageY;
+    return this.lastPoint?.pageY;
   }
 
   public get screenX() {
-    return this.lastPoint.screenX;
+    return this.lastPoint?.screenX;
   }
 
   public get screenY() {
-    return this.lastPoint.screenY;
+    return this.lastPoint?.screenY;
   }
 }
 
