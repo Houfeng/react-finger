@@ -6,18 +6,18 @@ import { ITouchProps } from "./ITouchProps";
 import { isFunction } from "ntils";
 
 export class TouchOwner {
-  public startPoints?: ITouchPoint[];
-  public lastPoints?: ITouchPoint[];
-  public isPointDown?: boolean;
-  public lastTapTime?: number;
-  public isDoubleTap?: boolean;
-  public isSwipe?: boolean;
-  public isPinch?: boolean;
-  public direction?: string;
-  public scale?: number;
-  public moveX?: number;
-  public moveY?: number;
-  public holdTimer?: number;
+  public startPoints?: ITouchPoint[] = [];
+  public lastPoints?: ITouchPoint[] = [];
+  public isPointDown?: boolean = null;
+  public lastTapTime?: number = null;
+  public isDoubleTap?: boolean = null;
+  public isSwipe?: boolean = null;
+  public isPinch?: boolean = null;
+  public direction?: string = null;
+  public scale?: number = null;
+  public moveX = 0;
+  public moveY = 0;
+  public holdTimer?: number = null;
   protected extendsKeys = [
     ...Object.keys(this),
     ...Object.keys(Object.getPrototypeOf(this))
