@@ -52,13 +52,13 @@ export interface ITouchEvent<T extends HTMLElement = HTMLElement>
 
 export function getTouchPoinsts(event: ITouchEvent): ITouchPoint[] {
   if (event.persist) event.persist();
-  const { targetTouches } = event;
+  const { targetTouches, timeStamp } = event;
   const list: any = targetTouches ? [].slice.call(targetTouches) : [event];
   return list.map((item: Touch) => {
     const point: any = item;
     if (!("x" in point)) point.x = item.clientX;
     if (!("y" in point)) point.y = item.clientY;
-    if (!("timeStamp" in point)) point.timeStamp = event.timeStamp;
+    if (!("timeStamp" in point)) point.timeStamp = timeStamp;
     return point;
   });
 }
