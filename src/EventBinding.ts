@@ -5,6 +5,7 @@ import { ICalcInfo } from "./ICalcInfo";
 import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
 import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { calcDistance } from "./VectorHelper";
+import { isDesktop } from "./utils";
 
 export function createEvent(event: ITouchEvent) {
   if (event.persist) event.persist();
@@ -17,8 +18,8 @@ export function createStartHandler(props: ITouchProps) {
     const owner = getEventOwner(event, props);
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
-    owner.moveX = owner.lastPoint.x - owner.startPoint?.x;
-    owner.moveY = owner.lastPoint.y - owner.startPoint?.y;
+    owner.moveX = owner.lastPoint?.x - owner.startPoint?.x;
+    owner.moveY = owner.lastPoint?.y - owner.startPoint?.y;
     const { onTapHold, onPointDown, onPinchStart } = props;
     if (onTapHold) {
       owner.startHoldTimer(() => owner.emit(event, onTapHold));
@@ -42,8 +43,8 @@ export function createMoveHandler(props: ITouchProps) {
     if (owner.isPointDown) {
       const info = calcTouchInfo(owner);
       if (info.isSwipeMove) owner.clearHoldTimer();
-      owner.moveX = owner.lastPoint.x - owner.startPoint?.x;
-      owner.moveY = owner.lastPoint.y - owner.startPoint?.y;
+      owner.moveX = owner.lastPoint?.x - owner.startPoint?.x;
+      owner.moveY = owner.lastPoint?.y - owner.startPoint?.y;
     }
     if (
       owner.isPointDown &&
@@ -91,7 +92,7 @@ export function createEndHandler(props: ITouchProps) {
           owner.emit(event, onDoubleTap);
           owner.lastTapTime = null;
         } else {
-          owner.lastTapTime = owner.lastPoint.timeStamp;
+          owner.lastTapTime = event.timeStamp || owner.lastPoint?.timeStamp;
         }
       }
     }
@@ -138,11 +139,21 @@ export function calcTouchInfo(owner: TouchOwner) {
   return info;
 }
 
+export function mapingToNative(props: ITouchProps, from: string, to: string) {
+  const handler = props[from];
+  delete props[from];
+  props[to] = handler;
+}
+
 export function createAttachProps(props: ITouchProps): ITouchProps {
   // fix: ios 10+
   const { onPinchStart, onPinch, onPinchEnd } = props;
   if (onPinchStart || onPinch || onPinchEnd) {
     document.addEventListener("gesturestart", event => event.preventDefault());
+  }
+  if (TouchOptions.possibleToNative && isDesktop()) {
+    mapingToNative(props, "onDoubleTap", "onDoubleClick");
+    mapingToNative(props, "onTap", "onClick");
   }
   return {
     [START_EVENT_NAME]: createStartHandler(props),

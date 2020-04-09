@@ -43,9 +43,12 @@ export class App extends React.Component {
     console.log('onDocTap');
   }
 
+  onDocTap1 = () => {
+    console.log('onDocTap1');
+  }
+
   onPointDown = (event: ITouchEvent) => {
     console.log("onPointDown", event);
-    debugger;
   }
 
   render() {
@@ -63,13 +66,13 @@ export class App extends React.Component {
       onTap={this.onTap}>
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
-      <EventProxy
+      {/* <EventProxy
         onPointDown={this.onPointDown}
         onPinch={this.onPinch}
-        onPinchEnd={this.onPinchEnd} />
+        onPinchEnd={this.onPinchEnd} /> */}
       <EventProxy onDoubleTap={this.onDocTap} />
       <EventProxy onDoubleTap={this.onDocTap} />
-      <Block onTap={() => console.log("test")} >测试</Block>
+      {/* <Block onTap={() => console.log("test")} >测试</Block> */}
     </div>
   }
 }

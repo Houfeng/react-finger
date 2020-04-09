@@ -6,3 +6,7 @@ export function isMobile() {
     (navigator.platform.indexOf("Mac") > -1 && SUPPORT_TOUCH)
   );
 }
+
+export function isDesktop() {
+  return !isMobile();
+}

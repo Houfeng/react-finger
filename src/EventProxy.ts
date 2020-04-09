@@ -45,6 +45,7 @@ export class EventProxyInner<
     this.handlers = Object.entries(this.props).reduce(
       (list, [name, handler]) => {
         if (!isFunction(handler) || !name.startsWith("on")) return list;
+        if (name === "onDoubleClick") name = "onDblClick";
         return [...list, [name.slice(2).toLowerCase(), handler]];
       },
       []
