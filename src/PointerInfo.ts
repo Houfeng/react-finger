@@ -1,4 +1,4 @@
-import { suppertEventTypes } from "./utils";
+import { eventTypes } from "./utils";
 
 export enum PointerType {
   mouse = "mouse",
@@ -40,15 +40,15 @@ export const pointerEndHandler = (event: Event) => {
   setTimeout(() => (PointerInfo.type = null), 300);
 };
 
-if (suppertEventTypes.touch) {
+if (eventTypes.touch) {
   document.addEventListener("touchstart", pointerStartHandler, true);
   document.addEventListener("touchmove", pointerMoveHandler, true);
   document.addEventListener("touchend", pointerEndHandler, true);
   document.addEventListener("touchcancel", pointerEndHandler, true);
 }
 
-if (suppertEventTypes.mouse) {
+if (eventTypes.mouse) {
   document.addEventListener("mousedown", pointerStartHandler, true);
-  document.addEventListener("mousedown", pointerMoveHandler, true);
+  document.addEventListener("mousemove", pointerMoveHandler, true);
   document.addEventListener("mouseup", pointerEndHandler, true);
 }

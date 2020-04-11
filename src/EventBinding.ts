@@ -2,7 +2,7 @@ import { calcDistance } from "./VectorHelper";
 import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { getTouchPoinsts, ITouchEvent } from "./TouchEvents";
 import { ICalcInfo } from "./ICalcInfo";
-import { isDesktop, suppertEventTypes } from "./utils";
+import { isDesktop, eventTypes } from "./utils";
 import { ITouchProps } from "./ITouchProps";
 import { PointerInfo } from "./PointerInfo";
 import { TouchOptions } from "./TouchOptions";
@@ -160,12 +160,12 @@ export function createAttachProps(props: ITouchProps): ITouchProps {
   const startHandler = createStartHandler(props);
   const moveHandler = createMoveHandler(props);
   const endHandler = createEndHandler(props);
-  const touchEvents = suppertEventTypes.touch && {
+  const touchEvents = eventTypes.touch && {
     onTouchStart: startHandler,
     onTouchMove: moveHandler,
     onTouchEnd: endHandler
   };
-  const mouseEvents = suppertEventTypes.mouse && {
+  const mouseEvents = eventTypes.mouse && {
     onMouseDown: startHandler,
     onMouseMove: moveHandler,
     onMouseUp: endHandler
