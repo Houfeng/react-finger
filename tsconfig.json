@@ -3,6 +3,7 @@
     "outDir": "./dist/",
     "declarationDir": "./types/",
     "sourceMap": true,
+    "moduleResolution": "node",
     "declaration": true,
     "noImplicitAny": true,
     "module": "commonjs",
@@ -15,9 +16,12 @@
     "esModuleInterop": true,
     "lib": [
       "dom",
-      "es2017"
+      "esnext"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx"

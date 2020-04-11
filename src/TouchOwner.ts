@@ -1,9 +1,9 @@
-import { ITouchPoint } from "./ITouchPoint";
-import { ITouchEvent } from "./TouchEvents";
-import { TouchOptions } from "./TouchOptions";
-import { ITouchHandler } from "./ITouchHandler";
-import { ITouchProps } from "./ITouchProps";
 import { isFunction } from "ntils";
+import { ITouchEvent } from "./TouchEvents";
+import { ITouchHandler } from "./ITouchHandler";
+import { ITouchPoint } from "./ITouchPoint";
+import { ITouchProps } from "./ITouchProps";
+import { TouchOptions } from "./TouchOptions";
 
 export class TouchOwner {
   public startPoints?: ITouchPoint[] = [];
@@ -18,7 +18,7 @@ export class TouchOwner {
   public moveX = 0;
   public moveY = 0;
   public holdTimer?: number = null;
-  public pointType?: string = null;
+
   protected extendsKeys = [
     ...Object.keys(this),
     ...Object.keys(Object.getPrototypeOf(this))

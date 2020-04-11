@@ -1,8 +1,8 @@
 import React, {
-  Fragment,
   createElement,
-  ReactNode,
-  HTMLAttributes
+  Fragment,
+  HTMLAttributes,
+  ReactNode
 } from "react";
 import { isFunction, isNull } from "ntils";
 

@@ -1,6 +1,6 @@
+import { ITouchPoint } from "./ITouchPoint";
 import { ITouchProps } from "./ITouchProps";
 import { TouchEvent } from "react";
-import { ITouchPoint } from "./ITouchPoint";
 import { TouchOwner } from "./TouchOwner";
 
 export const TouchEventNameList = [
@@ -47,6 +47,7 @@ export interface ITouchEvent<T extends HTMLElement = HTMLElement>
   extends TouchEvent<T>,
     TouchOwner {
   timeStamp: number;
+  pointType: string;
   [name: string]: any;
 }
 

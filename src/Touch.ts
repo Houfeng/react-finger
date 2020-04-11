@@ -1,8 +1,8 @@
 import { createAttachProps } from "./EventBinding";
 import { createFitter } from "mota";
 import { findTouchEvents } from "./TouchEvents";
+import { isBoolean, isString } from "ntils";
 import { ITouchProps } from "./ITouchProps";
-import { isString, isBoolean } from "ntils";
 
 export function isElementForward(type: any) {
   return type && isString(type.target);

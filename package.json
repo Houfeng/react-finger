@@ -1,6 +1,6 @@
 {
   "name": "mota-touch",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
@@ -30,7 +30,7 @@
     "dn-middleware-unit": "^0.1.18",
     "dn-middleware-version": "^1.0.4",
     "dn-middleware-webpack": "^1.10.1",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.0",
     "typescript": "3.7.5"
   },
   "dependencies": {

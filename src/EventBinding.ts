@@ -1,10 +1,11 @@
-import { ITouchProps } from "./ITouchProps";
-import { TouchOptions } from "./TouchOptions";
-import { ICalcInfo } from "./ICalcInfo";
-import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
-import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { calcDistance } from "./VectorHelper";
+import { getEventOwner, TouchOwner } from "./TouchOwner";
+import { getTouchPoinsts, ITouchEvent } from "./TouchEvents";
+import { ICalcInfo } from "./ICalcInfo";
 import { isDesktop, suppertEventTypes } from "./utils";
+import { ITouchProps } from "./ITouchProps";
+import { PointerInfo } from "./PointerInfo";
+import { TouchOptions } from "./TouchOptions";
 
 export function createEvent(event: ITouchEvent) {
   if (event.persist) event.persist();
@@ -15,9 +16,8 @@ export function createEvent(event: ITouchEvent) {
 export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
+    if (PointerInfo.type !== event.pointType) return;
     const owner = getEventOwner(event, props);
-    if (owner.pointType && owner.pointType !== event.pointType) return;
-    owner.pointType = event.pointType;
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
     owner.moveX = owner.lastPoint?.x - owner.startPoint?.x;
@@ -38,9 +38,8 @@ export function createStartHandler(props: ITouchProps) {
 export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
+    if (PointerInfo.type !== event.pointType) return;
     const owner = getEventOwner(event, props);
-    if (!owner.pointType) owner.pointType = event.pointType;
-    if (owner.pointType !== event.pointType) return;
     owner.lastPoints = getTouchPoinsts(event);
     const { onPointMove, onPinch } = props;
     owner.emit(event, onPointMove);
@@ -67,9 +66,8 @@ export function createMoveHandler(props: ITouchProps) {
 export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
+    if (PointerInfo.type !== event.pointType) return;
     const owner = getEventOwner(event, props);
-    if (!owner.pointType) owner.pointType = event.pointType;
-    if (owner.pointType !== event.pointType) return;
     const info = calcTouchInfo(owner);
     owner.isPointDown = false;
     owner.clearHoldTimer();
@@ -100,8 +98,6 @@ export function createEndHandler(props: ITouchProps) {
         }
       }
     }
-    // 重置 pointType
-    setTimeout(() => (owner.pointType = null), 300);
   };
 }
 
@@ -164,19 +160,15 @@ export function createAttachProps(props: ITouchProps): ITouchProps {
   const startHandler = createStartHandler(props);
   const moveHandler = createMoveHandler(props);
   const endHandler = createEndHandler(props);
-  const touchEvents = suppertEventTypes.touch
-    ? {
-        onTouchStart: startHandler,
-        onTouchMove: moveHandler,
-        onTouchEnd: endHandler
-      }
-    : {};
-  const mouseEvents = suppertEventTypes.mouse
-    ? {
-        onMouseDown: startHandler,
-        onMouseMove: moveHandler,
-        onMouseUp: endHandler
-      }
-    : {};
+  const touchEvents = suppertEventTypes.touch && {
+    onTouchStart: startHandler,
+    onTouchMove: moveHandler,
+    onTouchEnd: endHandler
+  };
+  const mouseEvents = suppertEventTypes.mouse && {
+    onMouseDown: startHandler,
+    onMouseMove: moveHandler,
+    onMouseUp: endHandler
+  };
   return { ...touchEvents, ...mouseEvents };
 }
