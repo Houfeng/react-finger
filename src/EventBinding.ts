@@ -1,14 +1,14 @@
-import { END_EVENT_NAME, MOVE_EVENT_NAME, START_EVENT_NAME } from "./Constants";
 import { ITouchProps } from "./ITouchProps";
 import { TouchOptions } from "./TouchOptions";
 import { ICalcInfo } from "./ICalcInfo";
 import { ITouchEvent, getTouchPoinsts } from "./TouchEvents";
 import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { calcDistance } from "./VectorHelper";
-import { isDesktop } from "./utils";
+import { isDesktop, suppertEventTypes } from "./utils";
 
 export function createEvent(event: ITouchEvent) {
   if (event.persist) event.persist();
+  event.pointType = event.type.slice(0, 5);
   return event instanceof Event ? event : Object.create(event);
 }
 
@@ -16,6 +16,8 @@ export function createStartHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
     const owner = getEventOwner(event, props);
+    if (owner.pointType && owner.pointType !== event.pointType) return;
+    owner.pointType = event.pointType;
     owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
     owner.isPointDown = true;
     owner.moveX = owner.lastPoint?.x - owner.startPoint?.x;
@@ -37,6 +39,8 @@ export function createMoveHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
     const owner = getEventOwner(event, props);
+    if (!owner.pointType) owner.pointType = event.pointType;
+    if (owner.pointType !== event.pointType) return;
     owner.lastPoints = getTouchPoinsts(event);
     const { onPointMove, onPinch } = props;
     owner.emit(event, onPointMove);
@@ -64,6 +68,8 @@ export function createEndHandler(props: ITouchProps) {
   return (event: ITouchEvent) => {
     event = createEvent(event);
     const owner = getEventOwner(event, props);
+    if (!owner.pointType) owner.pointType = event.pointType;
+    if (owner.pointType !== event.pointType) return;
     const info = calcTouchInfo(owner);
     owner.isPointDown = false;
     owner.clearHoldTimer();
@@ -71,9 +77,7 @@ export function createEndHandler(props: ITouchProps) {
     const onSwipeX = props["onSwipe" + info.direction];
     owner.emit(event, onPointUp);
     // Pinch 事件
-    if (owner.isPinch) {
-      owner.emit(event, onPinchEnd);
-    }
+    if (owner.isPinch) owner.emit(event, onPinchEnd);
     // 根据计算结果判断
     if (info.isSwipeTime && info.isSwipeMove) {
       owner.isSwipe = true;
@@ -96,6 +100,8 @@ export function createEndHandler(props: ITouchProps) {
         }
       }
     }
+    // 重置 pointType
+    setTimeout(() => (owner.pointType = null), 300);
   };
 }
 
@@ -155,9 +161,22 @@ export function createAttachProps(props: ITouchProps): ITouchProps {
     mapingToNative(props, "onDoubleTap", "onDoubleClick");
     mapingToNative(props, "onTap", "onClick");
   }
-  return {
-    [START_EVENT_NAME]: createStartHandler(props),
-    [MOVE_EVENT_NAME]: createMoveHandler(props),
-    [END_EVENT_NAME]: createEndHandler(props)
-  };
+  const startHandler = createStartHandler(props);
+  const moveHandler = createMoveHandler(props);
+  const endHandler = createEndHandler(props);
+  const touchEvents = suppertEventTypes.touch
+    ? {
+        onTouchStart: startHandler,
+        onTouchMove: moveHandler,
+        onTouchEnd: endHandler
+      }
+    : {};
+  const mouseEvents = suppertEventTypes.mouse
+    ? {
+        onMouseDown: startHandler,
+        onMouseMove: moveHandler,
+        onMouseUp: endHandler
+      }
+    : {};
+  return { ...touchEvents, ...mouseEvents };
 }

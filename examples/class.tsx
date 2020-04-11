@@ -39,8 +39,8 @@ export class App extends React.Component {
     this.model.originScale = this.model.scale;
   }
 
-  onDocTap = () => {
-    console.log('onDocTap');
+  onDocTap = (event: any) => {
+    console.log('onDocTap', event);
   }
 
   onDocTap1 = () => {
@@ -61,18 +61,11 @@ export class App extends React.Component {
       transitionDuration: ".3s",
       background: "#fff",
       transform: `scale(${scale}) translateZ(0)`
-    }}
-      onSwipeLeft={this.onTap}
-      onTap={this.onTap}>
+    }}>
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
-      {/* <EventProxy
-        onPointDown={this.onPointDown}
-        onPinch={this.onPinch}
-        onPinchEnd={this.onPinchEnd} /> */}
+      {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
       <EventProxy onDoubleTap={this.onDocTap} />
-      <EventProxy onDoubleTap={this.onDocTap} />
-      {/* <Block onTap={() => console.log("test")} >测试</Block> */}
     </div>
   }
 }

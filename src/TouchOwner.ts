@@ -18,6 +18,7 @@ export class TouchOwner {
   public moveX = 0;
   public moveY = 0;
   public holdTimer?: number = null;
+  public pointType?: string = null;
   protected extendsKeys = [
     ...Object.keys(this),
     ...Object.keys(Object.getPrototypeOf(this))
