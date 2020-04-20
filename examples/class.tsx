@@ -64,6 +64,7 @@ export class App extends React.Component {
     }}>
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
+      <div onTap={event => console.log("tap", event)}>tap</div>
       {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
       <EventProxy onDoubleTap={this.onDocTap} />
     </div>

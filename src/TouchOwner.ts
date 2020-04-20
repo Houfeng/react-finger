@@ -9,7 +9,7 @@ export class TouchOwner {
   public startPoints?: ITouchPoint[] = [];
   public lastPoints?: ITouchPoint[] = [];
   public isPointDown?: boolean = null;
-  public lastTapTime?: number = null;
+  public lastTapInfo?: { timeStamp: number; x: number; y: number } = null;
   public isDoubleTap?: boolean = null;
   public isSwipe?: boolean = null;
   public isPinch?: boolean = null;

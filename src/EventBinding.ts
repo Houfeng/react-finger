@@ -85,16 +85,24 @@ export function createEndHandler(props: ITouchProps) {
     } else if (info.isSwipeTime && !info.isSwipeMove && !info.isHoldTime) {
       owner.emit(event, onTap);
       if (onDoubleTap) {
+        const timeStamp = event.timeStamp || owner.lastPoint?.timeStamp;
+        const x = event.clientX || event.lastPoint?.clientX;
+        const y = event.clientY || event.lastPoint?.clientY;
+        const lastTapInfo = owner.lastTapInfo;
         // 处理 “双击”
         owner.isDoubleTap =
-          owner.lastTapTime &&
-          info.timeStamp - owner.lastTapTime <=
-            TouchOptions.dblDurationThreshold;
+          lastTapInfo &&
+          timeStamp - lastTapInfo.timeStamp <=
+            TouchOptions.dblDurationThreshold &&
+          Math.abs(x - lastTapInfo.x) <
+            TouchOptions.swipeHorizontalDistanceThreshold &&
+          Math.abs(y - lastTapInfo.y) <
+            TouchOptions.swipeVerticalDistanceThreshold;
         if (owner.isDoubleTap) {
           owner.emit(event, onDoubleTap);
-          owner.lastTapTime = null;
+          owner.lastTapInfo = null;
         } else {
-          owner.lastTapTime = event.timeStamp || owner.lastPoint?.timeStamp;
+          owner.lastTapInfo = { timeStamp, x, y };
         }
       }
     }
