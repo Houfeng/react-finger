@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2015-present Houfeng
+ * @homepage https://github.com/Houfeng/mota-touch
+ * @author Houfeng <admin@xhou.net>
+ */
+
 import { calcDistance } from "./VectorHelper";
 import { getEventOwner, TouchOwner } from "./TouchOwner";
 import { getTouchPoinsts, ITouchEvent } from "./TouchEvents";
@@ -168,15 +174,27 @@ export function createAttachProps(props: ITouchProps): ITouchProps {
   const startHandler = createStartHandler(props);
   const moveHandler = createMoveHandler(props);
   const endHandler = createEndHandler(props);
-  const touchEvents = eventTypes.touch && {
-    onTouchStart: startHandler,
-    onTouchMove: moveHandler,
-    onTouchEnd: endHandler
-  };
-  const mouseEvents = eventTypes.mouse && {
-    onMouseDown: startHandler,
-    onMouseMove: moveHandler,
-    onMouseUp: endHandler
-  };
-  return { ...touchEvents, ...mouseEvents };
+  const touchEvents = eventTypes.touch
+    ? {
+        onTouchStart: startHandler,
+        onTouchMove: moveHandler,
+        onTouchEnd: endHandler
+      }
+    : null;
+  const mouseEvents =
+    eventTypes.mouse && !eventTypes.pointer
+      ? {
+          onMouseDown: startHandler,
+          onMouseMove: moveHandler,
+          onMouseUp: endHandler
+        }
+      : null;
+  const pointerEvents = eventTypes.pointer
+    ? {
+        onMouseDown: startHandler,
+        onMouseMove: moveHandler,
+        onMouseUp: endHandler
+      }
+    : null;
+  return { ...touchEvents, ...mouseEvents, ...pointerEvents };
 }

@@ -3,6 +3,7 @@ dev:
     target:
       - debug
       - types
+      - node_modules/@types/react-native/
   - name: typescript
   - name: webpack
     output: ./debug/
@@ -22,6 +23,13 @@ build:
       - debug
       - dist
       - types
+      - node_modules/@types/react-native/
+  - name: file-header
+    files: ./src/**/*.ts
+    text: 
+      - 'Copyright (c) 2015-present Houfeng'
+      - '@homepage https://github.com/Houfeng/mota-touch'
+      - '@author Houfeng <admin@xhou.net>'
   - name: shell
     script:
       - tsc --locale zh-cn -d --esModuleInterop
