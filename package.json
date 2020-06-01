@@ -1,6 +1,6 @@
 {
   "name": "mota-gesture",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",

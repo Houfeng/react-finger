@@ -19,9 +19,8 @@ export type EventProxyTarget =
   | typeof globalThis
   | HTMLElement;
 
-export interface IEventProxyProps<
-  T extends EventProxyTarget = EventProxyTarget
-> extends HTMLAttributes<T> {
+export interface EventProxyProps<T extends EventProxyTarget = EventProxyTarget>
+  extends HTMLAttributes<T> {
   target?: T;
   /**
    * @deprecated Please use 'capture' instead
@@ -35,7 +34,7 @@ export interface IEventProxyProps<
 
 export class EventProxyInner<
   T extends EventProxyTarget = EventProxyTarget
-> extends React.PureComponent<IEventProxyProps<T>> {
+> extends React.PureComponent<EventProxyProps<T>> {
   public static gesture = true;
 
   protected handlers: [string, EventListenerOrEventListenerObject][];
@@ -95,7 +94,7 @@ export class EventProxyInner<
   }
 }
 
-export class EventProxy extends React.PureComponent<IEventProxyProps> {
+export class EventProxy extends React.PureComponent<EventProxyProps> {
   static gesture: (...args: any[]) => ReactNode = null;
   static setGesture = (value: any) => (EventProxy.gesture = value);
   render() {
