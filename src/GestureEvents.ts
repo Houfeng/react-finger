@@ -91,27 +91,47 @@ export class GestureEvent {
     return this.__originEvent;
   }
 
+  public get nativeEvent() {
+    return this.originEvent?.nativeEvent;
+  }
+
   public get context() {
     return this.__context;
   }
 
   public preventDefault() {
-    return this.originEvent.preventDefault();
+    return this.originEvent?.preventDefault();
   }
 
   public stopPropagation() {
-    return this.originEvent.stopPropagation();
+    return this.originEvent?.stopPropagation();
   }
 
-  public get nativeEvent() {
-    return this.originEvent.nativeEvent;
+  public stopImmediatePropagation() {
+    return this.nativeEvent?.stopImmediatePropagation();
+  }
+
+  public get target() {
+    return this.originEvent?.target;
+  }
+
+  public get currentTarget() {
+    return this.originEvent?.currentTarget;
+  }
+
+  public get button() {
+    return (this.originEvent as any)?.button;
+  }
+
+  public get buttons() {
+    return (this.originEvent as any)?.buttons;
   }
 
   constructor(event: OriginEvent, props: GestureProps) {
     if (event.persist) event.persist();
     this.__context = uesGestureContext(event, props);
     this.__originEvent = event;
-    this.__gestureType = event.type.slice(0, 5);
+    this.__gestureType = event.type?.slice(0, 5);
   }
 
   @Contextable(() => [] as GesturePoint[])
