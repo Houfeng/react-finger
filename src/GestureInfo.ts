@@ -46,14 +46,14 @@ export const onGesturePointerEnd = (event: Event) => {
   setTimeout(() => (GestureInfo.type = null), 300);
 };
 
-if (supportEventTypes.touch && !supportEventTypes.pointer) {
+if (supportEventTypes.touch) {
   document.addEventListener("touchstart", onGesturePointerStart, true);
   document.addEventListener("touchmove", onGesturePointerMove, true);
   document.addEventListener("touchend", onGesturePointerEnd, true);
   document.addEventListener("touchcancel", onGesturePointerEnd, true);
 }
 
-if (supportEventTypes.mouse && !supportEventTypes.pointer) {
+if (supportEventTypes.mouse) {
   document.addEventListener("mousedown", onGesturePointerStart, true);
   document.addEventListener("mousemove", onGesturePointerMove, true);
   document.addEventListener("mouseup", onGesturePointerEnd, true);
