@@ -1,6 +1,6 @@
-# Mota Touch
+# Mota Gesture
 
-Mota Touch 是基于 Mota 同时兼容 PC & Mobile 的事件扩展，让基于 React + Mota 的移动应用
+Mota Gesture 是基于 Mota 同时兼容 PC & Mobile 的事件扩展，让基于 React + Mota 的移动应用
 开发变得更加便捷。
 
 ## 基本使用
@@ -9,7 +9,7 @@ Mota Touch 是基于 Mota 同时兼容 PC & Mobile 的事件扩展，让基于 R
 注意 Mota 版本需要是 `>=4.0.0`
 
 ```
-npm install react react-dom mota mota-touch --save
+npm install react react-dom mota mota-gesture --save
 ```
 
 在类组件中使用
@@ -17,10 +17,10 @@ npm install react react-dom mota mota-touch --save
 ```jsx
 import React from 'react';
 import { model } from 'mota';
-import { touch } from 'mota-touch';
+import { gesture } from 'mota-gesture';
 
 @model(YourModel)
-@touch
+@gesture
 export class App extends React.Component {
 
   onTap = (event)=>{
@@ -40,9 +40,9 @@ export class App extends React.Component {
 ```jsx
 import React from 'react';
 import { model } from 'mota';
-import { touch } from 'mota-touch';
+import { gesture } from 'mota-gesture';
 
-const App = touch(()=>{
+const App = gesture(()=>{
   const onTap = ()=>{
     console.log('onTap', event);
   }
@@ -53,7 +53,7 @@ const App = touch(()=>{
 
 ## 事件支持
 
-Mota Touch 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
+Mota Gesture 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
 
 事件 | 设备 | 说明  
 ------- | ------- | -------  
