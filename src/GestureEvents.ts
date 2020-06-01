@@ -175,7 +175,7 @@ export class GestureEvent {
   }
 
   public handlePointDown() {
-    if (this.gestureType === GestureType.point) {
+    if (this.gestureType === GestureType.point && false) {
       const point = (getGesturePoints(this) || [])[0];
       if (!point) return;
       this.points.push(point);
@@ -186,7 +186,7 @@ export class GestureEvent {
   }
 
   public handlePointMove() {
-    if (this.gestureType === GestureType.point) {
+    if (this.gestureType === GestureType.point && false) {
       const point = (getGesturePoints(this) || [])[0];
       if (!point) return;
       const index = this.changedPoints.findIndex(item => item.id === point.id);
@@ -198,7 +198,7 @@ export class GestureEvent {
   }
 
   public handlePointEnd() {
-    if (this.gestureType === GestureType.point) {
+    if (this.gestureType === GestureType.point && false) {
       const point = (getGesturePoints(this) || [])[0];
       if (!point) return;
       const index = this.changedPoints.findIndex(item => item.id === point.id);

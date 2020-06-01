@@ -163,10 +163,8 @@ export function mapingToNative(props: any, from: string, to: string) {
 
 export function createAttachProps(props: GestureProps) {
   // fix: ios 10+
-  const { onPinchStart, onPinch, onPinchEnd } = props;
-  if (onPinchStart || onPinch || onPinchEnd) {
-    document.addEventListener("gesturestart", event => event.preventDefault());
-  }
+  document.addEventListener("gesturestart", event => event.preventDefault());
+  document.body.style.touchAction = "none";
   if (GestureOptions.possibleToNative && isDesktop()) {
     mapingToNative(props, "onDoubleTap", "onDoubleClick");
     mapingToNative(props, "onTap", "onClick");
