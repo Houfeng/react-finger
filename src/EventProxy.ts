@@ -29,7 +29,6 @@ export interface EventProxyProps<T extends EventProxyTarget = EventProxyTarget>
   capture?: boolean;
   passive?: boolean;
   once?: boolean;
-  [name: string]: any;
 }
 
 export class EventProxyInner<
