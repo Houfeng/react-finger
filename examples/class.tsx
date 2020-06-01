@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { model } from "mota";
-import { touch, ITouchEvent, EventProxy } from "../src";
+import { gesture, GestureEvent, EventProxy } from "../src";
 
 const Block = styled.div`
   background: red;
@@ -20,16 +20,16 @@ const data = {
 };
 
 @model(data)
-@touch
+@gesture
 export class App extends React.Component {
 
   model: any;
 
-  onTap = (event: ITouchEvent) => {
+  onTap = (event: GestureEvent) => {
     console.log('onTap', event);
   }
 
-  onPinch = (event: ITouchEvent) => {
+  onPinch = (event: GestureEvent) => {
     event.preventDefault();
     event.stopPropagation();
     this.model.scale = this.model.originScale * event.scale;
@@ -47,7 +47,11 @@ export class App extends React.Component {
     console.log('onDocTap1');
   }
 
-  onPointDown = (event: ITouchEvent) => {
+  onSwipe = (event: GestureEvent) => {
+    console.log(event);
+  }
+
+  onPointDown = (event: GestureEvent) => {
     console.log("onPointDown", event);
   }
 
@@ -66,7 +70,12 @@ export class App extends React.Component {
       <div>scale: {scale}</div>
       <div onTap={event => console.log("tap", event)}>tap</div>
       {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
-      <EventProxy onDoubleTap={this.onDocTap} />
+      <EventProxy
+        onPinch={this.onPinch}
+        onPinchEnd={this.onPinchEnd}
+        onSwipe={this.onSwipe}
+        onDoubleTap={this.onDocTap}
+      />
     </div>
   }
 }

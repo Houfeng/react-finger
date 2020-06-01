@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2015-present Houfeng
- * @homepage https://github.com/Houfeng/mota-touch
+ * @homepage https://github.com/Houfeng/mota-gesture
  * @author Houfeng <admin@xhou.net>
  */
 
@@ -36,7 +36,7 @@ export interface IEventProxyProps<
 export class EventProxyInner<
   T extends EventProxyTarget = EventProxyTarget
 > extends React.PureComponent<IEventProxyProps<T>> {
-  public static motaTouch = true;
+  public static gesture = true;
 
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: T;
@@ -96,13 +96,13 @@ export class EventProxyInner<
 }
 
 export class EventProxy extends React.PureComponent<IEventProxyProps> {
-  static touch: (...args: any[]) => ReactNode = null;
-  static setMotaTouch = (value: any) => (EventProxy.touch = value);
+  static gesture: (...args: any[]) => ReactNode = null;
+  static setGesture = (value: any) => (EventProxy.gesture = value);
   render() {
     const { target = document, ...others } = this.props;
-    const { touch } = EventProxy;
-    if (!touch) return createElement(Fragment);
+    const { gesture } = EventProxy;
+    if (!gesture) return createElement(Fragment);
     const props = { ...others, target, motaTouchHost: this };
-    return touch(createElement(EventProxyInner, props), {});
+    return gesture(createElement(EventProxyInner, props), {});
   }
 }

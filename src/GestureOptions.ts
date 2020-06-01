@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2015-present Houfeng
- * @homepage https://github.com/Houfeng/mota-touch
+ * @homepage https://github.com/Houfeng/mota-gesture
  * @author Houfeng <admin@xhou.net>
  */
 
-export const TouchOptions = {
+export const GestureOptions = {
   swipeDurationThreshold: 1000,
   swipeHorizontalDistanceThreshold: 25,
   swipeVerticalDistanceThreshold: 45,

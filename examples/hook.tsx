@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { touch } from "../src";
+import { gesture } from "../src";
 
 const root = document.getElementById("root");
-export const App = touch(function App() {
+export const App = gesture(function App() {
   const onTap = () => {
     console.log('onTap');
   }
@@ -20,7 +20,7 @@ export const App = touch(function App() {
     onDoubleTap={() => { console.log('onDoubleTap') }}
     onTap={onTap}>
   </div>
-}, {});
+});
 
 
 ReactDOM.render(<App />, root);

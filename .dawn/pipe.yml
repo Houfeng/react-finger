@@ -28,7 +28,7 @@ build:
     files: ./src/**/*.ts
     text: 
       - 'Copyright (c) 2015-present Houfeng'
-      - '@homepage https://github.com/Houfeng/mota-touch'
+      - '@homepage https://github.com/Houfeng/mota-gesture'
       - '@author Houfeng <admin@xhou.net>'
   - name: shell
     script:

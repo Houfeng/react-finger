@@ -1,5 +1,5 @@
 {
-  "name": "mota-touch",
+  "name": "mota-gesture",
   "version": "2.0.5",
   "description": "",
   "main": "./dist/index.js",

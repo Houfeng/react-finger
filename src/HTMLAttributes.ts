@@ -1,53 +1,53 @@
 /**
  * Copyright (c) 2015-present Houfeng
- * @homepage https://github.com/Houfeng/mota-touch
+ * @homepage https://github.com/Houfeng/mota-gesture
  * @author Houfeng <admin@xhou.net>
  */
 
-import { ITouchHandler } from "./ITouchHandler";
+import { GestureHandler } from "./GestureHandler";
 
 declare module "react" {
   // tslint:disable-next-line
   interface HTMLAttributes<T> {
     // tap
-    onTap?: ITouchHandler;
-    onTapHold?: ITouchHandler;
-    onDoubleTap?: ITouchHandler;
+    onTap?: GestureHandler;
+    onTapHold?: GestureHandler;
+    onDoubleTap?: GestureHandler;
     // swipe
-    onSwipe?: ITouchHandler;
-    onSwipeUp?: ITouchHandler;
-    onSwipeRight?: ITouchHandler;
-    onSwipeDown?: ITouchHandler;
-    onSwipeLeft?: ITouchHandler;
+    onSwipe?: GestureHandler;
+    onSwipeUp?: GestureHandler;
+    onSwipeRight?: GestureHandler;
+    onSwipeDown?: GestureHandler;
+    onSwipeLeft?: GestureHandler;
     // pinch
-    onPinchStart?: ITouchHandler;
-    onPinch?: ITouchHandler;
-    onPinchEnd?: ITouchHandler;
-    // point
-    onPointDown?: ITouchHandler;
-    onPointMove?: ITouchHandler;
-    onPointUp?: ITouchHandler;
+    onPinchStart?: GestureHandler;
+    onPinch?: GestureHandler;
+    onPinchEnd?: GestureHandler;
+    // pointer
+    onGesturePointerDown?: GestureHandler;
+    onGesturePointerMove?: GestureHandler;
+    onGesturePointerUp?: GestureHandler;
   }
 
   // tslint:disable-next-line
   interface SVGProps<T> {
     // tap
-    onTap?: ITouchHandler;
-    onTapHold?: ITouchHandler;
-    onDoubleTap?: ITouchHandler;
+    onTap?: GestureHandler;
+    onTapHold?: GestureHandler;
+    onDoubleTap?: GestureHandler;
     // swipe
-    onSwipe?: ITouchHandler;
-    onSwipeUp?: ITouchHandler;
-    onSwipeRight?: ITouchHandler;
-    onSwipeDown?: ITouchHandler;
-    onSwipeLeft?: ITouchHandler;
+    onSwipe?: GestureHandler;
+    onSwipeUp?: GestureHandler;
+    onSwipeRight?: GestureHandler;
+    onSwipeDown?: GestureHandler;
+    onSwipeLeft?: GestureHandler;
     // pinch
-    onPinchStart?: ITouchHandler;
-    onPinch?: ITouchHandler;
-    onPinchEnd?: ITouchHandler;
-    // point
-    onPointDown?: ITouchHandler;
-    onPointMove?: ITouchHandler;
-    onPointUp?: ITouchHandler;
+    onPinchStart?: GestureHandler;
+    onPinch?: GestureHandler;
+    onPinchEnd?: GestureHandler;
+    // pointer
+    onGesturePointerDown?: GestureHandler;
+    onGesturePointerMove?: GestureHandler;
+    onGesturePointerUp?: GestureHandler;
   }
 }

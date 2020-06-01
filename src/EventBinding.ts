@@ -1,129 +1,129 @@
 /**
  * Copyright (c) 2015-present Houfeng
- * @homepage https://github.com/Houfeng/mota-touch
+ * @homepage https://github.com/Houfeng/mota-gesture
  * @author Houfeng <admin@xhou.net>
  */
 
-import { calcDistance } from "./VectorHelper";
-import { getEventOwner, TouchOwner } from "./TouchOwner";
-import { getTouchPoinsts, ITouchEvent } from "./TouchEvents";
-import { ICalcInfo } from "./ICalcInfo";
-import { isDesktop, eventTypes } from "./utils";
-import { ITouchProps } from "./ITouchProps";
-import { PointerInfo } from "./PointerInfo";
-import { TouchOptions } from "./TouchOptions";
+import { calcDistance, isDesktop, supportEventTypes } from "./GestureUtils";
+import { GestureEvent } from "./GestureEvents";
+import { GestureCalcInfo } from "./GestureCalcInfo";
+import { GestureProps } from "./GestureProps";
+import { GestureInfo } from "./GestureInfo";
+import { GestureOptions } from "./GestureOptions";
+import { OriginEvent } from "./OriginEvent";
 
-export function createEvent(event: ITouchEvent) {
-  if (event.persist) event.persist();
-  event.pointType = event.type.slice(0, 5);
-  return event instanceof Event ? event : Object.create(event);
-}
-
-export function createStartHandler(props: ITouchProps) {
-  return (event: ITouchEvent) => {
-    event = createEvent(event);
-    if (PointerInfo.type !== event.pointType) return;
-    const owner = getEventOwner(event, props);
-    owner.startPoints = owner.lastPoints = getTouchPoinsts(event);
-    owner.isPointDown = true;
-    owner.moveX = owner.lastPoint?.x - owner.startPoint?.x;
-    owner.moveY = owner.lastPoint?.y - owner.startPoint?.y;
-    const { onTapHold, onPointDown, onPinchStart } = props;
+export function createStartHandler(props: GestureProps) {
+  return (originEvent: OriginEvent) => {
+    const event = new GestureEvent(originEvent, props);
+    if (GestureInfo.type !== event.gestureType) return;
+    event.handlePointDown();
+    event.isPointDown = true;
+    event.moveX = event.changedPoint?.clientX - event.point?.clientX;
+    event.moveY = event.changedPoint?.clientY - event.point?.clientY;
+    const { onTapHold, onGesturePointerDown, onPinchStart } = props;
     if (onTapHold) {
-      owner.startHoldTimer(() => owner.emit(event, onTapHold));
+      event.startHoldTimer(() => event.emit(onTapHold));
     }
-    owner.emit(event, onPointDown);
+    event.emit(onGesturePointerDown);
     // Pinch
-    if (owner.lastPoints.length === 2 && owner.startPoints.length === 2) {
-      owner.isPinch = true;
-      owner.emit(event, onPinchStart);
+    if (event.changedPoints.length === 2 && event.points.length === 2) {
+      event.isPinch = true;
+      event.emit(onPinchStart);
     }
   };
 }
 
-export function createMoveHandler(props: ITouchProps) {
-  return (event: ITouchEvent) => {
-    event = createEvent(event);
-    if (PointerInfo.type !== event.pointType) return;
-    const owner = getEventOwner(event, props);
-    owner.lastPoints = getTouchPoinsts(event);
-    const { onPointMove, onPinch } = props;
-    owner.emit(event, onPointMove);
-    if (owner.isPointDown) {
-      const info = calcTouchInfo(owner);
-      if (info.isSwipeMove) owner.clearHoldTimer();
-      owner.moveX = owner.lastPoint?.x - owner.startPoint?.x;
-      owner.moveY = owner.lastPoint?.y - owner.startPoint?.y;
+export function createMoveHandler(props: GestureProps) {
+  return (originEvent: OriginEvent) => {
+    const event = new GestureEvent(originEvent, props);
+    if (GestureInfo.type !== event.gestureType) return;
+    event.handlePointMove();
+    const { onGesturePointerMove, onPinch } = props;
+    event.emit(onGesturePointerMove);
+    if (event.isPointDown) {
+      const info = calcGestureInfo(event);
+      if (info.isSwipeMove) event.clearHoldTimer();
+      event.moveX = event.changedPoint?.clientX - event.point?.clientX;
+      event.moveY = event.changedPoint?.clientY - event.point?.clientY;
     }
     if (
-      owner.isPointDown &&
-      owner.lastPoints.length === 2 &&
-      owner.startPoints.length === 2
+      event.isPointDown &&
+      event.changedPoints.length === 2 &&
+      event.points.length === 2
     ) {
-      owner.isPinch = true;
-      const origin = calcDistance(owner.startPoints[0], owner.startPoints[1]);
-      const latest = calcDistance(owner.lastPoints[0], owner.lastPoints[1]);
-      owner.scale = latest / origin;
-      owner.emit(event, onPinch);
+      event.isPinch = true;
+      const origin = calcDistance(event.points[0], event.points[1]);
+      const latest = calcDistance(
+        event.changedPoints[0],
+        event.changedPoints[1]
+      );
+      event.scale = latest / origin;
+      event.emit(onPinch);
     }
   };
 }
 
-export function createEndHandler(props: ITouchProps) {
-  return (event: ITouchEvent) => {
-    event = createEvent(event);
-    if (PointerInfo.type !== event.pointType) return;
-    const owner = getEventOwner(event, props);
-    const info = calcTouchInfo(owner);
-    owner.isPointDown = false;
-    owner.clearHoldTimer();
-    const { onPointUp, onSwipe, onTap, onDoubleTap, onPinchEnd } = props;
-    const onSwipeX = props["onSwipe" + info.direction];
-    owner.emit(event, onPointUp);
+export function createEndHandler(props: GestureProps) {
+  return (originEvent: OriginEvent) => {
+    const event = new GestureEvent(originEvent, props);
+    if (GestureInfo.type !== event.gestureType) return;
+    const info = calcGestureInfo(event);
+    event.isPointDown = false;
+    event.clearHoldTimer();
+    const {
+      onGesturePointerUp,
+      onSwipe,
+      onTap,
+      onDoubleTap,
+      onPinchEnd
+    } = props;
+    const onSwipeX = (props as any)["onSwipe" + info.direction];
+    event.emit(onGesturePointerUp);
     // Pinch 事件
-    if (owner.isPinch) owner.emit(event, onPinchEnd);
+    if (event.isPinch) event.emit(onPinchEnd);
     // 根据计算结果判断
     if (info.isSwipeTime && info.isSwipeMove) {
-      owner.isSwipe = true;
-      owner.direction = info.direction;
-      owner.emit(event, onSwipe);
-      owner.emit(event, onSwipeX);
+      event.isSwipe = true;
+      event.direction = info.direction;
+      event.emit(onSwipe);
+      event.emit(onSwipeX);
     } else if (info.isSwipeTime && !info.isSwipeMove && !info.isHoldTime) {
-      owner.emit(event, onTap);
+      event.emit(onTap);
       if (onDoubleTap) {
-        const timeStamp = event.timeStamp || owner.lastPoint?.timeStamp;
-        const x = event.clientX || event.lastPoint?.clientX;
-        const y = event.clientY || event.lastPoint?.clientY;
-        const lastTapInfo = owner.lastTapInfo;
+        const timeStamp = event.timeStamp || event.changedPoint?.timeStamp;
+        const x = event.clientX || event.changedPoint?.clientX;
+        const y = event.clientY || event.changedPoint?.clientY;
+        const lastTapInfo = event.lastTapInfo;
         // 处理 “双击”
-        owner.isDoubleTap =
+        event.isDoubleTap =
           lastTapInfo &&
           timeStamp - lastTapInfo.timeStamp <=
-            TouchOptions.dblDurationThreshold &&
+            GestureOptions.dblDurationThreshold &&
           Math.abs(x - lastTapInfo.x) <
-            TouchOptions.swipeHorizontalDistanceThreshold &&
+            GestureOptions.swipeHorizontalDistanceThreshold &&
           Math.abs(y - lastTapInfo.y) <
-            TouchOptions.swipeVerticalDistanceThreshold;
-        if (owner.isDoubleTap) {
-          owner.emit(event, onDoubleTap);
-          owner.lastTapInfo = null;
+            GestureOptions.swipeVerticalDistanceThreshold;
+        if (event.isDoubleTap) {
+          event.emit(onDoubleTap);
+          event.lastTapInfo = null;
         } else {
-          owner.lastTapInfo = { timeStamp, x, y };
+          event.lastTapInfo = { timeStamp, x, y };
         }
       }
     }
+    event.handlePointEnd();
   };
 }
 
-export function calcTouchInfo(owner: TouchOwner) {
-  const info: ICalcInfo = {};
-  info.timeStamp = owner.lastPoint ? owner.lastPoint.timeStamp : null;
-  info.existStartAndStop = !!(owner.lastPoint && owner.startPoint);
+export function calcGestureInfo(event: GestureEvent) {
+  const info: GestureCalcInfo = {};
+  info.timeStamp = event.changedPoint ? event.changedPoint.timeStamp : null;
+  info.existStartAndStop = !!(event.changedPoint && event.point);
   info.horizontalDistance = info.existStartAndStop
-    ? owner.lastPoint.x - owner.startPoint.x
+    ? event.changedPoint.clientX - event.point.clientX
     : 0;
   info.verticalDistance = info.existStartAndStop
-    ? owner.lastPoint.y - owner.startPoint.y
+    ? event.changedPoint.clientY - event.point.clientY
     : 0;
   info.horizontalDistanceValue = Math.abs(info.horizontalDistance);
   info.verticalDistanceVlaue = Math.abs(info.verticalDistance);
@@ -132,15 +132,15 @@ export function calcTouchInfo(owner: TouchOwner) {
   info.isVertical = !info.isHorizontal;
   info.isSwipeMove =
     info.horizontalDistanceValue >=
-      TouchOptions.swipeHorizontalDistanceThreshold ||
-    info.verticalDistanceVlaue >= TouchOptions.swipeVerticalDistanceThreshold;
+      GestureOptions.swipeHorizontalDistanceThreshold ||
+    info.verticalDistanceVlaue >= GestureOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
-    ? owner.lastPoint.timeStamp - owner.startPoint.timeStamp <=
-      TouchOptions.swipeDurationThreshold
+    ? event.changedPoint.timeStamp - event.point.timeStamp <=
+      GestureOptions.swipeDurationThreshold
     : true;
   info.isHoldTime = info.existStartAndStop
-    ? owner.lastPoint.timeStamp - owner.startPoint.timeStamp >=
-      TouchOptions.holdDurationThreshold
+    ? event.changedPoint.timeStamp - event.point.timeStamp >=
+      GestureOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素
   if (info.isHorizontal && info.horizontalDistance > 0) {
@@ -155,46 +155,47 @@ export function calcTouchInfo(owner: TouchOwner) {
   return info;
 }
 
-export function mapingToNative(props: ITouchProps, from: string, to: string) {
+export function mapingToNative(props: any, from: string, to: string) {
   const handler = props[from];
   delete props[from];
   props[to] = handler;
 }
 
-export function createAttachProps(props: ITouchProps): ITouchProps {
+export function createAttachProps(props: GestureProps) {
   // fix: ios 10+
   const { onPinchStart, onPinch, onPinchEnd } = props;
   if (onPinchStart || onPinch || onPinchEnd) {
     document.addEventListener("gesturestart", event => event.preventDefault());
   }
-  if (TouchOptions.possibleToNative && isDesktop()) {
+  if (GestureOptions.possibleToNative && isDesktop()) {
     mapingToNative(props, "onDoubleTap", "onDoubleClick");
     mapingToNative(props, "onTap", "onClick");
   }
   const startHandler = createStartHandler(props);
   const moveHandler = createMoveHandler(props);
   const endHandler = createEndHandler(props);
-  const touchEvents = eventTypes.touch
-    ? {
-        onTouchStart: startHandler,
-        onTouchMove: moveHandler,
-        onTouchEnd: endHandler
-      }
-    : null;
-  const mouseEvents =
-    eventTypes.mouse && !eventTypes.pointer
-      ? {
-          onMouseDown: startHandler,
-          onMouseMove: moveHandler,
-          onMouseUp: endHandler
-        }
-      : null;
-  const pointerEvents = eventTypes.pointer
-    ? {
-        onMouseDown: startHandler,
-        onMouseMove: moveHandler,
-        onMouseUp: endHandler
-      }
-    : null;
+  // pointer
+  const pointerEvents = isDesktop() &&
+    supportEventTypes.pointer && {
+      onPointerDown: startHandler,
+      onPointerMove: moveHandler,
+      onPointerUp: endHandler,
+      onPointerCancel: endHandler
+    };
+  // touch
+  const touchEvents = supportEventTypes.touch &&
+    !pointerEvents && {
+      onTouchStart: startHandler,
+      onTouchMove: moveHandler,
+      onTouchEnd: endHandler,
+      onTouchCancel: endHandler
+    };
+  // mouse
+  const mouseEvents = supportEventTypes.mouse &&
+    !pointerEvents && {
+      onMouseDown: startHandler,
+      onMouseMove: moveHandler,
+      onMouseUp: endHandler
+    };
   return { ...touchEvents, ...mouseEvents, ...pointerEvents };
 }
