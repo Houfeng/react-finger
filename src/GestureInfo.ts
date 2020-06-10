@@ -18,32 +18,30 @@ export function getGestureType(event: Event): GestureType {
   return event.type.slice(0, 5) as GestureType;
 }
 
+export let resetGestureInfoTimer: any;
+export function resetGestureInfo() {
+  if (resetGestureInfoTimer) clearTimeout(resetGestureInfoTimer);
+  resetGestureInfoTimer = setTimeout(() => {
+    GestureInfo.type = null;
+  }, 300);
+}
+
 export const onGesturePointerStart = (event: Event) => {
   const type = getGestureType(event);
   if (!GestureInfo.type) GestureInfo.type = type;
-  if (type !== GestureInfo.type) {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-  }
+  resetGestureInfo();
 };
 
 export const onGesturePointerMove = (event: Event) => {
   const type = getGestureType(event);
   if (!GestureInfo.type) GestureInfo.type = type;
-  if (type !== GestureInfo.type) {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-  }
+  resetGestureInfo();
 };
 
 export const onGesturePointerEnd = (event: Event) => {
   const type = getGestureType(event);
   if (!GestureInfo.type) GestureInfo.type = type;
-  if (type !== GestureInfo.type) {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-  }
-  setTimeout(() => (GestureInfo.type = null), 300);
+  resetGestureInfo();
 };
 
 if (supportEventTypes.touch) {
