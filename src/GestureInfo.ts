@@ -4,7 +4,7 @@
  * @author Houfeng <admin@xhou.net>
  */
 
-import { supportEventTypes } from "./GestureUtils";
+import { supportEventTypes, isDesktop } from "./GestureUtils";
 
 export enum GestureType {
   mouse = "mouse",
@@ -44,22 +44,22 @@ export const onGesturePointerEnd = (event: Event) => {
   resetGestureInfo();
 };
 
-if (supportEventTypes.touch) {
+if (supportEventTypes.touch && !isDesktop()) {
   document.addEventListener("touchstart", onGesturePointerStart, true);
   document.addEventListener("touchmove", onGesturePointerMove, true);
   document.addEventListener("touchend", onGesturePointerEnd, true);
   document.addEventListener("touchcancel", onGesturePointerEnd, true);
 }
 
-if (supportEventTypes.mouse) {
-  document.addEventListener("mousedown", onGesturePointerStart, true);
-  document.addEventListener("mousemove", onGesturePointerMove, true);
-  document.addEventListener("mouseup", onGesturePointerEnd, true);
-}
-
-if (supportEventTypes.pointer) {
+if (supportEventTypes.pointer && isDesktop()) {
   document.addEventListener("pointerdown", onGesturePointerStart, true);
   document.addEventListener("pointermove", onGesturePointerMove, true);
   document.addEventListener("pointerup", onGesturePointerEnd, true);
   document.addEventListener("pointercancel", onGesturePointerEnd, true);
+}
+
+if (supportEventTypes.mouse && !supportEventTypes.pointer) {
+  document.addEventListener("mousedown", onGesturePointerStart, true);
+  document.addEventListener("mousemove", onGesturePointerMove, true);
+  document.addEventListener("mouseup", onGesturePointerEnd, true);
 }
