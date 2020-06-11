@@ -10,7 +10,7 @@ export interface GestureCalcInfo {
   horizontalDistance?: number;
   verticalDistance?: number;
   horizontalDistanceValue?: number;
-  verticalDistanceVlaue?: number;
+  verticalDistanceValue?: number;
   isHorizontal?: boolean;
   isVertical?: boolean;
   isSwipeMove?: boolean;

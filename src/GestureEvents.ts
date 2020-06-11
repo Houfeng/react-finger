@@ -14,7 +14,7 @@ import {
   uesGestureContext
 } from "./GestureContext";
 import { OriginEvent } from "./OriginEvent";
-import { GestureType } from "./GestureInfo";
+import { GestureType } from "./GestureType";
 
 export const GestureEventNameList = [
   "onTap",

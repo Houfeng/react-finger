@@ -5,7 +5,6 @@
  */
 
 import "./HTMLAttributes";
-import "./GestureInfo";
 
 export * from "./GestureCalcInfo";
 export * from "./GestureHandler";
@@ -16,6 +15,12 @@ export * from "./GestureEvents";
 export * from "./GestureOptions";
 export * from "./GestureContext";
 export * from "./GestureUtils";
+export * from "./GestureType";
 export * from "./EventProxy";
 export * from "./EventBinding";
-export * from "./GestureInfo";
+
+(() => {
+  // fix: ios 10+
+  document.addEventListener("gesturestart", event => event.preventDefault());
+  document.body.style.touchAction = "none";
+})();

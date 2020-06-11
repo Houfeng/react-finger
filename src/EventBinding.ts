@@ -4,18 +4,23 @@
  * @author Houfeng <admin@xhou.net>
  */
 
-import { calcDistance, isDesktop, supportEventTypes } from "./GestureUtils";
+import {
+  calcDistance,
+  isDesktop,
+  supportEventTypes,
+  isMobile
+} from "./GestureUtils";
 import { GestureEvent } from "./GestureEvents";
 import { GestureCalcInfo } from "./GestureCalcInfo";
 import { GestureProps } from "./GestureProps";
-import { GestureInfo } from "./GestureInfo";
+// import { GestureInfo } from "./GestureInfo";
 import { GestureOptions } from "./GestureOptions";
 import { OriginEvent } from "./OriginEvent";
 
 export function createStartHandler(props: GestureProps) {
   return (originEvent: OriginEvent) => {
     const event = new GestureEvent(originEvent, props);
-    if (GestureInfo.type !== event.gestureType) return;
+    // if (GestureInfo.type !== event.gestureType) return;
     event.handlePointDown();
     event.isPointDown = true;
     event.moveX = event.changedPoint?.clientX - event.point?.clientX;
@@ -36,7 +41,7 @@ export function createStartHandler(props: GestureProps) {
 export function createMoveHandler(props: GestureProps) {
   return (originEvent: OriginEvent) => {
     const event = new GestureEvent(originEvent, props);
-    if (GestureInfo.type !== event.gestureType) return;
+    // if (GestureInfo.type !== event.gestureType) return;
     event.handlePointMove();
     const { onGesturePointerMove, onPinch } = props;
     event.emit(onGesturePointerMove);
@@ -66,7 +71,7 @@ export function createMoveHandler(props: GestureProps) {
 export function createEndHandler(props: GestureProps) {
   return (originEvent: OriginEvent) => {
     const event = new GestureEvent(originEvent, props);
-    if (GestureInfo.type !== event.gestureType) return;
+    // if (GestureInfo.type !== event.gestureType) return;
     const info = calcGestureInfo(event);
     event.isPointDown = false;
     event.clearHoldTimer();
@@ -126,14 +131,14 @@ export function calcGestureInfo(event: GestureEvent) {
     ? event.changedPoint.clientY - event.point.clientY
     : 0;
   info.horizontalDistanceValue = Math.abs(info.horizontalDistance);
-  info.verticalDistanceVlaue = Math.abs(info.verticalDistance);
+  info.verticalDistanceValue = Math.abs(info.verticalDistance);
   info.isHorizontal =
-    info.horizontalDistanceValue >= info.verticalDistanceVlaue;
+    info.horizontalDistanceValue >= info.verticalDistanceValue;
   info.isVertical = !info.isHorizontal;
   info.isSwipeMove =
     info.horizontalDistanceValue >=
       GestureOptions.swipeHorizontalDistanceThreshold ||
-    info.verticalDistanceVlaue >= GestureOptions.swipeVerticalDistanceThreshold;
+    info.verticalDistanceValue >= GestureOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
     ? event.changedPoint.timeStamp - event.point.timeStamp <=
       GestureOptions.swipeDurationThreshold
@@ -155,19 +160,16 @@ export function calcGestureInfo(event: GestureEvent) {
   return info;
 }
 
-export function mapingToNative(props: any, from: string, to: string) {
+export function mappingToNative(props: any, from: string, to: string) {
   const handler = props[from];
   delete props[from];
   props[to] = handler;
 }
 
 export function createAttachProps(props: GestureProps) {
-  // fix: ios 10+
-  document.addEventListener("gesturestart", event => event.preventDefault());
-  document.body.style.touchAction = "none";
   if (GestureOptions.possibleToNative && isDesktop()) {
-    mapingToNative(props, "onDoubleTap", "onDoubleClick");
-    mapingToNative(props, "onTap", "onClick");
+    mappingToNative(props, "onDoubleTap", "onDoubleClick");
+    mappingToNative(props, "onTap", "onClick");
   }
   const startHandler = createStartHandler(props);
   const moveHandler = createMoveHandler(props);
@@ -181,7 +183,8 @@ export function createAttachProps(props: GestureProps) {
       onPointerCancel: endHandler
     };
   // touch
-  const touchEvents = supportEventTypes.touch &&
+  const touchEvents = isMobile() &&
+    supportEventTypes.touch &&
     !pointerEvents && {
       onTouchStart: startHandler,
       onTouchMove: moveHandler,
@@ -189,7 +192,8 @@ export function createAttachProps(props: GestureProps) {
       onTouchCancel: endHandler
     };
   // mouse
-  const mouseEvents = supportEventTypes.mouse &&
+  const mouseEvents = isDesktop() &&
+    supportEventTypes.mouse &&
     !pointerEvents && {
       onMouseDown: startHandler,
       onMouseMove: moveHandler,
