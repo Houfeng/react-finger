@@ -19,8 +19,15 @@ export * from "./GestureType";
 export * from "./EventProxy";
 export * from "./EventBinding";
 
-(() => {
+(document => {
   // fix: ios 10+
   document.addEventListener("gesturestart", event => event.preventDefault());
-  document.body.style.touchAction = "none";
-})();
+  // for PointerEvents
+  const id = "mota-gesture-style";
+  if (document.head && !document.getElementById(id)) {
+    const style = document.createElement("style");
+    style.setAttribute("id", id);
+    style.textContent = `*{touch-action:none;}`;
+    document.head.appendChild(style);
+  }
+})(document);
