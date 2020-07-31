@@ -55,6 +55,10 @@ export class App extends React.Component {
     console.log("onPointDown", event);
   }
 
+  onGesturePointerMove = (event: GestureEvent) => {
+    console.log('onGesturePointerMove', event.moveX, event.moveY);
+  }
+
   render() {
     const { originScale, scale } = this.model;
     return <div style={{
@@ -71,6 +75,7 @@ export class App extends React.Component {
       <div onTap={event => console.log("tap", event)}>tap</div>
       {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
       <EventProxy
+        onGesturePointerMove={this.onGesturePointerMove}
         onPinch={this.onPinch}
         onPinchEnd={this.onPinchEnd}
         onSwipe={this.onSwipe}
