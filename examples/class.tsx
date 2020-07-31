@@ -48,7 +48,7 @@ export class App extends React.Component {
   }
 
   onSwipe = (event: GestureEvent) => {
-    console.log(event);
+    console.log("swipe", event.direction);
   }
 
   onPointDown = (event: GestureEvent) => {

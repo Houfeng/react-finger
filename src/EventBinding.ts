@@ -23,8 +23,8 @@ export function createStartHandler(props: GestureProps) {
     // if (GestureInfo.type !== event.gestureType) return;
     event.handlePointDown();
     event.isPointDown = true;
-    event.moveX = event.changedPoint?.clientX - event.point?.clientX;
-    event.moveY = event.changedPoint?.clientY - event.point?.clientY;
+    event.moveX = event.changedPoint?.clientX - event.initial?.point?.clientX;
+    event.moveY = event.changedPoint?.clientY - event.initial?.point?.clientY;
     const { onTapHold, onGesturePointerDown, onPinchStart } = props;
     if (onTapHold) {
       event.startHoldTimer(() => event.emit(onTapHold));
@@ -48,8 +48,8 @@ export function createMoveHandler(props: GestureProps) {
     if (event.isPointDown) {
       const info = calcGestureInfo(event);
       if (info.isSwipeMove) event.clearHoldTimer();
-      event.moveX = event.changedPoint?.clientX - event.point?.clientX;
-      event.moveY = event.changedPoint?.clientY - event.point?.clientY;
+      event.moveX = event.changedPoint?.clientX - event.initial?.point?.clientX;
+      event.moveY = event.changedPoint?.clientY - event.initial?.point?.clientY;
     }
     if (
       event.isPointDown &&
@@ -57,9 +57,12 @@ export function createMoveHandler(props: GestureProps) {
       event.points.length === 2
     ) {
       event.isPinch = true;
-      const origin = calcDistance(event.points[0], event.points[1]);
+      const origin = calcDistance(
+        event.initial?.points?.[0],
+        event.initial?.points?.[1]
+      );
       const latest = calcDistance(
-        event.changedPoints[0],
+        event.changedPoints?.[0],
         event.changedPoints[1]
       );
       event.scale = latest / origin;
@@ -123,12 +126,12 @@ export function createEndHandler(props: GestureProps) {
 export function calcGestureInfo(event: GestureEvent) {
   const info: GestureCalcInfo = {};
   info.timeStamp = event.changedPoint ? event.changedPoint.timeStamp : null;
-  info.existStartAndStop = !!(event.changedPoint && event.point);
+  info.existStartAndStop = !!(event.changedPoint && event.initial?.point);
   info.horizontalDistance = info.existStartAndStop
-    ? event.changedPoint.clientX - event.point.clientX
+    ? event.changedPoint.clientX - event.initial.point.clientX
     : 0;
   info.verticalDistance = info.existStartAndStop
-    ? event.changedPoint.clientY - event.point.clientY
+    ? event.changedPoint.clientY - event.initial.point.clientY
     : 0;
   info.horizontalDistanceValue = Math.abs(info.horizontalDistance);
   info.verticalDistanceValue = Math.abs(info.verticalDistance);
@@ -140,11 +143,11 @@ export function calcGestureInfo(event: GestureEvent) {
       GestureOptions.swipeHorizontalDistanceThreshold ||
     info.verticalDistanceValue >= GestureOptions.swipeVerticalDistanceThreshold;
   info.isSwipeTime = info.existStartAndStop
-    ? event.changedPoint.timeStamp - event.point.timeStamp <=
+    ? event.changedPoint.timeStamp - event.initial.point.timeStamp <=
       GestureOptions.swipeDurationThreshold
     : true;
   info.isHoldTime = info.existStartAndStop
-    ? event.changedPoint.timeStamp - event.point.timeStamp >=
+    ? event.changedPoint.timeStamp - event.initial.point.timeStamp >=
       GestureOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素
