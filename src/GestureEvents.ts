@@ -14,7 +14,6 @@ import {
   uesGestureContext
 } from "./GestureContext";
 import { OriginEvent } from "./OriginEvent";
-import { GestureType } from "./GestureType";
 
 export const GestureEventNameList = [
   "onTap",
@@ -56,26 +55,56 @@ export function findGestureEvents(props: GestureProps) {
   );
 }
 
-export function getGesturePoints(event: GestureEvent): GesturePoint[] {
-  const originEvent = event.originEvent;
+export function toGesturePoint(
+  item: Touch | MouseEvent,
+  id: number,
+  timeStamp: number
+) {
+  const point: GesturePoint = {
+    id,
+    clientX: item.clientX,
+    clientY: item.clientY,
+    pageX: item.pageX,
+    pageY: item.pageY,
+    screenX: item.screenX,
+    screenY: item.screenY,
+    timeStamp: (item as any).timeStamp || timeStamp
+  };
+  return point;
+}
+
+export interface GesturePoints {
+  points: GesturePoint[];
+  targetPoints: GesturePoint[];
+  changedPoints: GesturePoint[];
+}
+
+export function getGesturePoints(event: GestureEvent): GesturePoints {
+  const originEvent = event.originEvent as React.TouchEvent<Element> &
+    React.PointerEvent<Element>;
   if (originEvent.persist) originEvent.persist();
-  const { targetTouches, timeStamp, pointerId } = originEvent as any;
-  const items: any = targetTouches
+  const {
+    touches,
+    targetTouches,
+    changedTouches,
+    timeStamp,
+    pointerId
+  } = originEvent;
+  const items: Touch[] = touches ? [].slice.call(touches) : [originEvent];
+  const targetItems: Touch[] = targetTouches
     ? [].slice.call(targetTouches)
     : [originEvent];
-  return items.map((item: Touch) => {
-    const point: GesturePoint = {
-      id: pointerId,
-      clientX: item.clientX,
-      clientY: item.clientY,
-      pageX: item.pageX,
-      pageY: item.pageY,
-      screenX: item.screenX,
-      screenY: item.screenY,
-      timeStamp: (item as any).timeStamp || timeStamp
-    };
-    return point;
-  });
+  const changedItems: Touch[] = changedTouches
+    ? [].slice.call(changedTouches)
+    : [originEvent];
+  const points = items.map(item => toGesturePoint(item, pointerId, timeStamp));
+  const targetPoints = targetItems.map(item =>
+    toGesturePoint(item, pointerId, timeStamp)
+  );
+  const changedPoints = changedItems.map(item =>
+    toGesturePoint(item, pointerId, timeStamp)
+  );
+  return { points, targetPoints, changedPoints };
 }
 
 export class GestureEvent {
@@ -138,6 +167,9 @@ export class GestureEvent {
   public points?: GesturePoint[];
 
   @Contextable(() => [] as GesturePoint[])
+  public targetPoints?: GesturePoint[];
+
+  @Contextable(() => [] as GesturePoint[])
   public changedPoints?: GesturePoint[];
 
   @Contextable()
@@ -175,37 +207,45 @@ export class GestureEvent {
   }
 
   public handlePointDown() {
-    if (this.gestureType === GestureType.point && false) {
-      const point = (getGesturePoints(this) || [])[0];
-      if (!point) return;
-      this.points.push(point);
-      this.changedPoints.push(point);
-    } else {
-      this.points = this.changedPoints = getGesturePoints(this);
-    }
+    // if (this.gestureType === GestureType.point && false) {
+    //   const point = (getGesturePoints(this) || [])[0];
+    //   if (!point) return;
+    //   this.points.push(point);
+    //   this.changedPoints.push(point);
+    // } else {
+    //   this.points = this.changedPoints = getGesturePoints(this);
+    // }
+    const { points, targetPoints, changedPoints } = getGesturePoints(this);
+    this.points = points;
+    this.targetPoints = targetPoints;
+    this.changedPoints = changedPoints;
   }
 
   public handlePointMove() {
-    if (this.gestureType === GestureType.point && false) {
-      const point = (getGesturePoints(this) || [])[0];
-      if (!point) return;
-      const index = this.changedPoints.findIndex(item => item.id === point.id);
-      if (index < 0) return;
-      this.changedPoints[index] = point;
-    } else {
-      this.changedPoints = getGesturePoints(this);
-    }
+    // if (this.gestureType === GestureType.point && false) {
+    //   const point = (getGesturePoints(this) || [])[0];
+    //   if (!point) return;
+    //   const index = this.changedPoints.findIndex(item => item.id === point.id);
+    //   if (index < 0) return;
+    //   this.changedPoints[index] = point;
+    // } else {
+    //   this.changedPoints = getGesturePoints(this);
+    // }
+    const { points, targetPoints, changedPoints } = getGesturePoints(this);
+    this.points = points;
+    this.targetPoints = targetPoints;
+    this.changedPoints = changedPoints;
   }
 
   public handlePointEnd() {
-    if (this.gestureType === GestureType.point && false) {
-      const point = (getGesturePoints(this) || [])[0];
-      if (!point) return;
-      const index = this.changedPoints.findIndex(item => item.id === point.id);
-      if (index < 0) return;
-      this.points.splice(index, 1);
-      this.changedPoints.splice(index, 1);
-    }
+    // if (this.gestureType === GestureType.point && false) {
+    //   const point = (getGesturePoints(this) || [])[0];
+    //   if (!point) return;
+    //   const index = this.changedPoints.findIndex(item => item.id === point.id);
+    //   if (index < 0) return;
+    //   this.points.splice(index, 1);
+    //   this.changedPoints.splice(index, 1);
+    // }
   }
 
   public get point() {
@@ -214,6 +254,10 @@ export class GestureEvent {
 
   public get changedPoint() {
     return this.changedPoints?.[0];
+  }
+
+  public get targetPoint() {
+    return this.targetPoints?.[0];
   }
 
   public startHoldTimer(done: Function) {

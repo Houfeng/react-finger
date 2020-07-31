@@ -1,6 +1,6 @@
 {
   "name": "mota-gesture",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
@@ -15,8 +15,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^10.12.11",
-    "@types/react": "^16.0.6",
-    "@types/react-dom": "^16.0.6",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.0",
     "dn-middleware-browser-sync": "^0.1.0",
     "dn-middleware-clean": "^1.0.2",
@@ -32,11 +32,11 @@
     "dn-middleware-unit": "^0.1.18",
     "dn-middleware-version": "^1.0.4",
     "dn-middleware-webpack": "^1.10.1",
-    "styled-components": "^5.1.0",
+    "styled-components": "^5.1.1",
     "typescript": "3.7.5"
   },
   "dependencies": {
-    "mota": "^6.2.4",
+    "mota": "^6.3.1",
     "ntils": "^5.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

@@ -5,7 +5,7 @@
  */
 
 export interface GesturePoint {
-  id?: string;
+  id?: number;
   clientX: number;
   clientY: number;
   pageX: number;
