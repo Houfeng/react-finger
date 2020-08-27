@@ -15,7 +15,11 @@ console.log(console.log(React.createElement(React.forwardRef(() => {
 
 const root = document.getElementById("root");
 const data = {
+  originX: 0,
+  originY: 0,
   originScale: 1,
+  x: 0,
+  y: 0,
   scale: 1,
 };
 
@@ -33,10 +37,14 @@ export class App extends React.Component {
     event.preventDefault();
     event.stopPropagation();
     this.model.scale = this.model.originScale * event.scale;
+    this.model.x = this.model.originX + event.moveX;
+    this.model.y = this.model.originY + event.moveY;
   }
 
   onPinchEnd = () => {
     this.model.originScale = this.model.scale;
+    this.model.originX = this.model.x;
+    this.model.originY = this.model.y;
   }
 
   onDocTap = (event: any) => {
@@ -60,18 +68,19 @@ export class App extends React.Component {
   }
 
   render() {
-    const { originScale, scale } = this.model;
+    const { originScale, scale, x, y } = this.model;
     return <div style={{
       width: 260,
       height: 200,
       margin: "auto",
       border: "8px solid #333",
-      transitionDuration: ".3s",
+      //transitionDuration: ".3s",
       background: "#fff",
-      transform: `scale(${scale}) translateZ(0)`
+      transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
     }}>
       <div>originScale: {originScale}</div>
       <div>scale: {scale}</div>
+      <div>x: {x}, y: {y}</div>
       <div onTap={event => console.log("tap", event)}>tap</div>
       {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
       <EventProxy

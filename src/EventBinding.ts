@@ -31,7 +31,7 @@ export function createStartHandler(props: GestureProps) {
     }
     event.emit(onGesturePointerDown);
     // Pinch
-    if (event.changedPoints.length === 2 && event.points.length === 2) {
+    if (event.points.length === 2) {
       event.isPinch = true;
       event.emit(onPinchStart);
     }
@@ -51,20 +51,13 @@ export function createMoveHandler(props: GestureProps) {
       event.moveX = event.changedPoint?.clientX - event.initial?.point?.clientX;
       event.moveY = event.changedPoint?.clientY - event.initial?.point?.clientY;
     }
-    if (
-      event.isPointDown &&
-      event.changedPoints.length === 2 &&
-      event.points.length === 2
-    ) {
+    if (event.isPointDown && event.points.length === 2) {
       event.isPinch = true;
       const origin = calcDistance(
         event.initial?.points?.[0],
         event.initial?.points?.[1]
       );
-      const latest = calcDistance(
-        event.changedPoints?.[0],
-        event.changedPoints[1]
-      );
+      const latest = calcDistance(event.points?.[0], event.points?.[1]);
       event.scale = latest / origin;
       event.emit(onPinch);
     }
