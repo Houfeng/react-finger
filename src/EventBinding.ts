@@ -23,8 +23,8 @@ export function createStartHandler(props: GestureProps) {
     // if (GestureInfo.type !== event.gestureType) return;
     event.handlePointDown();
     event.isPointDown = true;
-    event.moveX = event.changedPoint?.clientX - event.initial?.point?.clientX;
-    event.moveY = event.changedPoint?.clientY - event.initial?.point?.clientY;
+    event.moveX = event.point?.clientX - event.initial?.point?.clientX;
+    event.moveY = event.point?.clientY - event.initial?.point?.clientY;
     const { onTapHold, onGesturePointerDown, onPinchStart } = props;
     if (onTapHold) {
       event.startHoldTimer(() => event.emit(onTapHold));
@@ -48,8 +48,8 @@ export function createMoveHandler(props: GestureProps) {
     if (event.isPointDown) {
       const info = calcGestureInfo(event);
       if (info.isSwipeMove) event.clearHoldTimer();
-      event.moveX = event.changedPoint?.clientX - event.initial?.point?.clientX;
-      event.moveY = event.changedPoint?.clientY - event.initial?.point?.clientY;
+      event.moveX = event.point?.clientX - event.initial?.point?.clientX;
+      event.moveY = event.point?.clientY - event.initial?.point?.clientY;
     }
     if (event.isPointDown && event.points.length === 2) {
       event.isPinch = true;
