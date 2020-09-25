@@ -24,6 +24,7 @@ export function isDesktop() {
 }
 
 export function calcDistance(from: GesturePoint, to: GesturePoint) {
+  if (!from || !to) return 0;
   const x = from.clientX - to.clientX;
   const y = from.clientY - to.clientY;
   return Math.sqrt(x * x + y * y);

@@ -58,8 +58,10 @@ export function createMoveHandler(props: GestureProps) {
         event.initial?.points?.[1]
       );
       const latest = calcDistance(event.points?.[0], event.points?.[1]);
-      event.scale = latest / origin;
-      event.emit(onPinch);
+      if (origin !== 0 && latest !== 0) {
+        event.scale = latest / origin;
+        event.emit(onPinch);
+      }
     }
   };
 }
