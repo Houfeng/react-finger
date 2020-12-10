@@ -6,6 +6,8 @@
     "moduleResolution": "node",
     "declaration": true,
     "noImplicitAny": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
     "module": "ESNext",
     "target": "es5",
     "jsx": "react",
