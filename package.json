@@ -1,6 +1,6 @@
 {
   "name": "mota-gesture",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
@@ -36,8 +36,8 @@
     "typescript": "3.7.5"
   },
   "dependencies": {
-    "mota": "^7.3.0",
-    "ntils": "^5.2.0",
+    "mota": "*",
+    "ntils": "*",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
