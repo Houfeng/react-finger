@@ -1,8 +1,9 @@
-import React from "react";
+import { EventContext, EventProxy, GestureEvent, gesture } from "../src";
+import React, { createRef } from "react";
+
 import ReactDOM from "react-dom";
-import styled from "styled-components";
 import { model } from "mota";
-import { gesture, GestureEvent, EventProxy } from "../src";
+import styled from "styled-components";
 
 const Block = styled.div`
   background: red;
@@ -67,30 +68,34 @@ export class App extends React.Component {
     console.log('onGesturePointerMove', event.moveX, event.moveY);
   }
 
+  boxRef = createRef<HTMLDivElement>();
+
   render() {
     const { originScale, scale, x, y } = this.model;
-    return <div style={{
-      width: 260,
-      height: 200,
-      margin: "auto",
-      border: "8px solid #333",
-      //transitionDuration: ".3s",
-      background: "#fff",
-      transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
-    }}>
-      <div>originScale: {originScale}</div>
-      <div>scale: {scale}</div>
-      <div>x: {x}, y: {y}</div>
-      <div onTap={event => console.log("tap", event)}>tap</div>
-      {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
-      <EventProxy
-        onGesturePointerMove={this.onGesturePointerMove}
-        onPinch={this.onPinch}
-        onPinchEnd={this.onPinchEnd}
-        onSwipe={this.onSwipe}
-        onDoubleTap={this.onDocTap}
-      />
-    </div>
+    return <EventContext.Provider value={this.boxRef}>
+      <div ref={this.boxRef} style={{
+        width: 260,
+        height: 200,
+        margin: "auto",
+        border: "8px solid #333",
+        //transitionDuration: ".3s",
+        background: "#fff",
+        transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+      }}>
+        <div>originScale: {originScale}</div>
+        <div>scale: {scale}</div>
+        <div>x: {x}, y: {y}</div>
+        <div onTap={event => console.log("tap", event)}>tap</div>
+        {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
+        <EventProxy
+          onGesturePointerMove={this.onGesturePointerMove}
+          onPinch={this.onPinch}
+          onPinchEnd={this.onPinchEnd}
+          onSwipe={this.onSwipe}
+          onDoubleTap={this.onDocTap}
+        />
+      </div>
+    </EventContext.Provider>
   }
 }
 

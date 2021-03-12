@@ -4,20 +4,18 @@
  * @author Houfeng <admin@xhou.net>
  */
 
-import React, {
-  createElement,
+import { EventProxyTarget, toEventTarget } from "./EventProxyTarget";
+import {
   Fragment,
   HTMLAttributes,
-  ReactNode
+  PureComponent,
+  ReactNode,
+  createElement
 } from "react";
 import { isFunction, isNull } from "ntils";
 
-export type EventProxyTarget =
-  | EventTarget
-  | Document
-  | Window
-  | typeof globalThis
-  | HTMLElement;
+import { EventContext } from "./EventContext";
+import { nextTick } from "mota";
 
 export interface EventProxyProps<T extends EventProxyTarget = EventProxyTarget>
   extends HTMLAttributes<T> {
@@ -33,17 +31,17 @@ export interface EventProxyProps<T extends EventProxyTarget = EventProxyTarget>
 
 export class EventProxyInner<
   T extends EventProxyTarget = EventProxyTarget
-> extends React.PureComponent<EventProxyProps<T>> {
+> extends PureComponent<EventProxyProps<T>> {
   public static gesture = true;
 
   protected handlers: [string, EventListenerOrEventListenerObject][];
-  protected target: T;
+  protected target: EventTarget;
   protected options?: boolean | AddEventListenerOptions;
 
   protected save() {
     const { target, useCapture = false } = this.props;
     const { capture = useCapture, passive, once } = this.props;
-    this.target = target;
+    this.target = toEventTarget(target) || document;
     this.options =
       isNull(passive) && isNull(once) ? capture : { capture, passive, once };
     this.handlers = Object.entries(this.props).reduce(
@@ -77,11 +75,11 @@ export class EventProxyInner<
   }
 
   componentDidMount() {
-    this.bind();
+    nextTick(() => this.bind());
   }
 
   componentDidUpdate() {
-    this.rebind();
+    nextTick(() => this.rebind());
   }
 
   componentWillUnmount() {
@@ -89,18 +87,24 @@ export class EventProxyInner<
   }
 
   render() {
-    return React.createElement(React.Fragment);
+    return createElement("span");
   }
 }
 
-export class EventProxy extends React.PureComponent<EventProxyProps> {
+export class EventProxy extends PureComponent<EventProxyProps> {
   static gesture: (...args: any[]) => ReactNode = null;
   static setGesture = (value: any) => (EventProxy.gesture = value);
   render() {
-    const { target = document, ...others } = this.props;
-    const { gesture } = EventProxy;
-    if (!gesture) return createElement(Fragment);
-    const props = { ...others, target, motaTouchHost: this };
-    return gesture(createElement(EventProxyInner, props), {});
+    return createElement(
+      EventContext.Consumer,
+      null,
+      (value: EventProxyTarget) => {
+        const { target = value || document, ...others } = this.props;
+        const { gesture } = EventProxy;
+        if (!gesture) return createElement(Fragment);
+        const props = { ...others, target, motaTouchHost: this };
+        return gesture(createElement(EventProxyInner, props), {});
+      }
+    );
   }
 }

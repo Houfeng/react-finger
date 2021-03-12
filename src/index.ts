@@ -17,6 +17,8 @@ export * from "./GestureContext";
 export * from "./GestureUtils";
 export * from "./GestureType";
 export * from "./EventProxy";
+export * from "./EventProxyTarget";
+export * from "./EventContext";
 export * from "./EventBinding";
 
 (document => {
