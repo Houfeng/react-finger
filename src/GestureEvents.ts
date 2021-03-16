@@ -102,10 +102,10 @@ export function getGesturePoints(event: GestureEvent): GesturePoints {
     toGesturePoint(item, pointerId || item.identifier, timeStamp)
   );
   const targetPoints = targetItems.map(item =>
-    toGesturePoint(item, pointerId, timeStamp)
+    toGesturePoint(item, pointerId || item.identifier, timeStamp)
   );
   const changedPoints = changedItems.map(item =>
-    toGesturePoint(item, pointerId, timeStamp)
+    toGesturePoint(item, pointerId || item.identifier, timeStamp)
   );
   return { points, targetPoints, changedPoints };
 }
