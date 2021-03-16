@@ -4,15 +4,16 @@
  * @author Houfeng <admin@xhou.net>
  */
 
-import { GesturePoint } from "./GesturePoint";
-import { GestureProps } from "./GestureProps";
-import { GestureOptions } from "./GestureOptions";
-import { GestureHandler } from "./GestureHandler";
 import {
   Contextable,
   GestureContext,
   uesGestureContext
 } from "./GestureContext";
+
+import { GestureHandler } from "./GestureHandler";
+import { GestureOptions } from "./GestureOptions";
+import { GesturePoint } from "./GesturePoint";
+import { GestureProps } from "./GestureProps";
 import { OriginEvent } from "./OriginEvent";
 
 export const GestureEventNameList = [
@@ -97,7 +98,9 @@ export function getGesturePoints(event: GestureEvent): GesturePoints {
   const changedItems: Touch[] = changedTouches
     ? [].slice.call(changedTouches)
     : [originEvent];
-  const points = items.map(item => toGesturePoint(item, pointerId, timeStamp));
+  const points = items.map(item =>
+    toGesturePoint(item, pointerId || item.identifier, timeStamp)
+  );
   const targetPoints = targetItems.map(item =>
     toGesturePoint(item, pointerId, timeStamp)
   );
