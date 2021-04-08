@@ -37,7 +37,7 @@ export class EventProxyInner<
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: EventTarget;
   protected options?: boolean | AddEventListenerOptions;
-  private mounted: boolean = false;
+  private mounted = false;
 
   protected save() {
     const { target, useCapture = false } = this.props;
