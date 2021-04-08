@@ -37,6 +37,7 @@ export class EventProxyInner<
   protected handlers: [string, EventListenerOrEventListenerObject][];
   protected target: EventTarget;
   protected options?: boolean | AddEventListenerOptions;
+  private mounted: boolean = false;
 
   protected save() {
     const { target, useCapture = false } = this.props;
@@ -55,6 +56,7 @@ export class EventProxyInner<
   }
 
   protected bind() {
+    if (!this.mounted) return;
     this.save();
     if (!this.target || !this.handlers) return;
     this.handlers.forEach(([name, handler]) => {
@@ -75,6 +77,7 @@ export class EventProxyInner<
   }
 
   componentDidMount() {
+    this.mounted = true;
     nextTick(() => this.bind());
   }
 
@@ -83,6 +86,7 @@ export class EventProxyInner<
   }
 
   componentWillUnmount() {
+    this.mounted = false;
     this.unbind();
   }
 
