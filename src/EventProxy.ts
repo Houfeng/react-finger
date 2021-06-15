@@ -91,7 +91,7 @@ export class EventProxyInner<
   }
 
   render() {
-    return createElement("span");
+    return createElement(Fragment);
   }
 }
 
