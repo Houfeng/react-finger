@@ -68,31 +68,40 @@ export class App extends React.Component {
     console.log('onGesturePointerMove', event.moveX, event.moveY);
   }
 
+  onDoubleTap1 = () => {
+    console.log('onDoubleTap1');
+  }
+
+  onDoubleTap2 = () => {
+    console.log('onDoubleTap2');
+  }
+
   boxRef = createRef<HTMLDivElement>();
 
   render() {
     const { originScale, scale, x, y } = this.model;
     return <EventContext.Provider value={this.boxRef}>
-      <div ref={this.boxRef} style={{
-        width: 260,
-        height: 200,
-        margin: "auto",
-        border: "8px solid #333",
-        //transitionDuration: ".3s",
-        background: "#fff",
-        transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
-      }}>
-        <div>originScale: {originScale}</div>
-        <div>scale: {scale}</div>
+      <div ref={this.boxRef}
+        style={{
+          width: 260,
+          height: 200,
+          margin: "auto",
+          border: "8px solid #333",
+          //transitionDuration: ".3s",
+          background: "#fff",
+          transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
+        }}>
+        <div onDoubleTap={this.onDoubleTap1}>originScale: {originScale}</div>
+        <div onDoubleTap={this.onDoubleTap1}>scale: {scale}</div>
         <div>x: {x}, y: {y}</div>
         <div onTap={event => console.log("tap", event)}>tap</div>
         {/* <EventProxy onDoubleTap={this.onDocTap} /> */}
         <EventProxy
-          onGesturePointerMove={this.onGesturePointerMove}
-          onPinch={this.onPinch}
-          onPinchEnd={this.onPinchEnd}
-          onSwipe={this.onSwipe}
-          onDoubleTap={this.onDocTap}
+          // onGesturePointerMove={this.onGesturePointerMove}
+          // onPinch={this.onPinch}
+          // onPinchEnd={this.onPinchEnd}
+          // onSwipe={this.onSwipe}
+          onDoubleTap={this.onDoubleTap2}
         />
       </div>
     </EventContext.Provider>

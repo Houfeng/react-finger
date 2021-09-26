@@ -7,14 +7,15 @@
 import {
   calcDistance,
   isDesktop,
-  supportEventTypes,
-  isMobile
+  isMobile,
+  supportEventTypes
 } from "./GestureUtils";
-import { GestureEvent } from "./GestureEvents";
+
 import { GestureCalcInfo } from "./GestureCalcInfo";
-import { GestureProps } from "./GestureProps";
+import { GestureEvent } from "./GestureEvents";
 // import { GestureInfo } from "./GestureInfo";
 import { GestureOptions } from "./GestureOptions";
+import { GestureProps } from "./GestureProps";
 import { OriginEvent } from "./OriginEvent";
 
 export function createStartHandler(props: GestureProps) {
@@ -47,7 +48,7 @@ export function createMoveHandler(props: GestureProps) {
     event.emit(onGesturePointerMove);
     if (event.isPointDown) {
       const info = calcGestureInfo(event);
-      if (info.isSwipeMove) event.clearHoldTimer();
+      if (info.isValidSwipeDistance) event.clearHoldTimer();
       event.moveX = event.point?.clientX - event.initial?.point?.clientX;
       event.moveY = event.point?.clientY - event.initial?.point?.clientY;
     }
@@ -85,12 +86,16 @@ export function createEndHandler(props: GestureProps) {
     // Pinch 事件
     if (event.isPinch) event.emit(onPinchEnd);
     // 根据计算结果判断
-    if (info.isSwipeTime && info.isSwipeMove) {
+    if (info.isValidSwipeTimeSpan && info.isValidSwipeDistance) {
       event.isSwipe = true;
       event.direction = info.direction;
       event.emit(onSwipe);
       event.emit(onSwipeX);
-    } else if (info.isSwipeTime && !info.isSwipeMove && !info.isHoldTime) {
+    } else if (
+      info.isValidSwipeTimeSpan &&
+      !info.isValidSwipeDistance &&
+      !info.isValidHoldTimeSpan
+    ) {
       event.emit(onTap);
       if (onDoubleTap) {
         const timeStamp = event.timeStamp || event.changedPoint?.timeStamp;
@@ -122,37 +127,36 @@ export function calcGestureInfo(event: GestureEvent) {
   const info: GestureCalcInfo = {};
   info.timeStamp = event.changedPoint ? event.changedPoint.timeStamp : null;
   info.existStartAndStop = !!(event.changedPoint && event.initial?.point);
-  info.horizontalDistance = info.existStartAndStop
+  info.horizontalMutation = info.existStartAndStop
     ? event.changedPoint.clientX - event.initial.point.clientX
     : 0;
-  info.verticalDistance = info.existStartAndStop
+  info.verticalMutation = info.existStartAndStop
     ? event.changedPoint.clientY - event.initial.point.clientY
     : 0;
-  info.horizontalDistanceValue = Math.abs(info.horizontalDistance);
-  info.verticalDistanceValue = Math.abs(info.verticalDistance);
-  info.isHorizontal =
-    info.horizontalDistanceValue >= info.verticalDistanceValue;
+  info.horizontalDistance = Math.abs(info.horizontalMutation);
+  info.verticalDistance = Math.abs(info.verticalMutation);
+  info.isHorizontal = info.horizontalDistance >= info.verticalDistance;
   info.isVertical = !info.isHorizontal;
-  info.isSwipeMove =
-    info.horizontalDistanceValue >=
+  info.isValidSwipeDistance =
+    info.horizontalDistance >=
       GestureOptions.swipeHorizontalDistanceThreshold ||
-    info.verticalDistanceValue >= GestureOptions.swipeVerticalDistanceThreshold;
-  info.isSwipeTime = info.existStartAndStop
+    info.verticalDistance >= GestureOptions.swipeVerticalDistanceThreshold;
+  info.isValidSwipeTimeSpan = info.existStartAndStop
     ? event.changedPoint.timeStamp - event.initial.point.timeStamp <=
       GestureOptions.swipeDurationThreshold
     : true;
-  info.isHoldTime = info.existStartAndStop
+  info.isValidHoldTimeSpan = info.existStartAndStop
     ? event.changedPoint.timeStamp - event.initial.point.timeStamp >=
       GestureOptions.holdDurationThreshold
     : false;
   // 这里的 direction 仅是指划动方向，不代表 swipe 动作，swipe 动作还有时间或划动距离等因素
-  if (info.isHorizontal && info.horizontalDistance > 0) {
+  if (info.isHorizontal && info.horizontalMutation > 0) {
     info.direction = "Right";
-  } else if (info.isHorizontal && info.horizontalDistance < 0) {
+  } else if (info.isHorizontal && info.horizontalMutation < 0) {
     info.direction = "Left";
-  } else if (info.isVertical && info.verticalDistance > 0) {
+  } else if (info.isVertical && info.verticalMutation > 0) {
     info.direction = "Down";
-  } else if (info.isVertical && info.verticalDistance < 0) {
+  } else if (info.isVertical && info.verticalMutation < 0) {
     info.direction = "Up";
   }
   return info;

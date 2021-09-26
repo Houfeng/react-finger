@@ -7,14 +7,14 @@
 export interface GestureCalcInfo {
   timeStamp?: number;
   existStartAndStop?: boolean;
+  horizontalMutation?: number;
+  verticalMutation?: number;
   horizontalDistance?: number;
   verticalDistance?: number;
-  horizontalDistanceValue?: number;
-  verticalDistanceValue?: number;
   isHorizontal?: boolean;
   isVertical?: boolean;
-  isSwipeMove?: boolean;
-  isSwipeTime?: boolean;
-  isHoldTime?: boolean;
+  isValidSwipeDistance?: boolean;
+  isValidSwipeTimeSpan?: boolean;
+  isValidHoldTimeSpan?: boolean;
   direction?: "Right" | "Left" | "Down" | "Up";
 }
