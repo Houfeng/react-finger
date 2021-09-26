@@ -16,11 +16,12 @@ export function uesGestureContext(
   event: OriginEvent,
   props: GestureProps
 ): GestureContext {
-  const { motaGestureKey, motaGestureHost } = { ...props } as any;
-  const key = `__mota_gesture_${String(motaGestureKey || "default")}__`;
-  const host = motaGestureHost || (event.currentTarget as any);
-  if (!host[key]) host[key] = new GestureContext();
-  return host[key];
+  props = { ...props };
+  const key = props["x-gesture-key"] || "default";
+  const computedKey = `__mota_gesture_${String(key)}__`;
+  const host: any = props["x-gesture-host"] || event.currentTarget;
+  if (!host[computedKey]) host[computedKey] = new GestureContext();
+  return host[computedKey];
 }
 
 export function Contextable(defaultValue: any = null) {

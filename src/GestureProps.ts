@@ -22,5 +22,6 @@ export interface GestureProps {
   onGesturePointerMove?: GestureHandler;
   onGesturePointerUp?: GestureHandler;
   ["x-gesture"]?: boolean;
-  ["data-gesture"]?: boolean;
+  ["x-gesture-key"]?: string;
+  ["x-gesture-host"]?: any;
 }
