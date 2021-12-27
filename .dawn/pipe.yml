@@ -49,5 +49,5 @@ publish:
     script:
       - dn test
       - dn build
-      - npm pu --registry=http://registry.npmjs.org
+      - npm pu --registry=https://registry.npmjs.org
   - name: submitter
