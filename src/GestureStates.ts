@@ -4,6 +4,7 @@
  * @author Houfeng <admin@xhou.net>
  */
 
+import { GestureOptions } from "./GestureOptions";
 import { GestureSupport } from "./GestureUtils";
 
 export interface GestureStatesType {
@@ -23,6 +24,10 @@ const endHandler = () => {
   if (GestureStates.pointTotal < 0) GestureStates.pointTotal = 0;
 };
 
+const contextMenuHandler = () => {
+  setTimeout(endHandler, GestureOptions.holdDurationThreshold);
+};
+
 (defaultView => {
   const startEvent = GestureSupport.pointer
     ? "pointerdown"
@@ -38,4 +43,5 @@ const endHandler = () => {
   defaultView.addEventListener(endEvent, endHandler, true);
   const cancelEvent = GestureSupport.pointer ? "pointercancel" : "touchcancel";
   defaultView.addEventListener(cancelEvent, endHandler, true);
+  defaultView.addEventListener("contextmenu", contextMenuHandler);
 })(document.defaultView);

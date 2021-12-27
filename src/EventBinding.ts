@@ -28,6 +28,7 @@ export function createStartHandler(props: GestureProps) {
     const { onTapHold, onGesturePointerDown, onPinchStart } = props;
     if (onTapHold) {
       event.startHoldTimer(() => {
+        console.log("xxx", GestureStates.pointTotal);
         if (GestureStates.pointTotal === 1) event.emit(onTapHold);
       });
     }
@@ -163,6 +164,7 @@ export function calcGestureInfo(event: GestureEvent) {
 
 export function mappingToNative(props: any, from: string, to: string) {
   const handler = props[from];
+  if (!handler) return;
   delete props[from];
   props[to] = handler;
 }
