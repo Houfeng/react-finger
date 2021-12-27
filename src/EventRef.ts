@@ -14,6 +14,10 @@ export type EventRefObject = RefObject<EventTarget> & {
   events?: EventRefHandlers;
 };
 
+/**
+ * EventRef 用于通过 EventContext 将全局事件限定在指定容器内，同时利用 React 事件机制
+ * @returns
+ */
 export const createEventRef = (): EventRefObject => {
   const events = new Map<string, EventRefComposeHandler>();
   const addEventListener = (
@@ -39,4 +43,8 @@ export const createEventRef = (): EventRefObject => {
   return eventProxyRef;
 };
 
+/**
+ * EventRef 用于通过 EventContext 将全局事件限定在指定容器内，同时利用 React 事件机制
+ * @returns
+ */
 export const useEventRef = () => useMemo(() => createEventRef(), []);
