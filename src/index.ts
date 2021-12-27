@@ -15,7 +15,7 @@ export * from "./GestureEvents";
 export * from "./GestureOptions";
 export * from "./GestureContext";
 export * from "./GestureUtils";
-export * from "./GestureType";
+export * from "./GestureStates";
 export * from "./EventProxy";
 export * from "./EventProxyTarget";
 export * from "./EventContext";

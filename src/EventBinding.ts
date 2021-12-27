@@ -21,7 +21,6 @@ import { OriginEvent } from "./OriginEvent";
 export function createStartHandler(props: GestureProps) {
   return (originEvent: OriginEvent) => {
     const event = new GestureEvent(originEvent, props);
-    // if (GestureInfo.type !== event.gestureType) return;
     event.handlePointDown();
     event.isPointDown = true;
     event.moveX = event.point?.clientX - event.initial?.point?.clientX;
@@ -42,7 +41,6 @@ export function createStartHandler(props: GestureProps) {
 export function createMoveHandler(props: GestureProps) {
   return (originEvent: OriginEvent) => {
     const event = new GestureEvent(originEvent, props);
-    // if (GestureInfo.type !== event.gestureType) return;
     event.handlePointMove();
     const { onGesturePointerMove, onPinch } = props;
     event.emit(onGesturePointerMove);
@@ -70,7 +68,6 @@ export function createMoveHandler(props: GestureProps) {
 export function createEndHandler(props: GestureProps) {
   return (originEvent: OriginEvent) => {
     const event = new GestureEvent(originEvent, props);
-    // if (GestureInfo.type !== event.gestureType) return;
     const info = calcGestureInfo(event);
     event.isPointDown = false;
     event.clearHoldTimer();
