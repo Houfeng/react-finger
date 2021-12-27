@@ -299,3 +299,5 @@ export class GestureEvent {
     return this.changedPoint?.screenY;
   }
 }
+
+export type GestureEventListener = (event: GestureEvent) => any;

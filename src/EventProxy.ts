@@ -105,7 +105,10 @@ export class EventProxy extends PureComponent<EventProxyProps> {
       (value: EventProxyTarget) => {
         const { target = value || document, ...others } = this.props;
         const { gesture } = EventProxy;
-        if (!gesture) return createElement(Fragment);
+        if (!gesture) {
+          console.error(`using EventProxy need to enable gesture`);
+          return createElement(Fragment);
+        }
         const props = { ...others, target, motaTouchHost: this };
         return gesture(createElement(EventProxyInner, props), {});
       }
