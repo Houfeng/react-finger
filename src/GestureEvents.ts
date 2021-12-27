@@ -246,6 +246,7 @@ export class GestureEvent {
   }
 
   public startHoldTimer(done: Function) {
+    this.clearHoldTimer();
     this.holdTimer = setTimeout(done, GestureOptions.holdDurationThreshold);
   }
 

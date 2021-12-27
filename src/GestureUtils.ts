@@ -6,7 +6,7 @@
 
 import { GesturePoint } from "./GesturePoint";
 
-export const supportEventTypes = {
+export const GestureSupport = {
   touch: "ontouchmove" in document,
   pointer: !!window.PointerEvent,
   mouse: "onmousemove" in document
@@ -15,7 +15,7 @@ export const supportEventTypes = {
 export function isMobile() {
   return (
     /(Mobile|iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent) ||
-    (navigator.platform.indexOf("Mac") > -1 && supportEventTypes.touch)
+    (navigator.platform.indexOf("Mac") > -1 && GestureSupport.touch)
   );
 }
 

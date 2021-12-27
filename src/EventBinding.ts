@@ -5,17 +5,17 @@
  */
 
 import {
+  GestureSupport,
   calcDistance,
   isDesktop,
-  isMobile,
-  supportEventTypes
+  isMobile
 } from "./GestureUtils";
 
 import { GestureCalcInfo } from "./GestureCalcInfo";
 import { GestureEvent } from "./GestureEvents";
-// import { GestureInfo } from "./GestureInfo";
 import { GestureOptions } from "./GestureOptions";
 import { GestureProps } from "./GestureProps";
+import { GestureStates } from "./GestureStates";
 import { OriginEvent } from "./OriginEvent";
 
 export function createStartHandler(props: GestureProps) {
@@ -27,7 +27,9 @@ export function createStartHandler(props: GestureProps) {
     event.moveY = event.point?.clientY - event.initial?.point?.clientY;
     const { onTapHold, onGesturePointerDown, onPinchStart } = props;
     if (onTapHold) {
-      event.startHoldTimer(() => event.emit(onTapHold));
+      event.startHoldTimer(() => {
+        if (GestureStates.pointTotal === 1) event.emit(onTapHold);
+      });
     }
     event.emit(onGesturePointerDown);
     // Pinch
@@ -175,7 +177,7 @@ export function createAttachProps(props: GestureProps) {
   const endHandler = createEndHandler(props);
   // pointer
   const pointerEvents = isDesktop() &&
-    supportEventTypes.pointer && {
+    GestureSupport.pointer && {
       onPointerDown: startHandler,
       onPointerMove: moveHandler,
       onPointerUp: endHandler,
@@ -183,7 +185,7 @@ export function createAttachProps(props: GestureProps) {
     };
   // touch
   const touchEvents = isMobile() &&
-    supportEventTypes.touch &&
+    GestureSupport.touch &&
     !pointerEvents && {
       onTouchStart: startHandler,
       onTouchMove: moveHandler,
@@ -192,7 +194,7 @@ export function createAttachProps(props: GestureProps) {
     };
   // mouse
   const mouseEvents = isDesktop() &&
-    supportEventTypes.mouse &&
+    GestureSupport.mouse &&
     !pointerEvents && {
       onMouseDown: startHandler,
       onMouseMove: moveHandler,
