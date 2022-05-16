@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2015-present Houfeng
+ * @homepage https://github.com/Houfeng/mota-gesture
+ * @author Houfeng <admin@xhou.net>
+ */
+
 import { RefObject, createRef, useMemo } from "react";
 
 import { isFunction } from "ntils";

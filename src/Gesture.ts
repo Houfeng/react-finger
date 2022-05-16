@@ -12,15 +12,28 @@ import { createAttachProps } from "./EventBinding";
 import { createFitter } from "mota";
 import { findGestureEvents } from "./GestureEvents";
 
-export function isElementForward(type: any) {
-  return type && isString(type.target);
+type GestureCheckFunction = (type: any, props?: GestureProps) => boolean;
+const checkers: GestureCheckFunction[] = [
+  (type: any) => {
+    return type && isString(type.target);
+  }
+];
+
+export function registerGestureChecker(checker: GestureCheckFunction) {
+  checkers.push(checker);
+  return () => {
+    const index = checkers.indexOf(checker);
+    checkers.splice(index, 1);
+  };
 }
 
 export function allowGesture(type: any, props: GestureProps) {
   if (!type) return false;
   if (isBoolean(type.gesture)) return type.gesture;
   return (
-    isString(type) || isElementForward(type) || (props && props["x-gesture"])
+    isString(type) ||
+    (props && props["x-gesture"]) ||
+    checkers.some(check => check(type, props))
   );
 }
 
