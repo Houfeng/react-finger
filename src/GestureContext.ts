@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import { GestureProps } from "./GestureProps";
@@ -40,7 +40,7 @@ export function Contextable(defaultValue: any = null) {
       set(value: any) {
         if (!this.context) return;
         this.context[member] = value;
-      }
+      },
     });
   };
 }

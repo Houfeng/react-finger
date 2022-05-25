@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import {
   GestureSupport,
   calcDistance,
   isDesktop,
-  isMobile
+  isMobile,
 } from "./GestureUtils";
 
 import { GestureCalcInfo } from "./GestureCalcInfo";
@@ -28,7 +28,6 @@ export function createStartHandler(props: GestureProps) {
     const { onTapHold, onGesturePointerDown, onPinchStart } = props;
     if (onTapHold) {
       event.startHoldTimer(() => {
-        console.log("xxx", GestureStates.pointTotal);
         if (GestureStates.pointTotal === 1) event.emit(onTapHold);
       });
     }
@@ -74,13 +73,8 @@ export function createEndHandler(props: GestureProps) {
     const info = calcGestureInfo(event);
     event.isPointDown = false;
     event.clearHoldTimer();
-    const {
-      onGesturePointerUp,
-      onSwipe,
-      onTap,
-      onDoubleTap,
-      onPinchEnd
-    } = props;
+    const { onGesturePointerUp, onSwipe, onTap, onDoubleTap, onPinchEnd } =
+      props;
     const onSwipeX = (props as any)["onSwipe" + info.direction];
     event.emit(onGesturePointerUp);
     // Pinch 事件
@@ -169,7 +163,7 @@ export function mappingToNative(props: any, from: string, to: string) {
   props[to] = handler;
 }
 
-export function createAttachProps(props: GestureProps) {
+export function convertEventProps(props: GestureProps) {
   if (GestureOptions.possibleToNative && isDesktop()) {
     mappingToNative(props, "onDoubleTap", "onDoubleClick");
     mappingToNative(props, "onTap", "onClick");
@@ -183,7 +177,7 @@ export function createAttachProps(props: GestureProps) {
       onPointerDown: startHandler,
       onPointerMove: moveHandler,
       onPointerUp: endHandler,
-      onPointerCancel: endHandler
+      onPointerCancel: endHandler,
     };
   // touch
   const touchEvents = isMobile() &&
@@ -192,7 +186,7 @@ export function createAttachProps(props: GestureProps) {
       onTouchStart: startHandler,
       onTouchMove: moveHandler,
       onTouchEnd: endHandler,
-      onTouchCancel: endHandler
+      onTouchCancel: endHandler,
     };
   // mouse
   const mouseEvents = isDesktop() &&
@@ -200,7 +194,7 @@ export function createAttachProps(props: GestureProps) {
     !pointerEvents && {
       onMouseDown: startHandler,
       onMouseMove: moveHandler,
-      onMouseUp: endHandler
+      onMouseUp: endHandler,
     };
   return { ...touchEvents, ...mouseEvents, ...pointerEvents };
 }

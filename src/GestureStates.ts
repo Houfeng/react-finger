@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import { GestureOptions } from "./GestureOptions";
@@ -12,7 +12,7 @@ export interface GestureStatesType {
 }
 
 export const GestureStates: GestureStatesType = {
-  pointTotal: 0
+  pointTotal: 0,
 };
 
 const startHandler = () => {
@@ -28,7 +28,7 @@ const contextMenuHandler = () => {
   setTimeout(endHandler, GestureOptions.holdDurationThreshold);
 };
 
-(defaultView => {
+((defaultView) => {
   const startEvent = GestureSupport.pointer
     ? "pointerdown"
     : GestureSupport.touch

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import { GesturePoint } from "./GesturePoint";
@@ -9,7 +9,7 @@ import { GesturePoint } from "./GesturePoint";
 export const GestureSupport = {
   touch: "ontouchmove" in document,
   pointer: !!window.PointerEvent,
-  mouse: "onmousemove" in document
+  mouse: "onmousemove" in document,
 };
 
 export function isMobile() {

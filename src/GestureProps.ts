@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import { GestureHandler } from "./GestureHandler";
@@ -21,6 +21,7 @@ export interface GestureProps {
   onGesturePointerDown?: GestureHandler;
   onGesturePointerMove?: GestureHandler;
   onGesturePointerUp?: GestureHandler;
+  children?: React.ReactNode;
   ["x-gesture"]?: boolean;
   ["x-gesture-key"]?: string;
   ["x-gesture-host"]?: any;

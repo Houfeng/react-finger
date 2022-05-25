@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import { RefObject, createRef, useMemo } from "react";
@@ -32,7 +32,7 @@ export const createEventRef = (): EventRefObject => {
   ) => {
     if (!events.has(name)) {
       events.set(name, (...args: any) =>
-        events.get(name).handlers.forEach(item => item(...args))
+        events.get(name).handlers.forEach((item) => item(...args))
       );
       events.get(name).handlers = [];
     }

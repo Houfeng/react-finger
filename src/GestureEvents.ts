@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import {
   Contextable,
   GestureContext,
-  uesGestureContext
+  uesGestureContext,
 } from "./GestureContext";
 
 import { GestureHandler } from "./GestureHandler";
@@ -30,7 +30,7 @@ export const GestureEventNameList = [
   "onPinchEnd",
   "onGesturePointerDown",
   "onGesturePointerMove",
-  "onGesturePointerUp"
+  "onGesturePointerUp",
 ];
 
 export type GestureEventNames =
@@ -69,7 +69,7 @@ export function toGesturePoint(
     pageY: item.pageY,
     screenX: item.screenX,
     screenY: item.screenY,
-    timeStamp: (item as any).timeStamp || timeStamp
+    timeStamp: (item as any).timeStamp || timeStamp,
   };
   return point;
 }
@@ -84,13 +84,8 @@ export function getGesturePoints(event: GestureEvent): GesturePoints {
   const originEvent = event.originEvent as React.TouchEvent<Element> &
     React.PointerEvent<Element>;
   if (originEvent.persist) originEvent.persist();
-  const {
-    touches,
-    targetTouches,
-    changedTouches,
-    timeStamp,
-    pointerId
-  } = originEvent;
+  const { touches, targetTouches, changedTouches, timeStamp, pointerId } =
+    originEvent;
   const items: Touch[] = touches ? [].slice.call(touches) : [originEvent];
   const targetItems: Touch[] = targetTouches
     ? [].slice.call(targetTouches)
@@ -98,13 +93,13 @@ export function getGesturePoints(event: GestureEvent): GesturePoints {
   const changedItems: Touch[] = changedTouches
     ? [].slice.call(changedTouches)
     : [originEvent];
-  const points = items.map(item =>
+  const points = items.map((item) =>
     toGesturePoint(item, pointerId || item.identifier, timeStamp)
   );
-  const targetPoints = targetItems.map(item =>
+  const targetPoints = targetItems.map((item) =>
     toGesturePoint(item, pointerId || item.identifier, timeStamp)
   );
-  const changedPoints = changedItems.map(item =>
+  const changedPoints = changedItems.map((item) =>
     toGesturePoint(item, pointerId || item.identifier, timeStamp)
   );
   return { points, targetPoints, changedPoints };
@@ -210,7 +205,7 @@ export class GestureEvent {
   public moveY: number;
 
   @Contextable()
-  public holdTimer?: number;
+  public holdTimer?: any;
 
   public get timeStamp() {
     return this.originEvent.timeStamp;
@@ -231,7 +226,8 @@ export class GestureEvent {
     this.changedPoints = changedPoints;
   }
 
-  public handlePointEnd() {}
+  // eslint-disable-next-line
+  public handlePointEnd() { }
 
   public get point() {
     return this.points?.[0];
@@ -245,7 +241,7 @@ export class GestureEvent {
     return this.targetPoints?.[0];
   }
 
-  public startHoldTimer(done: Function) {
+  public startHoldTimer(done: (...args: any) => any) {
     this.clearHoldTimer();
     this.holdTimer = setTimeout(done, GestureOptions.holdDurationThreshold);
   }
@@ -256,7 +252,7 @@ export class GestureEvent {
 
   public emit(...handlers: GestureHandler[]) {
     if (!handlers) return;
-    handlers.forEach(handler => handler && handler(this));
+    handlers.forEach((handler) => handler && handler(this));
   }
 
   public get distanceX() {

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 import { EventProxyTarget, toEventTarget } from "./EventProxyTarget";
@@ -10,12 +10,11 @@ import {
   HTMLAttributes,
   PureComponent,
   ReactNode,
-  createElement
+  createElement,
 } from "react";
 import { isFunction, isNull } from "ntils";
 
 import { EventContext } from "./EventContext";
-import { nextTick } from "mota";
 
 export interface EventProxyProps<T extends EventProxyTarget = EventProxyTarget>
   extends HTMLAttributes<T> {
@@ -31,7 +30,7 @@ export interface EventProxyProps<T extends EventProxyTarget = EventProxyTarget>
 
 export class EventProxyInner<
   T extends EventProxyTarget = EventProxyTarget
-> extends PureComponent<EventProxyProps<T>> {
+  > extends PureComponent<EventProxyProps<T>> {
   public static gesture = true;
 
   protected handlers: [string, EventListenerOrEventListenerObject][];
@@ -78,11 +77,11 @@ export class EventProxyInner<
 
   componentDidMount() {
     this.mounted = true;
-    nextTick(() => this.bind());
+    setTimeout(() => this.bind(), 0);
   }
 
   componentDidUpdate() {
-    nextTick(() => this.rebind());
+    setTimeout(() => this.rebind(), 0);
   }
 
   componentWillUnmount() {
@@ -99,19 +98,16 @@ export class EventProxy extends PureComponent<EventProxyProps> {
   static gesture: (...args: any[]) => ReactNode = null;
   static setGesture = (value: any) => (EventProxy.gesture = value);
   render() {
-    return createElement(
-      EventContext.Consumer,
-      null,
-      (value: EventProxyTarget) => {
-        const { target = value || document, ...others } = this.props;
-        const { gesture } = EventProxy;
-        if (!gesture) {
-          console.error(`using EventProxy need to enable gesture`);
-          return createElement(Fragment);
-        }
-        const props = { ...others, target, motaTouchHost: this };
-        return gesture(createElement(EventProxyInner, props), {});
+    const fn = (value: EventProxyTarget) => {
+      const { target = value || document, ...others } = this.props;
+      const { gesture } = EventProxy;
+      if (!gesture) {
+        console.error(`using EventProxy need to enable gesture`);
+        return createElement(Fragment);
       }
-    );
+      const props = { ...others, target, motaTouchHost: this };
+      return gesture(createElement(EventProxyInner, props), {});
+    };
+    return createElement(EventContext.Consumer, null, fn as any);
   }
 }

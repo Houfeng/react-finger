@@ -1,47 +1,42 @@
 dev:
   - name: clean
-    target:
-      - debug
-      - types
-      - node_modules/@types/react-native/
-  - name: typescript
-  - name: webpack
-    output: ./debug/
-    common:
-      disabled: true
-    entry: ./examples/*.tsx
-    template: ./assets/*.html
-    watch: true
+    target: 
+      - ./dist/
+      - ./types/
+  - name: copy 
+    files:
+      ./dist/(0).html: ./assets/*.html
+  - name: shell
+    async: true
+    script:
+      - rollup -w -c ./rollup.config.dev.js
   - name: server
-    port: 5006
-    public: ./debug
-  - name: browser-sync
+    public: ./dist/
+    port: 6009
 
 build:
   - name: clean
-    target:
-      - debug
-      - dist
-      - types
-      - node_modules/@types/react-native/
+    target: 
+      - ./dist/
+      - ./types/
   - name: file-header
     files: ./src/**/*.ts
     text: 
       - 'Copyright (c) 2015-present Houfeng'
       - '@homepage https://github.com/Houfeng/mota-gesture'
-      - '@author Houfeng <admin@xhou.net>'
+      - '@author Houfeng <houzhanfeng@gmail.com>'
   - name: shell
     script:
-      - tsc --locale zh-cn -d --esModuleInterop
+      - rollup -c
 
 test:
-  - name: clean
-    target:
-      - debug
-      - dist
-      - types
-  - name: tslint
+  - name: shell
+    script:
+      - eslint --fix ./src/**/*.ts
   - name: unit
+    env: browser_typescript
+    extension: .ts
+    files: ./test/**/*.test.tsx
 
 publish:
   - name: version
@@ -49,5 +44,5 @@ publish:
     script:
       - dn test
       - dn build
-      - npm pu --registry=https://registry.npmjs.org
+      - npm pu --registry=https://registry.npmjs.org/
   - name: submitter

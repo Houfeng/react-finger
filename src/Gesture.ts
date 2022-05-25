@@ -1,55 +1,79 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { isBoolean, isString } from "ntils";
-
 import { GestureProps } from "./GestureProps";
-import { OriginEvent } from "./OriginEvent";
-import { createAttachProps } from "./EventBinding";
-import { createFitter } from "mota";
-import { findGestureEvents } from "./GestureEvents";
+import React from "react";
+import { convertEventProps } from "./EventBinding";
+import { isFunction } from "ntils";
 
-type GestureCheckFunction = (type: any, props?: GestureProps) => boolean;
-const checkers: GestureCheckFunction[] = [
-  (type: any) => {
-    return type && isString(type.target);
-  }
-];
-
-export function registerGestureChecker(checker: GestureCheckFunction) {
-  checkers.push(checker);
-  return () => {
-    const index = checkers.indexOf(checker);
-    checkers.splice(index, 1);
-  };
+interface TargetProps {
+  onMouseDown: (event?: React.MouseEvent) => void;
+  onMouseMove: (event?: React.MouseEvent) => void;
+  onMouseUp: (event?: React.MouseEvent) => void;
+  onTouchStart: (event?: React.TouchEvent) => void;
+  onTouchMove: (event?: React.TouchEvent) => void;
+  onTouchEnd: (event?: React.TouchEvent) => void;
+  onPointerUp: (event?: React.PointerEvent) => void;
+  onPointerMove: (event?: React.PointerEvent) => void;
+  onPointerDown: (event?: React.PointerEvent) => void;
+  children?: React.ReactNode;
 }
 
-export function allowGesture(type: any, props: GestureProps) {
-  if (!type) return false;
-  if (isBoolean(type.gesture)) return type.gesture;
-  return (
-    isString(type) ||
-    (props && props["x-gesture"]) ||
-    checkers.some(check => check(type, props))
-  );
+interface TargetCC extends React.ComponentClass<TargetProps, any> {
+  displayName?: string;
 }
 
-export const gesture = createFitter((type: any, props: any) => {
-  if (type.setGesture) return type.setGesture(gesture);
-  if (!allowGesture(type, props)) return;
-  const gestureEvents = findGestureEvents(props);
-  if (!type || gestureEvents.length < 1) return;
-  const attachProps = createAttachProps({ ...props });
-  Object.entries(attachProps).forEach(([name, handler]) => {
-    const originHandler = props[name];
-    props[name] = (event: OriginEvent) => {
-      if (originHandler) originHandler(event);
-      handler(event);
-    };
+interface TargetFC extends React.FunctionComponent<TargetProps> {
+  displayName?: string;
+}
+
+interface TargetEC
+  extends React.ForwardRefExoticComponent<
+    React.PropsWithoutRef<TargetProps> & React.RefAttributes<any>
+  > {
+  displayName?: string;
+}
+
+type GestureFC<T extends TargetFC> = (
+  props: Parameters<T>[0] & GestureProps
+) => ReturnType<T>;
+
+type GestureCC<T extends TargetCC> = (
+  props: ConstructorParameters<T>[0] & GestureProps,
+  context: ConstructorParameters<T>[1]
+) => T;
+
+export type GestureEC<T extends TargetEC> = (
+  props: Parameters<T>[0] & GestureProps
+) => ReturnType<T>;
+
+// Class component
+export function gesture<T extends TargetCC>(type: T): GestureCC<T>;
+// Function component
+export function gesture<T extends TargetFC>(type: T): GestureFC<T>;
+// Exotic component
+export function gesture<T extends TargetEC>(type: T): GestureEC<T>;
+// HTML element
+export function gesture<T extends keyof React.ReactHTML>(
+  type: T
+): GestureFC<(props: Parameters<React.ReactHTML[T]>[0]) => React.ReactElement>;
+// SVG element
+export function gesture<T extends keyof React.ReactSVG>(
+  type: T
+): GestureFC<(props: Parameters<React.ReactSVG[T]>[0]) => React.ReactElement>;
+// the function implementation
+export function gesture<T extends TargetCC | TargetFC | string>(type: T) {
+  const Wrapper = React.forwardRef((props: GestureProps, ref) => {
+    const composeProps = React.useMemo(() => {
+      return { ...props, ...convertEventProps(props), ref };
+    }, Object.values(props));
+    return React.createElement(type, composeProps);
   });
-  delete props["x-gesture"];
-  gestureEvents.forEach(([name]) => delete props[name]);
-});
+  Wrapper.displayName = String(
+    isFunction(type) ? (type as any).displayName || type.name : type
+  );
+  return Wrapper;
+}

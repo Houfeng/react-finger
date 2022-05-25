@@ -1,10 +1,8 @@
 /**
  * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <admin@xhou.net>
+ * @author Houfeng <houzhanfeng@gmail.com>
  */
-
-import "./HTMLAttributes";
 
 export * from "./GestureCalcInfo";
 export * from "./GestureHandler";
@@ -22,7 +20,7 @@ export * from "./EventContext";
 export * from "./EventRef";
 export * from "./EventBinding";
 
-(document => {
+((document) => {
   // fix: ios 10+
-  document.addEventListener("gesturestart", event => event.preventDefault());
+  document.addEventListener("gesturestart", (event) => event.preventDefault());
 })(document);
