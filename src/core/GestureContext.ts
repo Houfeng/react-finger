@@ -1,0 +1,41 @@
+import { GesturePointerEvent } from "./GesturePointerEvents";
+
+export type GestureContext = {
+  addPointer: (pointer: GesturePointerEvent) => void;
+  updatePointer: (pointer: GesturePointerEvent) => void;
+  removePointer: (pointer: GesturePointerEvent) => void;
+  getPointers: () => GesturePointerEvent[];
+  getChangedPointers: () => GesturePointerEvent[];
+  flags: Map<symbol, any>;
+};
+
+export function GestureContext(): GestureContext {
+  const flags = new Map<symbol, any>();
+  const points = new Map<number, GesturePointerEvent>();
+  const changedPoints = new Map<number, GesturePointerEvent>();
+  const addPointer = (pointer: GesturePointerEvent) => {
+    points.set(pointer.pointerId, { ...pointer });
+    updatePointer(pointer);
+  };
+  const updatePointer = (pointer: GesturePointerEvent) => {
+    changedPoints.set(pointer.pointerId, { ...pointer });
+  };
+  const removePointer = (pointer: GesturePointerEvent) => {
+    points.delete(pointer.pointerId);
+    changedPoints.delete(pointer.pointerId);
+  };
+  const getPointers = (): GesturePointerEvent[] => {
+    return Array.from(points.values());
+  };
+  const getChangedPointers = (): GesturePointerEvent[] => {
+    return Array.from(changedPoints.values());
+  };
+  return {
+    addPointer,
+    updatePointer,
+    removePointer,
+    getPointers,
+    getChangedPointers,
+    flags,
+  };
+}

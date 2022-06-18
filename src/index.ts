@@ -4,7 +4,15 @@
  */
 
 import "pepjs";
+import { registerGestureProvider } from "./core/GestureProviders";
+// import { GesturePinchProvider } from "./events/GesturePinchProvider";
+// import { GestureSwipeProvider } from "./events/GestureSwipeProvider";
+import { GestureTapProvider } from "./events/GestureTapProvider";
 
-export { GestureOptions } from "./GestureOptions";
-export { composeGestureEvents } from "./GestureCompose";
-export { type GestureEvent } from "./GestureEvents";
+export { GestureOptions } from "./core/GestureOptions";
+export { composeGestureEvents } from "./core/GestureCompose";
+export { type GestureEvent } from "./core/GestureEvents";
+
+registerGestureProvider(GestureTapProvider);
+// registerGestureProvider(GestureSwipeProvider);
+// registerGestureProvider(GesturePinchProvider);

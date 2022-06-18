@@ -7,7 +7,7 @@ export const GestureOptions = {
   /**
    * swipe 最大时间阈值
    */
-  swipeMaxDurationThreshold: 1000,
+  swipeMaxDurationThreshold: 600,
 
   /**
    * swipe 最小距离阈值
@@ -22,7 +22,7 @@ export const GestureOptions = {
   /**
    * hold 触发时间阈值
    */
-  holdDurationThreshold: 1000,
+  holdDurationThreshold: 600,
 
   /**
    * 双击 触发间隔阈值

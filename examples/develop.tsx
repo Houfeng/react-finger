@@ -1,12 +1,12 @@
 import React, { CSSProperties } from "react"
 
-import { composeGestureEvents } from '../src/GestureEvents';
+import { composeGestureEvents } from '../src';
 import { createRoot } from "react-dom/client";
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
-  padding: 16,
-  borderRadius: 8,
+  padding: 16, 
+  borderRadius: 8, 
   width: 300,
   height: 300,
   backgroundColor: '#fff'
@@ -14,13 +14,14 @@ const boxStyle: CSSProperties = {
 
 const events = composeGestureEvents({
   onTap: event => {
-    event.stopPropagation();
-    event.preventDefault();
     console.log('onTap', event);
+  },
+  onTapHold: event => {
+    console.log('onTapHold', event);
   }
 });
 
-export function App() { 
+export function App() {
   return (
     <div style={boxStyle} {...events}>
     </div>

@@ -1,0 +1,95 @@
+/**
+ * @homepage https://github.com/Houfeng/mota-gesture
+ * @author Houfeng <houzhanfeng@gmail.com>
+ */
+
+import { GestureMixEvents, getAllGestureProviders } from "./GestureProviders";
+import {
+  GesturePointerEvent,
+  GesturePointerEventListener,
+  GesturePointerEvents,
+} from "./GesturePointerEvents";
+
+import { GestureContext } from "./GestureContext";
+
+const providers = getAllGestureProviders();
+
+/**
+ * 创建包含合成处理逻辑的 PointerDown Listener
+ * @param events
+ * @param context
+ * @returns
+ */
+function createPointerDownListener(
+  events: Partial<GestureMixEvents>,
+  context: GestureContext
+): GesturePointerEventListener {
+  return (pointer: GesturePointerEvent) => {
+    events.onPointerDown?.(pointer);
+    context.addPointer(pointer);
+    providers.forEach((it) => it.handlePointerDown(events, context, pointer));
+  };
+}
+
+/**
+ * 创建包含合成处理逻辑的 PointerMove Listener
+ * @param events
+ * @param context
+ * @returns
+ */
+function createPointerMoveListener(
+  events: Partial<GestureMixEvents>,
+  context: GestureContext
+): GesturePointerEventListener {
+  return (pointer: GesturePointerEvent) => {
+    events.onPointerMove?.(pointer);
+    context.updatePointer(pointer);
+    if (context.getPointers().length < 1) return;
+    providers.forEach((it) => it.handlePointerMove(events, context, pointer));
+  };
+}
+
+/**
+ * 创建包含合成处理逻辑的 PointerUp Listener
+ * @param events
+ * @param context
+ * @returns
+ */
+function createPointerUpListener(
+  events: Partial<GestureMixEvents>,
+  context: GestureContext
+): GesturePointerEventListener {
+  return (pointer: GesturePointerEvent) => {
+    events.onPointerUp?.(pointer);
+    providers.forEach((it) => it.handlePointerUp(events, context, pointer));
+    context.removePointer(pointer);
+  };
+}
+
+/**
+ * 创建包含合成处理逻辑的 PointerCancel Listener
+ * @param events
+ * @param context
+ * @returns
+ */
+function createPointerCancelListener(
+  events: Partial<GestureMixEvents>,
+  context: GestureContext
+): GesturePointerEventListener {
+  return (pointer: GesturePointerEvent) => {
+    events.onPointerCancel?.(pointer);
+    providers.forEach((it) => it.handlePointerCancel(events, context, pointer));
+    context.removePointer(pointer);
+  };
+}
+
+export function composeGestureEvents(
+  events: Partial<GestureMixEvents>,
+  context = GestureContext()
+): GesturePointerEvents {
+  const onPointerDown = createPointerDownListener(events, context);
+  const onPointerMove = createPointerMoveListener(events, context);
+  const onPointerUp = createPointerUpListener(events, context);
+  const onPointerCancel = createPointerCancelListener(events, context);
+  return { onPointerDown, onPointerMove, onPointerUp, onPointerCancel };
+}
