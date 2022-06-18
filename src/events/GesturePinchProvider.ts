@@ -21,6 +21,8 @@ export const GesturePinchProvider: GestureProvider = {
       flags.set(pinchScale, scale);
       events?.onPinchStart(GestureEvent("onPinchStart", pointer, { scale }));
       flags.set(pinchStarted, true);
+      const target = getPointers()[0].target as HTMLElement | SVGElement;
+      target.setPointerCapture?.(pointer.pointerId);
     }
   },
 

@@ -2,7 +2,8 @@
   "name": "mota-gesture",
   "version": "5.2.3",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/gesture-cjs.js",
+  "module": "./dist/gesture-es.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "test": "dn test && dn build -e prod"

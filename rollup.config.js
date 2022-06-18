@@ -1,11 +1,16 @@
 import cleanup from 'rollup-plugin-cleanup';
 import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
+import { toCamelCase } from 'ntils';
 import typescript from 'rollup-plugin-typescript2';
 
+const externals = {
+  'react': 'React',
+  'react-dom': 'ReactDOM',
+}
+
 const createConf = ({
-  name = 'mota-gesture',
-  global = 'MotaGesture',
+  name = 'gesture',
   min = false
 } = {}) => {
   const suffix = min ? '.min' : '';
@@ -14,7 +19,7 @@ const createConf = ({
     output: [
       {
         file: `./dist/${name}-es${suffix}.js`,
-        format: 'es'
+        format: 'es',
       },
       {
         file: `./dist/${name}-cjs${suffix}.js`,
@@ -23,12 +28,14 @@ const createConf = ({
       {
         file: `./dist/${name}-umd${suffix}.js`,
         format: 'umd',
-        name: global
+        globals: externals,
+        name: toCamelCase(name, 1)
       },
       {
         file: `./dist/${name}-iife${suffix}.js`,
         format: 'iife',
-        name: global
+        globals: externals,
+        name: toCamelCase(name, 1)
       }
     ],
     external: ['react', 'react-dom'],
