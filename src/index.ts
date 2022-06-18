@@ -10,9 +10,8 @@ import { GesturePinchProvider } from "./events/GesturePinchProvider";
 import { GestureSwipeProvider } from "./events/GestureSwipeProvider";
 import { GestureTapProvider } from "./events/GestureTapProvider";
 
-export { GestureOptions } from "./core/GestureOptions";
-export { composeGestureEvents } from "./core/GestureCompose";
 export { type GestureEvent } from "./core/GestureEvents";
+export { GestureOptions } from "./core/GestureOptions";
 export { useGestureEvents } from "./helpers/GestureHook";
 export { createGestureEvents } from "./helpers/GestureFactory";
 export { gestured } from "./helpers/GestureHoC";
