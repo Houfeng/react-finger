@@ -4,6 +4,7 @@
  */
 
 import { GesturePointerEvent } from "./GesturePointerEvents";
+import { toEventWrapper } from "./GestureUtils";
 
 export type GestureContext = {
   addPointer: (pointer: GesturePointerEvent) => void;
@@ -19,11 +20,11 @@ export function GestureContext(): GestureContext {
   const points = new Map<number, GesturePointerEvent>();
   const changedPoints = new Map<number, GesturePointerEvent>();
   const addPointer = (pointer: GesturePointerEvent) => {
-    points.set(pointer.pointerId, { ...pointer });
+    points.set(pointer.pointerId, toEventWrapper(pointer));
     updatePointer(pointer);
   };
   const updatePointer = (pointer: GesturePointerEvent) => {
-    changedPoints.set(pointer.pointerId, { ...pointer });
+    changedPoints.set(pointer.pointerId, toEventWrapper(pointer));
   };
   const removePointer = (pointer: GesturePointerEvent) => {
     points.delete(pointer.pointerId);

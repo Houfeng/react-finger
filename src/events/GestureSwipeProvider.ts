@@ -17,7 +17,7 @@ export const GestureSwipeProvider: GestureProvider = {
     flags.set(swipeCanceled, getPointers().length > 1);
     flags.set(swipeStartTime, Date.now());
     if (!flags.get(swipeCanceled)) {
-      const target = getPointers()[0].target as HTMLElement | SVGElement;
+      const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
     }
   },

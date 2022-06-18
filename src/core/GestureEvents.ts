@@ -8,6 +8,8 @@ import {
   GesturePointerEvents,
 } from "./GesturePointerEvents";
 
+import { toEventWrapper } from "./GestureUtils";
+
 export type GestureMixEvents = GestureEvents & GesturePointerEvents;
 
 export type GestureEvent<D = any> = GesturePointerEvent<Element> & {
@@ -44,7 +46,10 @@ export function GestureEvent<G extends keyof GestureEvents>(
   pointerEvent: GesturePointerEvent,
   detail?: Parameters<GestureEvents[G]>[0]["detail"]
 ): GestureEvent<Parameters<GestureEvents[G]>[0]["detail"]> {
-  const gestureEvent = { ...detail, gesture, detail };
-  Object.setPrototypeOf(gestureEvent, pointerEvent);
+  pointerEvent.persist?.();
+  const gestureEvent = toEventWrapper(pointerEvent) as GestureEvent<
+    Parameters<GestureEvents[G]>[0]["detail"]
+  >;
+  Object.assign(gestureEvent, { ...detail, gesture, detail });
   return gestureEvent as any;
 }

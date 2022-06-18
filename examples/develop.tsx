@@ -1,7 +1,7 @@
+import { GestureProxy, useGestureEvents } from '../src';
 import React, { CSSProperties } from "react"
 
 import { createRoot } from "react-dom/client";
-import { useGestureEvents } from '../src';
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
@@ -14,6 +14,9 @@ const boxStyle: CSSProperties = {
 
 export function App() {
   const events = useGestureEvents({
+    onPointerDown: event => {
+      console.log('onPointerDown', event);
+    },
     onTap: event => {
       console.log('onTap', event);
     },
@@ -31,10 +34,11 @@ export function App() {
     }
   });
   return (
-    <div style={boxStyle} {...events}>
+    <div style={boxStyle}{...events} >
+      <GestureProxy />
     </div>
   );
 }
 
 const root = createRoot(document.getElementById("root")!);
-root.render(<App />);
+root.render(<App />);  
