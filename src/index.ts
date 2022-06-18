@@ -14,6 +14,7 @@ export { GestureOptions } from "./core/GestureOptions";
 export { composeGestureEvents } from "./core/GestureCompose";
 export { type GestureEvent } from "./core/GestureEvents";
 export { useGestureEvents } from "./helpers/GestureHook";
+export { createGestureEvents } from "./helpers/GestureFactory";
 export { gestured } from "./helpers/GestureHoC";
 export { GestureProxy, type GestureProxyProps } from "./helpers/GestureProxy";
 
