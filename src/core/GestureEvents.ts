@@ -10,29 +10,20 @@ import {
 
 export type GestureMixEvents = GestureEvents & GesturePointerEvents;
 
-export type GestureEvent<
-  T extends Element = Element,
-  D = unknown
-> = React.PointerEvent<T> & {
+export type GestureEvent<D = any> = GesturePointerEvent<Element> & {
   gesture: keyof GestureEvents;
-  detail: D;
+  detail?: D;
 } & D;
 
 export type GestureEventListener<E extends GestureEvent> = (event: E) => void;
 
-export type GestureSwipeEvent<T extends Element = Element> = GestureEvent<
-  T,
-  {
-    direction: "up" | "right" | "down" | "left";
-  }
->;
+export type GestureSwipeEvent = GestureEvent<{
+  direction: "up" | "right" | "down" | "left";
+}>;
 
-export type GesturePinchEvent<T extends Element = Element> = GestureEvent<
-  T,
-  {
-    scale: number;
-  }
->;
+export type GesturePinchEvent = GestureEvent<{
+  scale: number;
+}>;
 
 export type GestureEvents = {
   onTap: GestureEventListener<GestureEvent>;
@@ -48,15 +39,12 @@ export type GestureEvents = {
   onPinchEnd: GestureEventListener<GesturePinchEvent>;
 };
 
-export function GestureEvent<
-  T extends Element = Element,
-  G extends keyof GestureEvents = keyof GestureEvents
->(
-  gesture: keyof GestureEvents,
+export function GestureEvent<G extends keyof GestureEvents>(
+  gesture: G,
   pointerEvent: GesturePointerEvent,
-  detail?: Parameters<GestureEvents[G]>[0]
-): GestureEvent<T> {
-  const gestureEvent = { gesture, detail };
+  detail?: Parameters<GestureEvents[G]>[0]["detail"]
+): GestureEvent<Parameters<GestureEvents[G]>[0]["detail"]> {
+  const gestureEvent = { ...detail, gesture, detail };
   Object.setPrototypeOf(gestureEvent, pointerEvent);
-  return gestureEvent as GestureEvent<T, Parameters<GestureEvents[G]>[0]>;
+  return gestureEvent as any;
 }

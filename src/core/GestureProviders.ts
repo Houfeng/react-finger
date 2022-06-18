@@ -7,11 +7,13 @@ import { GestureContext } from "./GestureContext";
 import { GestureMixEvents } from "./GestureEvents";
 import { GesturePointerEvent } from "./GesturePointerEvents";
 
-export type GestureProvideHandler = (
-  events: Partial<GestureMixEvents>,
-  context: GestureContext,
-  pointer: GesturePointerEvent
-) => void;
+export type GestureProviderParams = {
+  events: Partial<GestureMixEvents>;
+  context: GestureContext;
+  pointer: GesturePointerEvent;
+};
+
+export type GestureProvideHandler = (params: GestureProviderParams) => void;
 
 export type GestureProvider = {
   handlePointerDown: GestureProvideHandler;

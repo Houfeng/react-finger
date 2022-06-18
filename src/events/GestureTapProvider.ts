@@ -11,38 +11,40 @@ import { calcDistance } from "../core/GestureUtils";
 const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
   GestureOptions;
 
-const holdTimerSymbol = Symbol("holdTimerSymbol");
+const holdTimer = Symbol("holdTimer");
 const tapCanceled = Symbol("tapCanceled");
 const dblWaitNext = Symbol("dblWaitNext");
 const dblPrevTime = Symbol("dblPrevTime");
 
 export const GestureTapProvider: GestureProvider = {
-  handlePointerDown: (events, context, pointer) => {
+  handlePointerDown: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(tapCanceled, getPointers().length > 1);
     if (flags.get(tapCanceled)) {
-      clearTimeout(flags.get(holdTimerSymbol));
+      clearTimeout(flags.get(holdTimer));
     }
     flags.set(
-      holdTimerSymbol,
+      holdTimer,
       setTimeout(() => {
         flags.set(tapCanceled, true);
         events.onTapHold?.(GestureEvent("onTapHold", pointer));
       }, holdDurationThreshold)
     );
   },
-  handlePointerMove: (_events, context, _pointer) => {
+
+  handlePointerMove: ({ context }) => {
     const { flags, getPointers, getChangedPointers } = context;
     if (flags.get(tapCanceled)) return;
     const dist = calcDistance(getPointers()[0], getChangedPointers()[0]);
     if (dist > tapMaxDistanceThreshold) {
       flags.set(tapCanceled, true);
-      clearTimeout(flags.get(holdTimerSymbol));
+      clearTimeout(flags.get(holdTimer));
     }
   },
-  handlePointerUp: (events, context, pointer) => {
+
+  handlePointerUp: ({ events, context, pointer }) => {
     const { flags } = context;
-    clearTimeout(flags.get(holdTimerSymbol));
+    clearTimeout(flags.get(holdTimer));
     if (flags.get(tapCanceled)) return;
     events.onTap?.(GestureEvent("onTap", pointer));
     const prevTime = flags.get(dblPrevTime) || 0;
@@ -60,9 +62,10 @@ export const GestureTapProvider: GestureProvider = {
       flags.set(dblWaitNext, false);
     }
   },
-  handlePointerCancel: (_events, context, _pointer) => {
+
+  handlePointerCancel: ({ context }) => {
     const { flags } = context;
     flags.set(tapCanceled, true);
-    clearTimeout(flags.get(holdTimerSymbol));
+    clearTimeout(flags.get(holdTimer));
   },
 };

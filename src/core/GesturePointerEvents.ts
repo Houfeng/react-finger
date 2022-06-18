@@ -3,8 +3,10 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-export type GesturePointerEvent<T extends Element = Element> =
-  React.PointerEvent<T>;
+export type GesturePointerEvent<T extends Element = Element> = Omit<
+  React.PointerEvent<T>,
+  "detail"
+>;
 
 export type GesturePointerEventLike = { pointerId: number };
 
