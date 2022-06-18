@@ -1,10 +1,14 @@
-import { ObserveMode } from 'ober';
 import commonjs from 'rollup-plugin-commonjs';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import path from 'path';
 import resolve from 'rollup-plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import typescript from 'rollup-plugin-typescript2';
+
+const externals = {
+  'react': 'React',
+  'react-dom': 'ReactDOM',
+}
 
 const createConf = (page) => {
   return {
@@ -13,17 +17,26 @@ const createConf = (page) => {
       {
         file: `./dist/js/${page}.js`,
         format: 'iife',
-        sourcemap: true
+        sourcemap: true,
+        globals: externals,
       }
     ],
-    external: ['react', 'react-dom'],
+    external: Object.keys(externals),
     plugins: [
       resolve(),
       commonjs({
-        ignoreDynamicRequires: true,
         namedExports: {
-          'node_modules/react/index.js': ['useState', 'useMemo', 'useEffect'],
-        },
+          'examples/node_modules/react-is/index.js': [
+            'isValidElementType',
+            'isContextConsumer',
+          ],
+          'examples/node_modules/use-sync-external-store/shim/with-selector.js': [
+            'useSyncExternalStoreWithSelector'
+          ],
+          'examples/node_modules/use-sync-external-store/shim/index.js': [
+            'useSyncExternalStore'
+          ]
+        }
       }),
       typescript({
         useTsconfigDeclarationDir: true,
@@ -31,8 +44,7 @@ const createConf = (page) => {
       }),
       sourcemaps(),
       injectProcessEnv({
-        NODE_ENV: 'production',
-        OBER_CONFIG: { mode: ObserveMode.property },
+        NODE_ENV: 'production'
       }),
     ]
   };

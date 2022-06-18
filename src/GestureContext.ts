@@ -1,46 +1,41 @@
-/**
- * Copyright (c) 2015-present Houfeng
- * @homepage https://github.com/Houfeng/mota-gesture
- * @author Houfeng <houzhanfeng@gmail.com>
- */
+import { PointerEvent } from "./PointerEvents";
 
-import { GestureProps } from "./GestureProps";
-import { OriginEvent } from "./OriginEvent";
-import { isFunction } from "ntils";
+export type GestureContext = {
+  addPointer: (pointer: PointerEvent) => void;
+  updatePointer: (pointer: PointerEvent) => void;
+  removePointer: (pointer: PointerEvent) => void;
+  getPointers: () => PointerEvent[];
+  getChangedPointers: () => PointerEvent[];
+  flags: Map<string, any>;
+};
 
-export class GestureContext {
-  [name: string]: any;
-}
-
-export function uesGestureContext(
-  event: OriginEvent,
-  props: GestureProps
-): GestureContext {
-  props = { ...props };
-  const key = props["x-gesture-key"] || "default";
-  const computedKey = `__mota_gesture_${String(key)}__`;
-  const host: any = props["x-gesture-host"] || event.currentTarget;
-  if (!host[computedKey]) host[computedKey] = new GestureContext();
-  return host[computedKey];
-}
-
-export function Contextable(defaultValue: any = null) {
-  return (target: { context: GestureContext }, member: string) => {
-    Object.defineProperty(target, member, {
-      enumerable: true,
-      get() {
-        if (!this.context) return defaultValue;
-        if (!(member in this.context)) {
-          this.context[member] = isFunction(defaultValue)
-            ? defaultValue()
-            : defaultValue;
-        }
-        return this.context[member];
-      },
-      set(value: any) {
-        if (!this.context) return;
-        this.context[member] = value;
-      },
-    });
+export function GestureContext(): GestureContext {
+  const flags = new Map<string, any>();
+  const points = new Map<number, PointerEvent>();
+  const changedPoints = new Map<number, PointerEvent>();
+  const addPointer = (pointer: PointerEvent) => {
+    points.set(pointer.pointerId, { ...pointer });
+    updatePointer(pointer);
+  };
+  const updatePointer = (pointer: PointerEvent) => {
+    changedPoints.set(pointer.pointerId, { ...pointer });
+  };
+  const removePointer = (pointer: PointerEvent) => {
+    points.delete(pointer.pointerId);
+    changedPoints.delete(pointer.pointerId);
+  };
+  const getPointers = (): PointerEvent[] => {
+    return Array.from(points.values());
+  };
+  const getChangedPointers = (): PointerEvent[] => {
+    return Array.from(changedPoints.values());
+  };
+  return {
+    addPointer,
+    updatePointer,
+    removePointer,
+    getPointers,
+    getChangedPointers,
+    flags,
   };
 }

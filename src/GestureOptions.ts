@@ -1,15 +1,31 @@
 /**
- * Copyright (c) 2015-present Houfeng
  * @homepage https://github.com/Houfeng/mota-gesture
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
 export const GestureOptions = {
-  swipeDurationThreshold: 1000,
-  swipeHorizontalDistanceThreshold: 25,
-  swipeVerticalDistanceThreshold: 45,
+  /**
+   * swipe 最大时间阈值
+   */
+  swipeMaxDurationThreshold: 1000,
+
+  /**
+   * swipe 最小距离阈值
+   */
+  swipeMinDistanceThreshold: 25,
+
+  /**
+   * tap 最大距离阈值
+   */
+  tapMaxDistanceThreshold: 5,
+
+  /**
+   * hold 触发时间阈值
+   */
   holdDurationThreshold: 1000,
-  dblDurationThreshold: 450,
-  scrollSuppressionThreshold: 25,
-  possibleToNative: false,
+
+  /**
+   * 双击 触发间隔阈值
+   */
+  dblIntervalThreshold: 300,
 };

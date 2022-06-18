@@ -1,26 +1,31 @@
-import React from "react"
-import { gesture } from '../src';
-import { render } from "react-dom";
+import React, { CSSProperties } from "react"
 
-export const Demo = React.forwardRef((
-  props: {}, ref: React.ForwardedRef<HTMLDivElement>
-) => {
-  return <div ref={ref}>{JSON.stringify(props)}</div>
-})
+import { composeGestureEvents } from '../src/GestureEvents';
+import { createRoot } from "react-dom/client";
 
-const P = gesture(Demo);
+const boxStyle: CSSProperties = {
+  margin: 'auto',
+  padding: 16,
+  borderRadius: 8,
+  width: 300,
+  height: 300,
+  backgroundColor: '#fff'
+}; 
 
-export function App() {
+const events = composeGestureEvents({
+  onTap: event => {
+    event.stopPropagation();
+    event.preventDefault();
+    console.log('onTap', event);
+  }
+});
+
+export function App() { 
   return (
-    <div>
-      <P
-        onGesturePointerDown={() => console.log('onGesturePointerDown')}
-        ref={ref => console.log('ref', ref)}
-      >
-        你好
-      </P>
+    <div style={boxStyle} {...events}>
     </div>
   );
 }
 
-render(<App />, document.getElementById("root"));
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
