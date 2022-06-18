@@ -17,13 +17,19 @@ export function App() {
     onTap: event => {
       console.log('onTap', event);
     },
-    onTapHold: event => { 
+    onTapHold: event => {
       console.log('onTapHold', event);
     },
     onDoubleTap: event => {
       console.log('onDoubleTap', event);
+    },
+    onSwipe: event => {
+      console.log('onSwipe', event.direction, event);
+    },
+    onSwipeLeft: event => {
+      console.log('onSwipeLeft', event.direction, event);
     }
-  });  
+  });
   return (
     <div style={boxStyle} {...events}>
     </div>

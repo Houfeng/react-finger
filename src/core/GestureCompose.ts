@@ -27,9 +27,12 @@ function createPointerDownListener(
 ): GesturePointerEventListener {
   return (pointer: GesturePointerEvent) => {
     events.onPointerDown?.(pointer);
+    providers.forEach((it) =>
+      it.handlePointerWillDown?.({ events, context, pointer })
+    );
     context.addPointer(pointer);
     providers.forEach((it) =>
-      it.handlePointerDown({ events, context, pointer })
+      it.handlePointerDown?.({ events, context, pointer })
     );
   };
 }
@@ -46,10 +49,13 @@ function createPointerMoveListener(
 ): GesturePointerEventListener {
   return (pointer: GesturePointerEvent) => {
     events.onPointerMove?.(pointer);
-    context.updatePointer(pointer);
     if (context.getPointers().length < 1) return;
     providers.forEach((it) =>
-      it.handlePointerMove({ events, context, pointer })
+      it.handlePointerWillMove?.({ events, context, pointer })
+    );
+    context.updatePointer(pointer);
+    providers.forEach((it) =>
+      it.handlePointerMove?.({ events, context, pointer })
     );
   };
 }
@@ -66,8 +72,13 @@ function createPointerUpListener(
 ): GesturePointerEventListener {
   return (pointer: GesturePointerEvent) => {
     events.onPointerUp?.(pointer);
+    providers.forEach((it) =>
+      it.handlePointerWillUp?.({ events, context, pointer })
+    );
     context.removePointer(pointer);
-    providers.forEach((it) => it.handlePointerUp({ events, context, pointer }));
+    providers.forEach((it) =>
+      it.handlePointerUp?.({ events, context, pointer })
+    );
   };
 }
 
@@ -83,9 +94,12 @@ function createPointerCancelListener(
 ): GesturePointerEventListener {
   return (pointer: GesturePointerEvent) => {
     events.onPointerCancel?.(pointer);
+    providers.forEach((it) =>
+      it.handlePointerWillCancel?.({ events, context, pointer })
+    );
     context.removePointer(pointer);
     providers.forEach((it) =>
-      it.handlePointerCancel({ events, context, pointer })
+      it.handlePointerCancel?.({ events, context, pointer })
     );
   };
 }

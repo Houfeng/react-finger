@@ -15,12 +15,16 @@ export type GestureProviderParams = {
 
 export type GestureProvideHandler = (params: GestureProviderParams) => void;
 
-export type GestureProvider = {
+export type GestureProvider = Partial<{
+  handlePointerWillDown: GestureProvideHandler;
   handlePointerDown: GestureProvideHandler;
+  handlePointerWillMove: GestureProvideHandler;
   handlePointerMove: GestureProvideHandler;
+  handlePointerWillUp: GestureProvideHandler;
   handlePointerUp: GestureProvideHandler;
+  handlePointerWillCancel: GestureProvideHandler;
   handlePointerCancel: GestureProvideHandler;
-};
+}>;
 
 const providers = new Set<GestureProvider>();
 
