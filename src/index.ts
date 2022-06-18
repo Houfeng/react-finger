@@ -4,17 +4,19 @@
  */
 
 import "pepjs";
+
 import { registerGestureProvider } from "./core/GestureProviders";
-// import { GesturePinchProvider } from "./events/GesturePinchProvider";
-// import { GestureSwipeProvider } from "./events/GestureSwipeProvider";
+import { GesturePinchProvider } from "./events/GesturePinchProvider";
+import { GestureSwipeProvider } from "./events/GestureSwipeProvider";
 import { GestureTapProvider } from "./events/GestureTapProvider";
 
 export { GestureOptions } from "./core/GestureOptions";
 export { composeGestureEvents } from "./core/GestureCompose";
 export { type GestureEvent } from "./core/GestureEvents";
-export { useGestureEvents } from "./helpers/hook";
-export { gestured } from "./helpers/hoc";
+export { useGestureEvents } from "./helpers/GestureHook";
+export { gestured } from "./helpers/GestureHoC";
+export { GestureProxy, type GestureProxyProps } from "./helpers/GestureProxy";
 
 registerGestureProvider(GestureTapProvider);
-// registerGestureProvider(GestureSwipeProvider);
-// registerGestureProvider(GesturePinchProvider);
+registerGestureProvider(GestureSwipeProvider);
+registerGestureProvider(GesturePinchProvider);

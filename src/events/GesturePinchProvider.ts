@@ -13,7 +13,7 @@ const pinchScale = Symbol("pinchScale");
 const pinchEnded = Symbol("pinchEnded");
 
 export const GesturePinchProvider: GestureProvider = {
-  handlePointerDown: function ({ events, context, pointer }) {
+  handlePointerDown: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (flags.get(pinch) && !flags.get(pinchStarted)) {
@@ -24,7 +24,7 @@ export const GesturePinchProvider: GestureProvider = {
     }
   },
 
-  handlePointerMove: function ({ events, context, pointer }) {
+  handlePointerMove: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     if (!flags.get(pinch)) return;
     const pointers = getPointers();
@@ -36,7 +36,7 @@ export const GesturePinchProvider: GestureProvider = {
     events?.onPinch(GestureEvent("onPinch", pointer, { scale }));
   },
 
-  handlePointerUp: function ({ events, context, pointer }) {
+  handlePointerUp: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
@@ -46,7 +46,7 @@ export const GesturePinchProvider: GestureProvider = {
     }
   },
 
-  handlePointerCancel: function ({ events, context, pointer }) {
+  handlePointerCancel: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
