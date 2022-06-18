@@ -19,7 +19,7 @@ export const GesturePinchProvider: GestureProvider = {
     if (flags.get(pinch) && !flags.get(pinchStarted)) {
       const scale = 1;
       flags.set(pinchScale, scale);
-      events?.onPinchStart(GestureEvent("onPinchStart", pointer, { scale }));
+      events.onPinchStart?.(GestureEvent("onPinchStart", pointer, { scale }));
       flags.set(pinchStarted, true);
       const target = getPointers()[0].target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
@@ -35,7 +35,7 @@ export const GesturePinchProvider: GestureProvider = {
     const latestDist = calcDistance(changedPointers[0], changedPointers[0]);
     const scale = latestDist / originDist;
     flags.set(pinchScale, scale);
-    events?.onPinch(GestureEvent("onPinch", pointer, { scale }));
+    events.onPinch?.(GestureEvent("onPinch", pointer, { scale }));
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
@@ -43,7 +43,7 @@ export const GesturePinchProvider: GestureProvider = {
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
       const scale = flags.get(pinchScale);
-      events?.onPinchStart(GestureEvent("onPinchStart", pointer, { scale }));
+      events.onPinchStart?.(GestureEvent("onPinchStart", pointer, { scale }));
       flags.set(pinchEnded, true);
     }
   },
@@ -53,7 +53,7 @@ export const GesturePinchProvider: GestureProvider = {
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
       const scale = flags.get(pinchScale);
-      events?.onPinchStart(GestureEvent("onPinchStart", pointer, { scale }));
+      events?.onPinchStart?.(GestureEvent("onPinchStart", pointer, { scale }));
       flags.set(pinchEnded, true);
     }
   },

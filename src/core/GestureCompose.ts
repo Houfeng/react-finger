@@ -94,6 +94,7 @@ export function composeGestureEvents(
   events: Partial<GestureMixEvents>,
   context = GestureContext()
 ): GesturePointerEvents {
+  events = { ...events };
   const onPointerDown = createPointerDownListener(events, context);
   const onPointerMove = createPointerMoveListener(events, context);
   const onPointerUp = createPointerUpListener(events, context);

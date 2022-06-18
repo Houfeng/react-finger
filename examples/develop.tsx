@@ -23,7 +23,7 @@ export function App() {
     onDoubleTap: event => {
       console.log('onDoubleTap', event);
     }
-  }); 
+  });  
   return (
     <div style={boxStyle} {...events}>
     </div>
