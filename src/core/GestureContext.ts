@@ -1,3 +1,8 @@
+/**
+ * @homepage https://github.com/Houfeng/mota-gesture
+ * @author Houfeng <houzhanfeng@gmail.com>
+ */
+
 import { GesturePointerEvent } from "./GesturePointerEvents";
 
 export type GestureContext = {

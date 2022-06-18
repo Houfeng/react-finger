@@ -3,7 +3,6 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { GestureMixEvents, getAllGestureProviders } from "./GestureProviders";
 import {
   GesturePointerEvent,
   GesturePointerEventListener,
@@ -11,6 +10,8 @@ import {
 } from "./GesturePointerEvents";
 
 import { GestureContext } from "./GestureContext";
+import { GestureMixEvents } from "./GestureEvents";
+import { getAllGestureProviders } from "./GestureProviders";
 
 const providers = getAllGestureProviders();
 

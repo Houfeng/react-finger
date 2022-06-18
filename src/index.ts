@@ -12,6 +12,8 @@ import { GestureTapProvider } from "./events/GestureTapProvider";
 export { GestureOptions } from "./core/GestureOptions";
 export { composeGestureEvents } from "./core/GestureCompose";
 export { type GestureEvent } from "./core/GestureEvents";
+export { useGestureEvents } from "./helpers/hook";
+export { gestured } from "./helpers/hoc";
 
 registerGestureProvider(GestureTapProvider);
 // registerGestureProvider(GestureSwipeProvider);

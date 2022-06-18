@@ -1,38 +1,43 @@
-import { GesturePointerEvent } from "./GesturePointerEvents";
+/**
+ * @homepage https://github.com/Houfeng/mota-gesture
+ * @author Houfeng <houzhanfeng@gmail.com>
+ */
 
-export type GestureEvent<D = unknown, T = Element> = React.PointerEvent<T> & D;
+import {
+  GesturePointerEvent,
+  GesturePointerEvents,
+} from "./GesturePointerEvents";
 
-export type GestureEventListener<E extends GestureEvent = GestureEvent> = (
-  event: E
-) => void;
+export type GestureMixEvents = GestureEvents & GesturePointerEvents;
 
-export type GestureSwipeEvent<T = Element> = GestureEvent<
+export type GestureEvent<
+  T extends Element = Element,
+  D = unknown
+> = React.PointerEvent<T> & {
+  gesture: keyof GestureEvents;
+  detail: D;
+} & D;
+
+export type GestureEventListener<E extends GestureEvent> = (event: E) => void;
+
+export type GestureSwipeEvent<T extends Element = Element> = GestureEvent<
+  T,
   {
     direction: "up" | "right" | "down" | "left";
-  },
-  T
+  }
 >;
 
-export type GesturePinchEvent<T = Element> = GestureEvent<
+export type GesturePinchEvent<T extends Element = Element> = GestureEvent<
+  T,
   {
     scale: number;
-  },
-  T
+  }
 >;
 
-export function GestureEvent<D = unknown, T = Element>(
-  pointerEvent: GesturePointerEvent,
-  data?: D
-): GestureEvent<D, T> {
-  const gestureEvent = { ...data };
-  Object.setPrototypeOf(gestureEvent, pointerEvent);
-  return gestureEvent as GestureEvent<D, T>;
-}
-
 export type GestureEvents = {
-  onTap: GestureEventListener;
-  onTapHold: GestureEventListener;
-  onDoubleTap: GestureEventListener;
+  onTap: GestureEventListener<GestureEvent>;
+  onTapHold: GestureEventListener<GestureEvent>;
+  onDoubleTap: GestureEventListener<GestureEvent>;
   onSwipe: GestureEventListener<GestureSwipeEvent>;
   onSwipeUp: GestureEventListener<GestureSwipeEvent>;
   onSwipeRight: GestureEventListener<GestureSwipeEvent>;
@@ -42,3 +47,16 @@ export type GestureEvents = {
   onPinch: GestureEventListener<GesturePinchEvent>;
   onPinchEnd: GestureEventListener<GesturePinchEvent>;
 };
+
+export function GestureEvent<
+  T extends Element = Element,
+  G extends keyof GestureEvents = keyof GestureEvents
+>(
+  gesture: keyof GestureEvents,
+  pointerEvent: GesturePointerEvent,
+  detail?: Parameters<GestureEvents[G]>[0]
+): GestureEvent<T> {
+  const gestureEvent = { gesture, detail };
+  Object.setPrototypeOf(gestureEvent, pointerEvent);
+  return gestureEvent as GestureEvent<T, Parameters<GestureEvents[G]>[0]>;
+}

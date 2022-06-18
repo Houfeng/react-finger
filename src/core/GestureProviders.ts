@@ -1,12 +1,11 @@
-import {
-  GesturePointerEvent,
-  GesturePointerEvents,
-} from "./GesturePointerEvents";
+/**
+ * @homepage https://github.com/Houfeng/mota-gesture
+ * @author Houfeng <houzhanfeng@gmail.com>
+ */
 
 import { GestureContext } from "./GestureContext";
-import { GestureEvents } from "./GestureEvents";
-
-export type GestureMixEvents = GestureEvents & GesturePointerEvents;
+import { GestureMixEvents } from "./GestureEvents";
+import { GesturePointerEvent } from "./GesturePointerEvents";
 
 export type GestureProvideHandler = (
   events: Partial<GestureMixEvents>,

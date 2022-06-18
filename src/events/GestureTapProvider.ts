@@ -1,11 +1,20 @@
+/**
+ * @homepage https://github.com/Houfeng/mota-gesture
+ * @author Houfeng <houzhanfeng@gmail.com>
+ */
+
 import { GestureEvent } from "../core/GestureEvents";
 import { GestureOptions } from "../core/GestureOptions";
 import { GestureProvider } from "../core/GestureProviders";
 import { calcDistance } from "../core/GestureUtils";
 
-const { tapMaxDistanceThreshold, holdDurationThreshold } = GestureOptions;
-const holdTimerSymbol = Symbol("holdTimer");
-const tapCanceled = Symbol("TapCanceled");
+const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
+  GestureOptions;
+
+const holdTimerSymbol = Symbol("holdTimerSymbol");
+const tapCanceled = Symbol("tapCanceled");
+const dblWaitNext = Symbol("dblWaitNext");
+const dblPrevTime = Symbol("dblPrevTime");
 
 export const GestureTapProvider: GestureProvider = {
   handlePointerDown: (events, context, pointer) => {
@@ -18,7 +27,7 @@ export const GestureTapProvider: GestureProvider = {
       holdTimerSymbol,
       setTimeout(() => {
         flags.set(tapCanceled, true);
-        events.onTapHold?.(GestureEvent(pointer));
+        events.onTapHold?.(GestureEvent("onTapHold", pointer));
       }, holdDurationThreshold)
     );
   },
@@ -35,7 +44,21 @@ export const GestureTapProvider: GestureProvider = {
     const { flags } = context;
     clearTimeout(flags.get(holdTimerSymbol));
     if (flags.get(tapCanceled)) return;
-    events.onTap?.(GestureEvent(pointer));
+    events.onTap?.(GestureEvent("onTap", pointer));
+    const prevTime = flags.get(dblPrevTime) || 0;
+    if (
+      !flags.get(dblWaitNext) ||
+      Date.now() - prevTime > dblIntervalThreshold
+    ) {
+      flags.set(dblPrevTime, Date.now());
+      flags.set(dblWaitNext, true);
+    } else {
+      const prevTime = flags.get(dblPrevTime);
+      if (Date.now() - prevTime < dblIntervalThreshold) {
+        events.onDoubleTap?.(GestureEvent("onDoubleTap", pointer));
+      }
+      flags.set(dblWaitNext, false);
+    }
   },
   handlePointerCancel: (_events, context, _pointer) => {
     const { flags } = context;
