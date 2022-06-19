@@ -21,7 +21,7 @@ export const GestureTapProvider: GestureProvider = {
     const { flags, getPointers } = context;
     flags.set(tapCanceled, getPointers().length > 1);
     if (flags.get(tapCanceled)) {
-      clearTimeout(flags.get(holdTimer));
+      clearTimeout(flags.get(holdTimer) as number);
     }
     flags.set(
       holdTimer,
@@ -38,16 +38,16 @@ export const GestureTapProvider: GestureProvider = {
     const dist = calcDistance(getPointers()[0], getChangedPointers()[0]);
     if (dist > tapMaxDistanceThreshold) {
       flags.set(tapCanceled, true);
-      clearTimeout(flags.get(holdTimer));
+      clearTimeout(flags.get(holdTimer) as number);
     }
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
     const { flags } = context;
-    clearTimeout(flags.get(holdTimer));
+    clearTimeout(flags.get(holdTimer) as number);
     if (flags.get(tapCanceled)) return;
     events.onTap?.(GestureEvent("onTap", pointer));
-    const prevTime = flags.get(dblPrevTime) || 0;
+    const prevTime = (flags.get(dblPrevTime) || 0) as number;
     if (
       !flags.get(dblWaitNext) ||
       Date.now() - prevTime > dblIntervalThreshold
@@ -55,7 +55,7 @@ export const GestureTapProvider: GestureProvider = {
       flags.set(dblPrevTime, Date.now());
       flags.set(dblWaitNext, true);
     } else {
-      const prevTime = flags.get(dblPrevTime);
+      const prevTime = flags.get(dblPrevTime) as number;
       if (Date.now() - prevTime < dblIntervalThreshold) {
         events.onDoubleTap?.(GestureEvent("onDoubleTap", pointer));
       }
@@ -66,6 +66,6 @@ export const GestureTapProvider: GestureProvider = {
   handlePointerCancel: ({ context }) => {
     const { flags } = context;
     flags.set(tapCanceled, true);
-    clearTimeout(flags.get(holdTimer));
+    clearTimeout(flags.get(holdTimer) as number);
   },
 };

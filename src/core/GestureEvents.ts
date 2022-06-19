@@ -12,10 +12,11 @@ import { toEventWrapper } from "./GestureUtils";
 
 export type GestureMixEvents = GestureEvents & GesturePointerEvents;
 
-export type GestureEvent<D = any> = GesturePointerEvent<Element> & {
-  gesture: keyof GestureEvents;
-  detail?: D;
-} & D;
+export type GestureEvent<D extends object = Record<string, unknown>> =
+  GesturePointerEvent<Element> & {
+    gesture: keyof GestureEvents;
+    detail?: D;
+  } & D;
 
 export type GestureEventListener<E extends GestureEvent> = (event: E) => void;
 
@@ -51,5 +52,5 @@ export function GestureEvent<G extends keyof GestureEvents>(
     Parameters<GestureEvents[G]>[0]["detail"]
   >;
   Object.assign(gestureEvent, { ...detail, gesture, detail });
-  return gestureEvent as any;
+  return gestureEvent;
 }

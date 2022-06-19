@@ -42,7 +42,7 @@ export const GesturePinchProvider: GestureProvider = {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
-      const scale = flags.get(pinchScale);
+      const scale = flags.get(pinchScale) as number;
       events.onPinchStart?.(GestureEvent("onPinchStart", pointer, { scale }));
       flags.set(pinchEnded, true);
     }
@@ -52,7 +52,7 @@ export const GesturePinchProvider: GestureProvider = {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
-      const scale = flags.get(pinchScale);
+      const scale = flags.get(pinchScale) as number;
       events?.onPinchStart?.(GestureEvent("onPinchStart", pointer, { scale }));
       flags.set(pinchEnded, true);
     }

@@ -12,11 +12,11 @@ export type GestureContext = {
   removePointer: (pointer: GesturePointerEvent) => void;
   getPointers: () => GesturePointerEvent[];
   getChangedPointers: () => GesturePointerEvent[];
-  flags: Map<symbol, any>;
+  flags: Map<symbol, unknown>;
 };
 
 export function GestureContext(): GestureContext {
-  const flags = new Map<symbol, any>();
+  const flags = new Map<symbol, unknown>();
   const points = new Map<number, GesturePointerEvent>();
   const changedPoints = new Map<number, GesturePointerEvent>();
   const addPointer = (pointer: GesturePointerEvent) => {

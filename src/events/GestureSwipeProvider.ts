@@ -8,15 +8,15 @@ import { GestureOptions } from "../core/GestureOptions";
 import { GestureProvider } from "../core/GestureProviders";
 
 const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = GestureOptions;
-const swipeCanceled = Symbol("swipeCanceled");
-const swipeStartTime = Symbol("swipeStartTime");
+const canceled = Symbol("swipeCanceled");
+const startTime = Symbol("swipeStartTime");
 
 export const GestureSwipeProvider: GestureProvider = {
   handlePointerDown: ({ context, pointer }) => {
     const { flags, getPointers } = context;
-    flags.set(swipeCanceled, getPointers().length > 1);
-    flags.set(swipeStartTime, Date.now());
-    if (!flags.get(swipeCanceled)) {
+    flags.set(canceled, getPointers().length > 1);
+    flags.set(startTime, Date.now());
+    if (!flags.get(canceled)) {
       const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
     }
@@ -25,8 +25,8 @@ export const GestureSwipeProvider: GestureProvider = {
   handlePointerWillUp: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     if (
-      flags.get(swipeCanceled) ||
-      Date.now() - flags.get(swipeStartTime) > swipeMaxDurationThreshold
+      flags.get(canceled) ||
+      Date.now() - (flags.get(startTime) as number) > swipeMaxDurationThreshold
     ) {
       return;
     }
@@ -68,6 +68,6 @@ export const GestureSwipeProvider: GestureProvider = {
 
   handlePointerCancel: ({ context }) => {
     const { flags } = context;
-    flags.set(swipeCanceled, true);
+    flags.set(canceled, true);
   },
 };
