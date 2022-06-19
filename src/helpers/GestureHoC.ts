@@ -51,6 +51,12 @@ type GesturedProps<T extends Element = Element> = Partial<GestureEvents<T>> & {
   children: ReactNode;
 };
 
+/**
+ * 将一个原生 HTML 标签，转换为具备「手势事件」的高阶组件
+ *
+ * @param type 原生 HTML 标签的 TagName
+ * @returns 具备手势事件的高阶组件
+ */
 export function Gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
   return forwardRef<HTMLAttributes<T>, GesturedProps<HTMLElementTagNameMap[T]>>(
     (props, ref) => {

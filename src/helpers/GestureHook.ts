@@ -11,6 +11,7 @@ import { composeGestureEvents } from "../core/GestureCompose";
 /**
  * 通过 Hook 创建可用于 Element 的 Gesture Events
  * 注意：些 Hook 返回稳定的引用，同时会更新事件处理函数中的依赖，不会造成不必要的渲染
+ *
  * @param events 要绑定的手势事件 map
  * @returns 合成后的 Pointer Events，需要直接解构到一个元素的 props 上
  */
@@ -19,7 +20,7 @@ export function useGestureEvents<T extends Element = Element>(
 ) {
   const eventsRef = useMemo<Partial<GestureMixEvents<T>>>(() => ({}), []);
   useLayoutEffect(() => {
-    Object.assign(eventsRef, events);
+    if (events) Object.assign(eventsRef, events);
   });
   return useMemo(() => composeGestureEvents<T>(eventsRef), []);
 }

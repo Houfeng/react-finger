@@ -51,17 +51,14 @@ export type GestureEvents<
 export function GestureEvent<
   T extends Element,
   D extends object,
-  G extends keyof GestureEvents<T>
+  G extends keyof GestureEvents<T, D>
 >(
   gesture: G,
   pointerEvent: GesturePointerEvent,
-  detail?: Parameters<GestureEvents[G]>[0]["detail"]
-): GestureEvent<T, Parameters<GestureEvents[G]>[0]["detail"]> {
+  detail?: Parameters<GestureEvents<T, D>[G]>[0]["detail"]
+): GestureEvent<T, Parameters<GestureEvents<T, D>[G]>[0]["detail"]> {
   pointerEvent.persist?.();
-  const gestureEvent = toEventWrapper(pointerEvent) as GestureEvent<
-    T,
-    Parameters<GestureEvents[G]>[0]["detail"]
-  >;
+  const gestureEvent = toEventWrapper(pointerEvent);
   Object.assign(gestureEvent, { ...detail, gesture, detail });
   return gestureEvent;
 }
