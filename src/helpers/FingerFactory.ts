@@ -3,8 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerMixEvents } from "../core/GestureEvents";
-import { composeFingerEvents } from "../core/GestureCompose";
+import { FingerMixEvents } from "../core/FingerEvents";
+import { composeFingerEvents } from "../core/FingerCompose";
 
 /**
  * 通过「方法」创建可用于 Element 的 Gesture Events，通常用类组件中，

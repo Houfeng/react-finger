@@ -3,9 +3,9 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerContext } from "./GestureContext";
-import { FingerMixEvents } from "./GestureEvents";
-import { FingerPointerEvent } from "./GesturePointerEvents";
+import { FingerContext } from "./FingerContext";
+import { FingerMixEvents } from "./FingerEvents";
+import { FingerPointerEvent } from "./FingerPointerEvents";
 
 export type FingerProviderParams = {
   events: Partial<FingerMixEvents>;

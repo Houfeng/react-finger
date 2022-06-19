@@ -7,11 +7,11 @@ import {
   FingerPointerEvent,
   FingerPointerEventListener,
   FingerPointerEvents,
-} from "./GesturePointerEvents";
+} from "./FingerPointerEvents";
 
-import { FingerContext } from "./GestureContext";
-import { FingerMixEvents } from "./GestureEvents";
-import { getAllFingerProviders } from "./GestureProviders";
+import { FingerContext } from "./FingerContext";
+import { FingerMixEvents } from "./FingerEvents";
+import { getAllFingerProviders } from "./FingerProviders";
 
 const providers = getAllFingerProviders();
 

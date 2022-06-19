@@ -3,11 +3,11 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { calcDistance, clearTimer, createTimer } from "../core/GestureUtils";
+import { calcDistance, clearTimer, createTimer } from "../core/FingerUtils";
 
-import { FingerEvent } from "../core/GestureEvents";
-import { FingerOptions } from "../core/GestureOptions";
-import { FingerProvider } from "../core/GestureProviders";
+import { FingerEvent } from "../core/FingerEvents";
+import { FingerOptions } from "../core/FingerOptions";
+import { FingerProvider } from "../core/FingerProviders";
 
 const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
   FingerOptions;

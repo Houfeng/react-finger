@@ -3,9 +3,9 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent } from "../core/GestureEvents";
-import { FingerProvider } from "../core/GestureProviders";
-import { calcDistance } from "../core/GestureUtils";
+import { FingerEvent } from "../core/FingerEvents";
+import { FingerProvider } from "../core/FingerProviders";
+import { calcDistance } from "../core/FingerUtils";
 
 const pinch = Symbol("pinch");
 const pinchStarted = Symbol("pinchStarted");

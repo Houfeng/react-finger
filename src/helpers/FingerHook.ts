@@ -5,8 +5,8 @@
 
 import { useLayoutEffect, useMemo } from "react";
 
-import { FingerMixEvents } from "../core/GestureEvents";
-import { composeFingerEvents } from "../core/GestureCompose";
+import { FingerMixEvents } from "../core/FingerEvents";
+import { composeFingerEvents } from "../core/FingerCompose";
 
 /**
  * 通过 Hook 创建可用于 Element 的 Gesture Events

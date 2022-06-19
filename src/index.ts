@@ -5,24 +5,24 @@
 
 import "pepjs";
 
-import { registerFingerProvider } from "./core/GestureProviders";
+import { registerFingerProvider } from "./core/FingerProviders";
 
-import { FingerPinchProvider } from "./events/GesturePinchProvider";
-import { FingerSwipeProvider } from "./events/GestureSwipeProvider";
-import { FingerTapProvider } from "./events/GestureTapProvider";
+import { FingerPinchProvider } from "./events/FingerPinchProvider";
+import { FingerSwipeProvider } from "./events/FingerSwipeProvider";
+import { FingerTapProvider } from "./events/FingerTapProvider";
 
-export { type FingerEvent } from "./core/GestureEvents";
-export { composeFingerEvents } from "./core/GestureCompose";
-export { FingerOptions } from "./core/GestureOptions";
+export { type FingerEvent } from "./core/FingerEvents";
+export { composeFingerEvents } from "./core/FingerCompose";
+export { FingerOptions } from "./core/FingerOptions";
 
-export { useFingerEvents } from "./helpers/GestureHook";
-export { createFingerEvents } from "./helpers/GestureFactory";
-export { Finger } from "./helpers/GestureHoC";
+export { useFingerEvents } from "./helpers/FingerHook";
+export { createFingerEvents } from "./helpers/FingerFactory";
+export { Finger } from "./helpers/FingerHoC";
 export {
   FingerProxy,
   FingerProxyBoundary,
   FingerProxyContainer,
-} from "./helpers/GestureProxy";
+} from "./helpers/FingerProxy";
 
 registerFingerProvider(FingerTapProvider);
 registerFingerProvider(FingerSwipeProvider);

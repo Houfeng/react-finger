@@ -3,8 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerPointerEvent } from "./GesturePointerEvents";
-import { toEventWrapper } from "./GestureUtils";
+import { FingerPointerEvent } from "./FingerPointerEvents";
+import { toEventWrapper } from "./FingerUtils";
 
 export type FingerContext = {
   addPointer: (pointer: FingerPointerEvent) => void;

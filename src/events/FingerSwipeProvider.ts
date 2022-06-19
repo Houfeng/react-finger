@@ -3,9 +3,9 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent } from "../core/GestureEvents";
-import { FingerOptions } from "../core/GestureOptions";
-import { FingerProvider } from "../core/GestureProviders";
+import { FingerEvent } from "../core/FingerEvents";
+import { FingerOptions } from "../core/FingerOptions";
+import { FingerProvider } from "../core/FingerProviders";
 
 const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = FingerOptions;
 const canceled = Symbol("swipeCanceled");

@@ -6,9 +6,9 @@
 import {
   FingerPointerEvent,
   FingerPointerEvents,
-} from "./GesturePointerEvents";
+} from "./FingerPointerEvents";
 
-import { toEventWrapper } from "./GestureUtils";
+import { toEventWrapper } from "./FingerUtils";
 
 export type FingerMixEvents<T extends Element = Element> = FingerEvents<T> &
   FingerPointerEvents<T>;

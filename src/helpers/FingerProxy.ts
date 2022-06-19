@@ -15,10 +15,10 @@ import {
   useState,
 } from "react";
 
-import { AnyFunction } from "../core/GestureUtils";
-import { FingerMixEvents } from "../core/GestureEvents";
-import { FingerPointerEvents } from "../core/GesturePointerEvents";
-import { useFingerEvents } from "./GestureHook";
+import { AnyFunction } from "../core/FingerUtils";
+import { FingerMixEvents } from "../core/FingerEvents";
+import { FingerPointerEvents } from "../core/FingerPointerEvents";
+import { useFingerEvents } from "./FingerHook";
 
 const GestureProxyContext =
   createContext<(events: Partial<FingerMixEvents<Element>>) => void>(null);

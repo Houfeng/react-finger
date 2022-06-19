@@ -5,8 +5,8 @@
 
 import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
-import { FingerEvents } from "../core/GestureEvents";
-import { useFingerEvents } from "./GestureHook";
+import { FingerEvents } from "../core/FingerEvents";
+import { useFingerEvents } from "./FingerHook";
 
 function splitProps(props: any) {
   const {
