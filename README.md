@@ -1,11 +1,11 @@
-# Gesture
+# React Finger
 
-Gesture 是一个面向 React 且同时兼容 PC & Mobile 的手势事件库。
+React Finger 是一个面向 React 且同时兼容 PC & Mobile 的手势事件库。
 
 ## 基本使用
 
 ```
-npm install gesture --save
+npm install react-finger --save
 ```
 
 在类组件中使用
@@ -22,7 +22,7 @@ npm install gesture --save
 
 ## 事件支持
 
-Gesture 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
+React Finger 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
 
 事件 | 说明  
 ------- | -------  
