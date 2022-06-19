@@ -102,6 +102,9 @@ export function GestureProxyBoundary(props: GestureProxyBoundaryProps) {
   });
 }
 
+export type GestureProxyContainerProps<T extends Element = Element> =
+  HTMLAttributes<T> & { children: ReactNode };
+
 /**
  * 将一个原生 HTML 标签，转换为具备 GestureProxyBoundary 能力的高阶容器组件
  *
@@ -111,7 +114,10 @@ export function GestureProxyBoundary(props: GestureProxyBoundaryProps) {
 export function GestureProxyContainer<T extends keyof HTMLElementTagNameMap>(
   type: T
 ) {
-  return forwardRef<HTMLAttributes<T>>((props, ref) => {
+  return forwardRef<
+    HTMLAttributes<HTMLElementTagNameMap[T]>,
+    GestureProxyContainerProps<HTMLElementTagNameMap[T]>
+  >((props, ref) => {
     return createElement(GestureProxyBoundary, {
       children: (events) => createElement(type, { ...props, ...events, ref }),
     });

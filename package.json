@@ -1,6 +1,6 @@
 {
-  "name": "mota-gesture",
-  "version": "5.2.3",
+  "name": "resture",
+  "version": "1.0.0",
   "description": "",
   "main": "./dist/gesture-cjs.js",
   "module": "./dist/gesture-es.js",

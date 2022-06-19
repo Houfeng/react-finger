@@ -1,9 +1,10 @@
-import { GestureProxy, Gestured, useGestureEvents } from '../src';
+import { GestureProxy, GestureProxyContainer, Gestured, useGestureEvents } from '../src';
 import React, { CSSProperties, useState } from "react"
 
 import { createRoot } from "react-dom/client";
 
 const GesturedDiv = Gestured("div");
+const GestureWrapper = GestureProxyContainer("div");
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
@@ -41,7 +42,7 @@ export function App() {
   });
   if (!prevEvents) prevEvents = events;
   return (
-    <div style={boxStyle} {...events} >
+    <GestureWrapper style={boxStyle} >
       <GestureProxy />
       <button onClick={() => setDirection('xx')}>
         click
@@ -53,10 +54,11 @@ export function App() {
           event.stopPropagation();
           console.log('event.direction', event.direction);
         }}
+        style={{}}
       >
         xxx
       </GesturedDiv>
-    </div>
+    </GestureWrapper>
   );
 }
 

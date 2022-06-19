@@ -47,9 +47,10 @@ function splitProps(props: any) {
   return { gestures, others };
 }
 
-type GesturedProps<T extends Element = Element> = Partial<GestureEvents<T>> & {
-  children: ReactNode;
-};
+type GesturedProps<T extends Element = Element> = HTMLAttributes<T> &
+  Partial<GestureEvents<T>> & {
+    children: ReactNode;
+  };
 
 /**
  * 将一个原生 HTML 标签，转换为具备「手势事件」的高阶组件
@@ -58,11 +59,12 @@ type GesturedProps<T extends Element = Element> = Partial<GestureEvents<T>> & {
  * @returns 具备手势事件的高阶组件
  */
 export function Gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
-  return forwardRef<HTMLAttributes<T>, GesturedProps<HTMLElementTagNameMap[T]>>(
-    (props, ref) => {
-      const { gestures, others } = splitProps(props);
-      const events = useGestureEvents(gestures);
-      return createElement(type, { ...others, ...events, ref });
-    }
-  );
+  return forwardRef<
+    HTMLAttributes<HTMLElementTagNameMap[T]>,
+    GesturedProps<HTMLElementTagNameMap[T]>
+  >((props, ref) => {
+    const { gestures, others } = splitProps(props);
+    const events = useGestureEvents(gestures);
+    return createElement(type, { ...others, ...events, ref });
+  });
 }
