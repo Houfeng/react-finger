@@ -1,5 +1,5 @@
 /**
- * @homepage https://github.com/Houfeng/mota-gesture
+ * @homepage https://github.com/Houfeng/react-finger
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 

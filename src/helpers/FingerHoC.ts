@@ -1,5 +1,5 @@
 /**
- * @homepage https://github.com/Houfeng/mota-gesture
+ * @homepage https://github.com/Houfeng/react-finger
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
@@ -25,9 +25,9 @@ function splitProps(props: any) {
     onPointerMove,
     onPointerUp,
     onPointerCancel,
-    ...others
+    ...otherProps
   } = props;
-  const gestures = {
+  const eventProps = {
     onTap,
     onTapHold,
     onDoubleTap,
@@ -44,7 +44,7 @@ function splitProps(props: any) {
     onPointerUp,
     onPointerCancel,
   };
-  return { gestures, others };
+  return { eventProps, otherProps };
 }
 
 type FingerProps<T extends Element = Element> = HTMLAttributes<T> &
@@ -63,8 +63,8 @@ export function Finger<T extends keyof HTMLElementTagNameMap>(type: T) {
     HTMLAttributes<HTMLElementTagNameMap[T]>,
     FingerProps<HTMLElementTagNameMap[T]>
   >(function FingerComponent(props, ref) {
-    const { gestures, others } = splitProps(props);
-    const events = useFingerEvents(gestures);
-    return createElement(type, { ...others, ...events, ref });
+    const { eventProps, otherProps } = splitProps(props);
+    const events = useFingerEvents(eventProps);
+    return createElement(type, { ...otherProps, ...events, ref });
   });
 }

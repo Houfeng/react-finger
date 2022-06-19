@@ -22,7 +22,7 @@ build:
   - name: file-header
     files: ./src/**/*.ts
     text: 
-      - '@homepage https://github.com/Houfeng/mota-gesture'
+      - '@homepage https://github.com/Houfeng/react-finger'
       - '@author Houfeng <houzhanfeng@gmail.com>'
   - name: shell
     script:

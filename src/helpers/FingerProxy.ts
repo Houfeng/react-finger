@@ -1,5 +1,5 @@
 /**
- * @homepage https://github.com/Houfeng/mota-gesture
+ * @homepage https://github.com/Houfeng/react-finger
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
@@ -20,7 +20,7 @@ import { FingerMixEvents } from "../core/FingerEvents";
 import { FingerPointerEvents } from "../core/FingerPointerEvents";
 import { useFingerEvents } from "./FingerHook";
 
-const GestureProxyContext =
+const FingerProxyContext =
   createContext<(events: Partial<FingerMixEvents<Element>>) => void>(null);
 
 export type FingerProxyProps = Partial<FingerMixEvents> & {
@@ -59,8 +59,8 @@ function FingerEventTargetProxy(props: FingerProxyProps) {
  * 手势事件代理组件，用于以组件式 API 代理到 window、document 等原生对象
  *
  * 当前未指定 target 时：
- *    1. 如果上层有 GestureProxyBoundary 将代理到最近的 GestureProxyBoundary
- *    2. 如果上层没有有 GestureProxyBoundary 将代理到 document
+ *    1. 如果上层有 FingerProxyBoundary 将代理到最近的 FingerProxyBoundary
+ *    2. 如果上层没有有 FingerProxyBoundary 将代理到 document
  * 当前指定了 target 时
  *    1. 总是代理到指定的 target
  *
@@ -70,10 +70,10 @@ function FingerEventTargetProxy(props: FingerProxyProps) {
 export function FingerProxy(props: FingerProxyProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { target, capture, passive, ...others } = props;
-  const setGestureEvents = useContext(GestureProxyContext);
-  const isProxyToBoundary = setGestureEvents && !target;
+  const setFingerEvents = useContext(FingerProxyContext);
+  const isProxyToBoundary = setFingerEvents && !target;
   useLayoutEffect(() => {
-    if (isProxyToBoundary) setGestureEvents(others);
+    if (isProxyToBoundary) setFingerEvents(others);
   });
   return isProxyToBoundary
     ? createElement(Fragment)
@@ -85,19 +85,19 @@ export type FingerProxyBoundaryProps = {
 };
 
 /**
- * 代理边界组件，能影响所有子组件中的 GestureProxy
- * 注意：下层所有未指定 target 的 GestureProxy，将代理到最近的 GestureProxyBoundary
+ * 代理边界组件，能影响所有子组件中的 FingerProxy
+ * 注意：下层所有未指定 target 的 FingerProxy，将代理到最近的 FingerProxyBoundary
  *
  * @param props 属性
  * @returns JSX.Element
  */
 export function FingerProxyBoundary(props: FingerProxyBoundaryProps) {
   const { children } = props;
-  const [eventMap, setGestureEvents] =
+  const [eventMap, setFingerEvents] =
     useState<Partial<FingerMixEvents<Element>>>(null);
   const events = useFingerEvents(eventMap);
-  return createElement(GestureProxyContext.Provider, {
-    value: setGestureEvents,
+  return createElement(FingerProxyContext.Provider, {
+    value: setFingerEvents,
     children: children(events),
   });
 }
@@ -106,7 +106,7 @@ export type FingerProxyContainerProps<T extends Element = Element> =
   HTMLAttributes<T> & { children: ReactNode };
 
 /**
- * 将一个原生 HTML 标签，转换为具备 GestureProxyBoundary 能力的高阶容器组件
+ * 将一个原生 HTML 标签，转换为具备 FingerProxyBoundary 能力的高阶容器组件
  *
  * @param props 属性
  * @returns JSX.Element

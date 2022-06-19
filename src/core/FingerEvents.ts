@@ -1,12 +1,9 @@
 /**
- * @homepage https://github.com/Houfeng/mota-gesture
+ * @homepage https://github.com/Houfeng/react-finger
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import {
-  FingerPointerEvent,
-  FingerPointerEvents,
-} from "./FingerPointerEvents";
+import { FingerPointerEvent, FingerPointerEvents } from "./FingerPointerEvents";
 
 import { toEventWrapper } from "./FingerUtils";
 
@@ -17,7 +14,7 @@ export type FingerEvent<
   T extends Element = Element,
   D extends object = Record<string, any>
 > = FingerPointerEvent<T> & {
-  gesture: keyof FingerEvents;
+  finger: keyof FingerEvents;
   detail?: D;
 } & D;
 
@@ -53,12 +50,12 @@ export function FingerEvent<
   D extends object,
   G extends keyof FingerEvents<T, D>
 >(
-  gesture: G,
+  finger: G,
   pointerEvent: FingerPointerEvent,
   detail?: Parameters<FingerEvents<T, D>[G]>[0]["detail"]
 ): FingerEvent<T, Parameters<FingerEvents<T, D>[G]>[0]["detail"]> {
   pointerEvent.persist?.();
   const fingerEvent = toEventWrapper(pointerEvent);
-  Object.assign(fingerEvent, { ...detail, gesture, detail });
+  Object.assign(fingerEvent, { ...detail, finger, detail });
   return fingerEvent;
 }
