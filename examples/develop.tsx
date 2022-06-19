@@ -47,9 +47,13 @@ export function App() {
         click
       </button>
       {direction}
-      <GesturedDiv onTap={(event) => {
-        event.stopPropagation();
-      }} >
+      <GesturedDiv
+        onTap={event => { event.stopPropagation() }}
+        onSwipe={event => {
+          event.stopPropagation();
+          console.log('event.direction', event.direction);
+        }}
+      >
         xxx
       </GesturedDiv>
     </div>
