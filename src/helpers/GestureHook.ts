@@ -3,9 +3,10 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { useLayoutEffect, useMemo } from "react";
+
 import { GestureMixEvents } from "../core/GestureEvents";
 import { composeGestureEvents } from "../core/GestureCompose";
-import { useMemo } from "react";
 
 /**
  * 通过 Hook 创建可用于 Element 的 Gesture Events
@@ -14,6 +15,8 @@ import { useMemo } from "react";
  */
 export function useGestureEvents(events: Partial<GestureMixEvents>) {
   const eventsRef = useMemo<Partial<GestureMixEvents>>(() => ({}), []);
-  Object.assign(eventsRef, events);
-  return useMemo(() => composeGestureEvents(events), []);
+  useLayoutEffect(() => {
+    Object.assign(eventsRef, events);
+  });
+  return useMemo(() => composeGestureEvents(eventsRef), []);
 }

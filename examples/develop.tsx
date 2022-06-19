@@ -1,5 +1,5 @@
 import { GestureProxy, useGestureEvents } from '../src';
-import React, { CSSProperties } from "react"
+import React, { CSSProperties, useState } from "react"
 
 import { createRoot } from "react-dom/client";
 
@@ -9,10 +9,14 @@ const boxStyle: CSSProperties = {
   borderRadius: 8,
   width: 300,
   height: 300,
-  backgroundColor: '#fff'
+  backgroundColor: '#fff',
+  cursor: 'pointer'
 };
 
+let prevEvents: any;
+
 export function App() {
+  const [direction, setDirection] = useState('none');
   const events = useGestureEvents({
     onPointerDown: event => {
       console.log('onPointerDown', event);
@@ -25,17 +29,22 @@ export function App() {
     },
     onDoubleTap: event => {
       console.log('onDoubleTap', event);
-    },
+    }, 
     onSwipe: event => {
-      console.log('onSwipe', event.direction, event);
-    },
+      setDirection(event.direction);
+    },     
     onSwipeLeft: event => {
       console.log('onSwipeLeft', event.direction, event);
     }
   });
+  if (!prevEvents) prevEvents = events;
   return (
-    <div style={boxStyle}{...events} >
+    <div style={boxStyle} {...events} >
       <GestureProxy />
+      <button onClick={() => setDirection('xx')}>
+        click
+      </button>
+      {direction}
     </div>
   );
 }
