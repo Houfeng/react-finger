@@ -62,7 +62,7 @@ export function Gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
   return forwardRef<
     HTMLAttributes<HTMLElementTagNameMap[T]>,
     GesturedProps<HTMLElementTagNameMap[T]>
-  >((props, ref) => {
+  >(function GesturedComponent(props, ref) {
     const { gestures, others } = splitProps(props);
     const events = useGestureEvents(gestures);
     return createElement(type, { ...others, ...events, ref });

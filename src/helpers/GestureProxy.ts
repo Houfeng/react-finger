@@ -117,7 +117,7 @@ export function GestureProxyContainer<T extends keyof HTMLElementTagNameMap>(
   return forwardRef<
     HTMLAttributes<HTMLElementTagNameMap[T]>,
     GestureProxyContainerProps<HTMLElementTagNameMap[T]>
-  >((props, ref) => {
+  >(function GestureProxyContainerComponent(props, ref) {
     return createElement(GestureProxyBoundary, {
       children: (events) => createElement(type, { ...props, ...events, ref }),
     });

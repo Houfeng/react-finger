@@ -20,7 +20,7 @@ let prevEvents: any;
 
 export function App() {
   const [direction, setDirection] = useState('none');
-  const events = useGestureEvents<HTMLDivElement>({
+  const events = useGestureEvents({
     onPointerDown: event => {
       console.log('onPointerDown', event);
     },
@@ -40,10 +40,10 @@ export function App() {
       console.log('onSwipeLeft', event.direction, event);
     }
   });
-  if (!prevEvents) prevEvents = events;
+  if (!prevEvents) prevEvents = events; 
   return (
-    <GestureWrapper style={boxStyle} >
-      <GestureProxy />
+    <GestureWrapper className='box' style={boxStyle} >
+      <GestureProxy {...events} />
       <button onClick={() => setDirection('xx')}>
         click
       </button>
@@ -54,7 +54,6 @@ export function App() {
           event.stopPropagation();
           console.log('event.direction', event.direction);
         }}
-        style={{}}
       >
         xxx
       </GesturedDiv>
