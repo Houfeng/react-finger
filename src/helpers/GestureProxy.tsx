@@ -1,4 +1,4 @@
-import React, { Fragment, RefObject, useEffect, useRef } from "react";
+import React, { Fragment, RefObject, createContext, useContext, useEffect, useRef } from "react";
 
 import { AnyFunction } from "../core/GestureUtils";
 import { GestureMixEvents } from '../core/GestureEvents';
@@ -43,4 +43,10 @@ export function GestureProxy(props: GestureProxyProps) {
     };
   }, Object.values(props));
   return <Fragment />;
+}
+
+const GestureProxyContext = createContext({});
+
+export function GestureProxyScope() {
+  useContext(GestureProxyContext);
 }

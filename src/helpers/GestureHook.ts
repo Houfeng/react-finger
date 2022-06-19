@@ -13,5 +13,7 @@ import { useMemo } from "react";
  * @returns 合成后的 Pointer Events
  */
 export function useGestureEvents(events: Partial<GestureMixEvents>) {
-  return useMemo(() => composeGestureEvents(events), Object.values(events));
+  const eventsRef = useMemo<Partial<GestureMixEvents>>(() => ({}), []);
+  Object.assign(eventsRef, events);
+  return useMemo(() => composeGestureEvents(events), []);
 }
