@@ -1,7 +1,9 @@
-import { GestureProxy, useGestureEvents } from '../src';
+import { GestureProxy, gestured, useGestureEvents } from '../src';
 import React, { CSSProperties, useState } from "react"
 
 import { createRoot } from "react-dom/client";
+
+const Div = gestured("div");
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
@@ -29,22 +31,27 @@ export function App() {
     },
     onDoubleTap: event => {
       console.log('onDoubleTap', event);
-    }, 
+    },
     onSwipe: event => {
       setDirection(event.direction);
-    },     
+    },
     onSwipeLeft: event => {
       console.log('onSwipeLeft', event.direction, event);
-    }
+    }  
   });
   if (!prevEvents) prevEvents = events;
-  return (
+  return ( 
     <div style={boxStyle} {...events} >
       <GestureProxy />
       <button onClick={() => setDirection('xx')}>
         click
       </button>
       {direction}
+      <Div onTap={(event) => {
+        event.stopPropagation();
+      }} >
+        xxx
+      </Div>
     </div>
   );
 }

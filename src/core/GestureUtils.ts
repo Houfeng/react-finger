@@ -21,6 +21,10 @@ export function isFunction(value: any): value is AnyFunction {
   return typeof value === "function";
 }
 
+/**
+ * stopPropagation、stopImmediatePropagation
+ * 以上两个需要清理 timer ，所以不列在此处
+ */
 const POINTER_EVENT_KEYS = [
   "pointerId",
   "width",
@@ -56,14 +60,42 @@ const POINTER_EVENT_KEYS = [
   "cancelBubble",
   "composedPath",
   "preventDefault",
-  "stopImmediatePropagation",
-  "stopPropagation",
   "path",
 ];
+
+const timerOwner = new Set<any>();
+
+export function createTimer(fn: () => void, timeout: number) {
+  const timer = setTimeout(() => {
+    clearTimer(timer);
+    fn();
+  }, timeout);
+  timerOwner.add(timer);
+  return timer;
+}
+
+export function clearTimer(timer: any) {
+  clearTimeout(timer);
+  return timerOwner.delete(timer);
+}
+
+function clearAllTimer() {
+  Array.from(timerOwner).forEach((timer) => clearTimer(timer));
+}
 
 function EventWrapper<T = object>(originEvent: T) {
   this.originEvent = originEvent;
 }
+
+EventWrapper.prototype.stopImmediatePropagation = function () {
+  clearAllTimer();
+  this.originEvent?.stopImmediatePropagation?.();
+};
+
+EventWrapper.prototype.stopPropagation = function () {
+  clearAllTimer();
+  this.originEvent?.stopPropagation?.();
+};
 
 POINTER_EVENT_KEYS.forEach((key) => {
   Object.defineProperty(EventWrapper.prototype, key, {
@@ -71,16 +103,12 @@ POINTER_EVENT_KEYS.forEach((key) => {
     configurable: true,
     get: function () {
       const value = this.originEvent[key];
-      return isFunction(value) ? value.bind(this) : value;
+      return isFunction(value) ? value.bind(this.originEvent) : value;
     },
   });
 });
 
 export function toEventWrapper<T = object>(originEvent: T) {
-  if (originEvent instanceof PointerEvent) {
-    //@ts-ignore
-    return new EventWrapper(originEvent);
-  } else {
-    return originEvent;
-  }
+  //@ts-ignore
+  return new EventWrapper(originEvent);
 }

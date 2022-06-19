@@ -3,10 +3,11 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { calcDistance, clearTimer, createTimer } from "../core/GestureUtils";
+
 import { GestureEvent } from "../core/GestureEvents";
 import { GestureOptions } from "../core/GestureOptions";
 import { GestureProvider } from "../core/GestureProviders";
-import { calcDistance } from "../core/GestureUtils";
 
 const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
   GestureOptions;
@@ -21,11 +22,11 @@ export const GestureTapProvider: GestureProvider = {
     const { flags, getPointers } = context;
     flags.set(tapCanceled, getPointers().length > 1);
     if (flags.get(tapCanceled)) {
-      clearTimeout(flags.get(holdTimer) as number);
+      clearTimer(flags.get(holdTimer) as number);
     }
     flags.set(
       holdTimer,
-      setTimeout(() => {
+      createTimer(() => {
         flags.set(tapCanceled, true);
         events.onTapHold?.(GestureEvent("onTapHold", pointer));
       }, holdDurationThreshold)
@@ -38,13 +39,13 @@ export const GestureTapProvider: GestureProvider = {
     const dist = calcDistance(getPointers()[0], getChangedPointers()[0]);
     if (dist > tapMaxDistanceThreshold) {
       flags.set(tapCanceled, true);
-      clearTimeout(flags.get(holdTimer) as number);
+      clearTimer(flags.get(holdTimer) as number);
     }
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
     const { flags } = context;
-    clearTimeout(flags.get(holdTimer) as number);
+    clearTimer(flags.get(holdTimer) as number);
     if (flags.get(tapCanceled)) return;
     events.onTap?.(GestureEvent("onTap", pointer));
     const prevTime = (flags.get(dblPrevTime) || 0) as number;
@@ -66,6 +67,6 @@ export const GestureTapProvider: GestureProvider = {
   handlePointerCancel: ({ context }) => {
     const { flags } = context;
     flags.set(tapCanceled, true);
-    clearTimeout(flags.get(holdTimer) as number);
+    clearTimer(flags.get(holdTimer) as number);
   },
 };
