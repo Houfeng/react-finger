@@ -11,6 +11,18 @@ const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = GestureOptions;
 const canceled = Symbol("swipeCanceled");
 const startTime = Symbol("swipeStartTime");
 
+const swipeDirectionToEventNames: {
+  down: "onSwipeDown";
+  up: "onSwipeUp";
+  right: "onSwipeRight";
+  left: "onSwipeLeft";
+} = {
+  down: "onSwipeDown",
+  up: "onSwipeUp",
+  right: "onSwipeRight",
+  left: "onSwipeLeft",
+};
+
 export const GestureSwipeProvider: GestureProvider = {
   handlePointerDown: ({ context, pointer }) => {
     const { flags, getPointers } = context;
@@ -50,20 +62,8 @@ export const GestureSwipeProvider: GestureProvider = {
     if (!direction) return;
     const detail = { direction };
     events.onSwipe?.(GestureEvent("onSwipe", pointer, detail));
-    switch (direction) {
-      case "down":
-        events.onSwipeDown?.(GestureEvent("onSwipeDown", pointer, detail));
-        break;
-      case "up":
-        events.onSwipeUp?.(GestureEvent("onSwipeUp", pointer, detail));
-        break;
-      case "right":
-        events.onSwipeRight?.(GestureEvent("onSwipeRight", pointer, detail));
-        break;
-      case "left":
-        events.onSwipeLeft?.(GestureEvent("onSwipeLeft", pointer, detail));
-        break;
-    }
+    const eventName = swipeDirectionToEventNames[direction];
+    events[eventName]?.(GestureEvent(eventName, pointer, detail));
   },
 
   handlePointerCancel: ({ context }) => {
