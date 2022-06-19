@@ -6,12 +6,15 @@
 import "pepjs";
 
 import { registerGestureProvider } from "./core/GestureProviders";
+
 import { GesturePinchProvider } from "./events/GesturePinchProvider";
 import { GestureSwipeProvider } from "./events/GestureSwipeProvider";
 import { GestureTapProvider } from "./events/GestureTapProvider";
 
 export { type GestureEvent } from "./core/GestureEvents";
+export { composeGestureEvents } from "./core/GestureCompose";
 export { GestureOptions } from "./core/GestureOptions";
+
 export { useGestureEvents } from "./helpers/GestureHook";
 export { createGestureEvents } from "./helpers/GestureFactory";
 export { gestured } from "./helpers/GestureHoC";

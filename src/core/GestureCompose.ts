@@ -104,6 +104,14 @@ function createPointerCancelListener(
   };
 }
 
+/**
+ * 将一组手手势事件转换为可直接用 element 的 Pointer Events
+ * 注意：上层应用通常不要直接使用此 API
+ * @internal
+ * @param events events 要绑定的手势事件 map
+ * @param context 一组合成手势事件的上下文对象
+ * @returns 合成后的 Pointer Events
+ */
 export function composeGestureEvents(
   events: Partial<GestureMixEvents>,
   context = GestureContext()
