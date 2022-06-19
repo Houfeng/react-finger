@@ -1,4 +1,11 @@
-import React, { Fragment, RefObject, createContext, useContext, useEffect, useRef } from "react";
+import React, {
+  Fragment,
+  RefObject,
+  createContext,
+  useContext,
+  useEffect,
+  useRef
+} from "react";
 
 import { AnyFunction } from "../core/GestureUtils";
 import { GestureMixEvents } from '../core/GestureEvents';
