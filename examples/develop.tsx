@@ -1,9 +1,9 @@
-import { GestureProxy, gestured, useGestureEvents } from '../src';
+import { GestureProxy, Gestured, useGestureEvents } from '../src';
 import React, { CSSProperties, useState } from "react"
 
 import { createRoot } from "react-dom/client";
 
-const Div = gestured("div");
+const Div = Gestured("div");
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
@@ -37,10 +37,10 @@ export function App() {
     },
     onSwipeLeft: event => {
       console.log('onSwipeLeft', event.direction, event);
-    }  
+    }
   });
   if (!prevEvents) prevEvents = events;
-  return ( 
+  return (
     <div style={boxStyle} {...events} >
       <GestureProxy />
       <button onClick={() => setDirection('xx')}>

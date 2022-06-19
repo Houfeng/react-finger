@@ -17,7 +17,7 @@ export { GestureOptions } from "./core/GestureOptions";
 
 export { useGestureEvents } from "./helpers/GestureHook";
 export { createGestureEvents } from "./helpers/GestureFactory";
-export { gestured } from "./helpers/GestureHoC";
+export { Gestured } from "./helpers/GestureHoC";
 export { GestureProxy, type GestureProxyProps } from "./helpers/GestureProxy";
 
 registerGestureProvider(GestureTapProvider);

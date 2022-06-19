@@ -3,7 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { HTMLAttributes, createElement, forwardRef } from "react";
+import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
 import { GestureEvents } from "../core/GestureEvents";
 import { useGestureEvents } from "./GestureHook";
@@ -47,12 +47,12 @@ function splitProps(props: any) {
   return { gestures, others };
 }
 
-export function gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
-  return forwardRef(
-    (props: HTMLAttributes<T> & Partial<GestureEvents>, ref) => {
-      const { gestures, others } = splitProps(props);
-      const events = useGestureEvents(gestures);
-      return createElement(type, { ...others, ...events, ref });
-    }
-  );
+type GesturedProps = Partial<GestureEvents> & { children: ReactNode };
+
+export function Gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
+  return forwardRef<HTMLAttributes<T>, GesturedProps>((props, ref) => {
+    const { gestures, others } = splitProps(props);
+    const events = useGestureEvents(gestures);
+    return createElement(type, { ...others, ...events, ref });
+  });
 }
