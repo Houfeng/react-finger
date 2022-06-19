@@ -85,7 +85,7 @@ export type GestureProxyBoundaryProps = {
 };
 
 /**
- * G代理边界组件，能影响所有子组件中的 GestureProxy
+ * 代理边界组件，能影响所有子组件中的 GestureProxy
  * 注意：下层所有未指定 target 的 GestureProxy，将代理到最近的 GestureProxyBoundary
  *
  * @param props 属性
