@@ -13,6 +13,8 @@ import { composeGestureEvents } from "../core/GestureCompose";
  * @param events 要绑定的手势事件 map
  * @returns 合成后的 PointerEvents，需要直接解构到一个元素的 props 上
  */
-export function createGestureEvents(events: Partial<GestureMixEvents>) {
+export function createGestureEvents<T extends Element = Element>(
+  events: Partial<GestureMixEvents<T>>
+) {
   return composeGestureEvents(events);
 }

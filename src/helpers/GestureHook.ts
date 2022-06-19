@@ -14,10 +14,12 @@ import { composeGestureEvents } from "../core/GestureCompose";
  * @param events 要绑定的手势事件 map
  * @returns 合成后的 Pointer Events，需要直接解构到一个元素的 props 上
  */
-export function useGestureEvents(events: Partial<GestureMixEvents>) {
-  const eventsRef = useMemo<Partial<GestureMixEvents>>(() => ({}), []);
+export function useGestureEvents<T extends Element = Element>(
+  events: Partial<GestureMixEvents<T>>
+) {
+  const eventsRef = useMemo<Partial<GestureMixEvents<T>>>(() => ({}), []);
   useLayoutEffect(() => {
     Object.assign(eventsRef, events);
   });
-  return useMemo(() => composeGestureEvents(eventsRef), []);
+  return useMemo(() => composeGestureEvents<T>(eventsRef), []);
 }

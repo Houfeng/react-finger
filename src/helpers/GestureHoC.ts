@@ -47,12 +47,16 @@ function splitProps(props: any) {
   return { gestures, others };
 }
 
-type GesturedProps = Partial<GestureEvents> & { children: ReactNode };
+type GesturedProps<T extends Element = Element> = Partial<GestureEvents<T>> & {
+  children: ReactNode;
+};
 
 export function Gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
-  return forwardRef<HTMLAttributes<T>, GesturedProps>((props, ref) => {
-    const { gestures, others } = splitProps(props);
-    const events = useGestureEvents(gestures);
-    return createElement(type, { ...others, ...events, ref });
-  });
+  return forwardRef<HTMLAttributes<T>, GesturedProps<HTMLElementTagNameMap[T]>>(
+    (props, ref) => {
+      const { gestures, others } = splitProps(props);
+      const events = useGestureEvents(gestures);
+      return createElement(type, { ...others, ...events, ref });
+    }
+  );
 }

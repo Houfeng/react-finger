@@ -3,7 +3,7 @@ import React, { CSSProperties, useState } from "react"
 
 import { createRoot } from "react-dom/client";
 
-const Div = Gestured("div");
+const GesturedDiv = Gestured("div");
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
@@ -19,7 +19,7 @@ let prevEvents: any;
 
 export function App() {
   const [direction, setDirection] = useState('none');
-  const events = useGestureEvents({
+  const events = useGestureEvents<HTMLDivElement>({
     onPointerDown: event => {
       console.log('onPointerDown', event);
     },
@@ -47,11 +47,11 @@ export function App() {
         click
       </button>
       {direction}
-      <Div onTap={(event) => {
+      <GesturedDiv onTap={(event) => {
         event.stopPropagation();
       }} >
         xxx
-      </Div>
+      </GesturedDiv>
     </div>
   );
 }

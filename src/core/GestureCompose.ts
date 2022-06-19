@@ -112,10 +112,10 @@ function createPointerCancelListener(
  * @param context 一组合成手势事件的上下文对象
  * @returns 合成后的 Pointer Events
  */
-export function composeGestureEvents(
-  events: Partial<GestureMixEvents>,
+export function composeGestureEvents<T extends Element = Element>(
+  events: Partial<GestureMixEvents<T>>,
   context = GestureContext()
-): GesturePointerEvents {
+): GesturePointerEvents<T> {
   const onPointerDown = createPointerDownListener(events, context);
   const onPointerMove = createPointerMoveListener(events, context);
   const onPointerUp = createPointerUpListener(events, context);

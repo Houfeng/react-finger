@@ -14,9 +14,9 @@ export type GesturePointerEventListener<T extends Element = Element> = (
   event: GesturePointerEvent<T>
 ) => void;
 
-export type GesturePointerEvents = {
-  onPointerDown: GesturePointerEventListener;
-  onPointerMove: GesturePointerEventListener;
-  onPointerUp: GesturePointerEventListener;
-  onPointerCancel: GesturePointerEventListener;
+export type GesturePointerEvents<T extends Element = Element> = {
+  onPointerDown: GesturePointerEventListener<T>;
+  onPointerMove: GesturePointerEventListener<T>;
+  onPointerUp: GesturePointerEventListener<T>;
+  onPointerCancel: GesturePointerEventListener<T>;
 };

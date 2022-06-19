@@ -10,45 +10,56 @@ import {
 
 import { toEventWrapper } from "./GestureUtils";
 
-export type GestureMixEvents = GestureEvents & GesturePointerEvents;
+export type GestureMixEvents<T extends Element = Element> = GestureEvents<T> &
+  GesturePointerEvents<T>;
 
-export type GestureEvent<D extends object = Record<string, unknown>> =
-  GesturePointerEvent<Element> & {
-    gesture: keyof GestureEvents;
-    detail?: D;
-  } & D;
+export type GestureEvent<
+  T extends Element = Element,
+  D extends object = Record<string, any>
+> = GesturePointerEvent<T> & {
+  gesture: keyof GestureEvents;
+  detail?: D;
+} & D;
 
 export type GestureEventListener<E extends GestureEvent> = (event: E) => void;
 
-export type GestureSwipeEvent = GestureEvent<{
+export type GestureSwipeEventDetail = {
   direction: "up" | "right" | "down" | "left";
-}>;
-
-export type GesturePinchEvent = GestureEvent<{
-  scale: number;
-}>;
-
-export type GestureEvents = {
-  onTap: GestureEventListener<GestureEvent>;
-  onTapHold: GestureEventListener<GestureEvent>;
-  onDoubleTap: GestureEventListener<GestureEvent>;
-  onSwipe: GestureEventListener<GestureSwipeEvent>;
-  onSwipeUp: GestureEventListener<GestureSwipeEvent>;
-  onSwipeRight: GestureEventListener<GestureSwipeEvent>;
-  onSwipeDown: GestureEventListener<GestureSwipeEvent>;
-  onSwipeLeft: GestureEventListener<GestureSwipeEvent>;
-  onPinchStart: GestureEventListener<GesturePinchEvent>;
-  onPinch: GestureEventListener<GesturePinchEvent>;
-  onPinchEnd: GestureEventListener<GesturePinchEvent>;
 };
 
-export function GestureEvent<G extends keyof GestureEvents>(
+export type GesturePinchEventDetail = {
+  scale: number;
+};
+
+export type GestureEvents<
+  T extends Element = Element,
+  D extends object = Record<string, any>
+> = {
+  onTap: GestureEventListener<GestureEvent<T, D>>;
+  onTapHold: GestureEventListener<GestureEvent<T>>;
+  onDoubleTap: GestureEventListener<GestureEvent<T>>;
+  onSwipe: GestureEventListener<GestureEvent<T, GestureSwipeEventDetail>>;
+  onSwipeUp: GestureEventListener<GestureEvent<T, GestureSwipeEventDetail>>;
+  onSwipeRight: GestureEventListener<GestureEvent<T, GestureSwipeEventDetail>>;
+  onSwipeDown: GestureEventListener<GestureEvent<T, GestureSwipeEventDetail>>;
+  onSwipeLeft: GestureEventListener<GestureEvent<T, GestureSwipeEventDetail>>;
+  onPinchStart: GestureEventListener<GestureEvent<T, GesturePinchEventDetail>>;
+  onPinch: GestureEventListener<GestureEvent<T, GesturePinchEventDetail>>;
+  onPinchEnd: GestureEventListener<GestureEvent<T, GesturePinchEventDetail>>;
+};
+
+export function GestureEvent<
+  T extends Element,
+  D extends object,
+  G extends keyof GestureEvents<T>
+>(
   gesture: G,
   pointerEvent: GesturePointerEvent,
   detail?: Parameters<GestureEvents[G]>[0]["detail"]
-): GestureEvent<Parameters<GestureEvents[G]>[0]["detail"]> {
+): GestureEvent<T, Parameters<GestureEvents[G]>[0]["detail"]> {
   pointerEvent.persist?.();
   const gestureEvent = toEventWrapper(pointerEvent) as GestureEvent<
+    T,
     Parameters<GestureEvents[G]>[0]["detail"]
   >;
   Object.assign(gestureEvent, { ...detail, gesture, detail });
