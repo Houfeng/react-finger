@@ -18,7 +18,11 @@ export { GestureOptions } from "./core/GestureOptions";
 export { useGestureEvents } from "./helpers/GestureHook";
 export { createGestureEvents } from "./helpers/GestureFactory";
 export { Gestured } from "./helpers/GestureHoC";
-export { GestureProxy, type GestureProxyProps } from "./helpers/GestureProxy";
+export {
+  GestureProxy,
+  GestureProxyBoundary,
+  GestureProxyContainer,
+} from "./helpers/GestureProxy";
 
 registerGestureProvider(GestureTapProvider);
 registerGestureProvider(GestureSwipeProvider);
