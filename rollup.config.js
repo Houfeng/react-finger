@@ -1,4 +1,5 @@
 import cleanup from 'rollup-plugin-cleanup';
+import pkg from './package.json'
 import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import { toCamelCase } from 'ntils';
@@ -10,7 +11,7 @@ const externals = {
 }
 
 const createConf = ({
-  name = 'gesture',
+  name = pkg.name,
   min = false
 } = {}) => {
   const suffix = min ? '.min' : '';

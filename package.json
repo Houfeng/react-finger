@@ -2,15 +2,15 @@
   "name": "react-finger",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/gesture-cjs.js",
-  "module": "./dist/gesture-es.js",
+  "main": "./dist/react-finger-cjs.js",
+  "module": "./dist/react-finger-es.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "test": "dn test && dn build -e prod"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Houfeng/mota-gesture.git"
+    "url": "git+https://github.com/Houfeng/react-finger.git"
   },
   "author": {
     "name": "Houfeng",
