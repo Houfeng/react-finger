@@ -3,11 +3,11 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { GestureEvent } from "../core/GestureEvents";
-import { GestureOptions } from "../core/GestureOptions";
-import { GestureProvider } from "../core/GestureProviders";
+import { FingerEvent } from "../core/GestureEvents";
+import { FingerOptions } from "../core/GestureOptions";
+import { FingerProvider } from "../core/GestureProviders";
 
-const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = GestureOptions;
+const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = FingerOptions;
 const canceled = Symbol("swipeCanceled");
 const startTime = Symbol("swipeStartTime");
 
@@ -23,7 +23,7 @@ const swipeDirectionToEventNames: {
   left: "onSwipeLeft",
 };
 
-export const GestureSwipeProvider: GestureProvider = {
+export const FingerSwipeProvider: FingerProvider = {
   handlePointerDown: ({ context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(canceled, getPointers().length > 1);
@@ -61,9 +61,9 @@ export const GestureSwipeProvider: GestureProvider = {
     })();
     if (!direction) return;
     const detail = { direction };
-    events.onSwipe?.(GestureEvent("onSwipe", pointer, detail));
+    events.onSwipe?.(FingerEvent("onSwipe", pointer, detail));
     const eventName = swipeDirectionToEventNames[direction];
-    events[eventName]?.(GestureEvent(eventName, pointer, detail));
+    events[eventName]?.(FingerEvent(eventName, pointer, detail));
   },
 
   handlePointerCancel: ({ context }) => {

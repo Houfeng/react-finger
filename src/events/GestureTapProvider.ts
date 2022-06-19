@@ -5,19 +5,19 @@
 
 import { calcDistance, clearTimer, createTimer } from "../core/GestureUtils";
 
-import { GestureEvent } from "../core/GestureEvents";
-import { GestureOptions } from "../core/GestureOptions";
-import { GestureProvider } from "../core/GestureProviders";
+import { FingerEvent } from "../core/GestureEvents";
+import { FingerOptions } from "../core/GestureOptions";
+import { FingerProvider } from "../core/GestureProviders";
 
 const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
-  GestureOptions;
+  FingerOptions;
 
 const holdTimer = Symbol("holdTimer");
 const tapCanceled = Symbol("tapCanceled");
 const dblWaitNext = Symbol("dblWaitNext");
 const dblPrevTime = Symbol("dblPrevTime");
 
-export const GestureTapProvider: GestureProvider = {
+export const FingerTapProvider: FingerProvider = {
   handlePointerDown: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(tapCanceled, getPointers().length > 1);
@@ -28,7 +28,7 @@ export const GestureTapProvider: GestureProvider = {
       holdTimer,
       createTimer(() => {
         flags.set(tapCanceled, true);
-        events.onTapHold?.(GestureEvent("onTapHold", pointer));
+        events.onTapHold?.(FingerEvent("onTapHold", pointer));
       }, holdDurationThreshold)
     );
   },
@@ -47,7 +47,7 @@ export const GestureTapProvider: GestureProvider = {
     const { flags } = context;
     clearTimer(flags.get(holdTimer) as number);
     if (flags.get(tapCanceled)) return;
-    events.onTap?.(GestureEvent("onTap", pointer));
+    events.onTap?.(FingerEvent("onTap", pointer));
     const prevTime = (flags.get(dblPrevTime) || 0) as number;
     if (
       !flags.get(dblWaitNext) ||
@@ -58,7 +58,7 @@ export const GestureTapProvider: GestureProvider = {
     } else {
       const prevTime = flags.get(dblPrevTime) as number;
       if (Date.now() - prevTime < dblIntervalThreshold) {
-        events.onDoubleTap?.(GestureEvent("onDoubleTap", pointer));
+        events.onDoubleTap?.(FingerEvent("onDoubleTap", pointer));
       }
       flags.set(dblWaitNext, false);
     }

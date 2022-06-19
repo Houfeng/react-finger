@@ -5,8 +5,8 @@
 
 import { useLayoutEffect, useMemo } from "react";
 
-import { GestureMixEvents } from "../core/GestureEvents";
-import { composeGestureEvents } from "../core/GestureCompose";
+import { FingerMixEvents } from "../core/GestureEvents";
+import { composeFingerEvents } from "../core/GestureCompose";
 
 /**
  * 通过 Hook 创建可用于 Element 的 Gesture Events
@@ -15,12 +15,12 @@ import { composeGestureEvents } from "../core/GestureCompose";
  * @param events 要绑定的手势事件 map
  * @returns 合成后的 Pointer Events，需要直接解构到一个元素的 props 上
  */
-export function useGestureEvents<T extends Element = Element>(
-  events: Partial<GestureMixEvents<T>>
+export function useFingerEvents<T extends Element = Element>(
+  events: Partial<FingerMixEvents<T>>
 ) {
-  const eventsRef = useMemo<Partial<GestureMixEvents<T>>>(() => ({}), []);
+  const eventsRef = useMemo<Partial<FingerMixEvents<T>>>(() => ({}), []);
   useLayoutEffect(() => {
     if (events) Object.assign(eventsRef, events);
   });
-  return useMemo(() => composeGestureEvents<T>(eventsRef), []);
+  return useMemo(() => composeFingerEvents<T>(eventsRef), []);
 }

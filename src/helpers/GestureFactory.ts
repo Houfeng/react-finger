@@ -3,8 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { GestureMixEvents } from "../core/GestureEvents";
-import { composeGestureEvents } from "../core/GestureCompose";
+import { FingerMixEvents } from "../core/GestureEvents";
+import { composeFingerEvents } from "../core/GestureCompose";
 
 /**
  * 通过「方法」创建可用于 Element 的 Gesture Events，通常用类组件中，
@@ -14,8 +14,8 @@ import { composeGestureEvents } from "../core/GestureCompose";
  * @param events 要绑定的手势事件 map
  * @returns 合成后的 PointerEvents，需要直接解构到一个元素的 props 上
  */
-export function createGestureEvents<T extends Element = Element>(
-  events: Partial<GestureMixEvents<T>>
+export function createFingerEvents<T extends Element = Element>(
+  events: Partial<FingerMixEvents<T>>
 ) {
-  return composeGestureEvents(events);
+  return composeFingerEvents(events);
 }

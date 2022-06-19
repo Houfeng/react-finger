@@ -5,25 +5,25 @@
 
 import "pepjs";
 
-import { registerGestureProvider } from "./core/GestureProviders";
+import { registerFingerProvider } from "./core/GestureProviders";
 
-import { GesturePinchProvider } from "./events/GesturePinchProvider";
-import { GestureSwipeProvider } from "./events/GestureSwipeProvider";
-import { GestureTapProvider } from "./events/GestureTapProvider";
+import { FingerPinchProvider } from "./events/GesturePinchProvider";
+import { FingerSwipeProvider } from "./events/GestureSwipeProvider";
+import { FingerTapProvider } from "./events/GestureTapProvider";
 
-export { type GestureEvent } from "./core/GestureEvents";
-export { composeGestureEvents } from "./core/GestureCompose";
-export { GestureOptions } from "./core/GestureOptions";
+export { type FingerEvent } from "./core/GestureEvents";
+export { composeFingerEvents } from "./core/GestureCompose";
+export { FingerOptions } from "./core/GestureOptions";
 
-export { useGestureEvents } from "./helpers/GestureHook";
-export { createGestureEvents } from "./helpers/GestureFactory";
-export { Gestured } from "./helpers/GestureHoC";
+export { useFingerEvents } from "./helpers/GestureHook";
+export { createFingerEvents } from "./helpers/GestureFactory";
+export { Finger } from "./helpers/GestureHoC";
 export {
-  GestureProxy,
-  GestureProxyBoundary,
-  GestureProxyContainer,
+  FingerProxy,
+  FingerProxyBoundary,
+  FingerProxyContainer,
 } from "./helpers/GestureProxy";
 
-registerGestureProvider(GestureTapProvider);
-registerGestureProvider(GestureSwipeProvider);
-registerGestureProvider(GesturePinchProvider);
+registerFingerProvider(FingerTapProvider);
+registerFingerProvider(FingerSwipeProvider);
+registerFingerProvider(FingerPinchProvider);

@@ -3,7 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-export const GestureOptions = {
+export const FingerOptions = {
   /**
    * swipe 最大时间阈值
    */

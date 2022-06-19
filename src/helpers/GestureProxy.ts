@@ -16,14 +16,14 @@ import {
 } from "react";
 
 import { AnyFunction } from "../core/GestureUtils";
-import { GestureMixEvents } from "../core/GestureEvents";
-import { GesturePointerEvents } from "../core/GesturePointerEvents";
-import { useGestureEvents } from "./GestureHook";
+import { FingerMixEvents } from "../core/GestureEvents";
+import { FingerPointerEvents } from "../core/GesturePointerEvents";
+import { useFingerEvents } from "./GestureHook";
 
 const GestureProxyContext =
-  createContext<(events: Partial<GestureMixEvents<Element>>) => void>(null);
+  createContext<(events: Partial<FingerMixEvents<Element>>) => void>(null);
 
-export type GestureProxyProps = Partial<GestureMixEvents> & {
+export type FingerProxyProps = Partial<FingerMixEvents> & {
   target?: EventTarget;
   capture?: boolean;
   passive?: boolean;
@@ -33,9 +33,9 @@ function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
 }
 
-function GestureEventTargetProxy(props: GestureProxyProps) {
+function FingerEventTargetProxy(props: FingerProxyProps) {
   const { target = document, capture, passive, ...others } = props;
-  const events = useGestureEvents(others);
+  const events = useFingerEvents(others);
   useLayoutEffect(() => {
     const eventEntries = Object.entries(events);
     const options = { capture, passive };
@@ -67,7 +67,7 @@ function GestureEventTargetProxy(props: GestureProxyProps) {
  * @param props 属性
  * @returns JSX.Element
  */
-export function GestureProxy(props: GestureProxyProps) {
+export function FingerProxy(props: FingerProxyProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { target, capture, passive, ...others } = props;
   const setGestureEvents = useContext(GestureProxyContext);
@@ -77,11 +77,11 @@ export function GestureProxy(props: GestureProxyProps) {
   });
   return isProxyToBoundary
     ? createElement(Fragment)
-    : createElement(GestureEventTargetProxy, props);
+    : createElement(FingerEventTargetProxy, props);
 }
 
-export type GestureProxyBoundaryProps = {
-  children: (events: GesturePointerEvents) => ReactNode;
+export type FingerProxyBoundaryProps = {
+  children: (events: FingerPointerEvents) => ReactNode;
 };
 
 /**
@@ -91,18 +91,18 @@ export type GestureProxyBoundaryProps = {
  * @param props 属性
  * @returns JSX.Element
  */
-export function GestureProxyBoundary(props: GestureProxyBoundaryProps) {
+export function FingerProxyBoundary(props: FingerProxyBoundaryProps) {
   const { children } = props;
   const [eventMap, setGestureEvents] =
-    useState<Partial<GestureMixEvents<Element>>>(null);
-  const events = useGestureEvents(eventMap);
+    useState<Partial<FingerMixEvents<Element>>>(null);
+  const events = useFingerEvents(eventMap);
   return createElement(GestureProxyContext.Provider, {
     value: setGestureEvents,
     children: children(events),
   });
 }
 
-export type GestureProxyContainerProps<T extends Element = Element> =
+export type FingerProxyContainerProps<T extends Element = Element> =
   HTMLAttributes<T> & { children: ReactNode };
 
 /**
@@ -111,14 +111,14 @@ export type GestureProxyContainerProps<T extends Element = Element> =
  * @param props 属性
  * @returns JSX.Element
  */
-export function GestureProxyContainer<T extends keyof HTMLElementTagNameMap>(
+export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
   type: T
 ) {
   return forwardRef<
     HTMLAttributes<HTMLElementTagNameMap[T]>,
-    GestureProxyContainerProps<HTMLElementTagNameMap[T]>
-  >(function GestureProxyContainerComponent(props, ref) {
-    return createElement(GestureProxyBoundary, {
+    FingerProxyContainerProps<HTMLElementTagNameMap[T]>
+  >(function FingerProxyContainerComponent(props, ref) {
+    return createElement(FingerProxyBoundary, {
       children: (events) => createElement(type, { ...props, ...events, ref }),
     });
   });

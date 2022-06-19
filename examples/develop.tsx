@@ -1,10 +1,10 @@
-import { GestureProxy, GestureProxyContainer, Gestured, useGestureEvents } from '../src';
+import { Finger, FingerProxy, FingerProxyContainer, useFingerEvents } from '../src';
 import React, { CSSProperties, useState } from "react"
 
 import { createRoot } from "react-dom/client";
 
-const GesturedDiv = Gestured("div");
-const GestureWrapper = GestureProxyContainer("div");
+const FingerDiv = Finger("div");
+const FingerBoxWrapper = FingerProxyContainer("div");
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
@@ -20,7 +20,7 @@ let prevEvents: any;
 
 export function App() {
   const [direction, setDirection] = useState('none');
-  const events = useGestureEvents({
+  const events = useFingerEvents({
     onPointerDown: event => {
       console.log('onPointerDown', event);
     },
@@ -40,15 +40,15 @@ export function App() {
       console.log('onSwipeLeft', event.direction, event);
     }
   });
-  if (!prevEvents) prevEvents = events; 
+  if (!prevEvents) prevEvents = events;
   return (
-    <GestureWrapper className='box' style={boxStyle} >
-      <GestureProxy {...events} />
+    <FingerBoxWrapper className='box' style={boxStyle} >
+      <FingerProxy {...events} />
       <button onClick={() => setDirection('xx')}>
         click
       </button>
       {direction}
-      <GesturedDiv
+      <FingerDiv
         onTap={event => { event.stopPropagation() }}
         onSwipe={event => {
           event.stopPropagation();
@@ -56,8 +56,8 @@ export function App() {
         }}
       >
         xxx
-      </GesturedDiv>
-    </GestureWrapper>
+      </FingerDiv>
+    </FingerBoxWrapper>
   );
 }
 

@@ -3,35 +3,35 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { GestureContext } from "./GestureContext";
-import { GestureMixEvents } from "./GestureEvents";
-import { GesturePointerEvent } from "./GesturePointerEvents";
+import { FingerContext } from "./GestureContext";
+import { FingerMixEvents } from "./GestureEvents";
+import { FingerPointerEvent } from "./GesturePointerEvents";
 
-export type GestureProviderParams = {
-  events: Partial<GestureMixEvents>;
-  context: GestureContext;
-  pointer: GesturePointerEvent;
+export type FingerProviderParams = {
+  events: Partial<FingerMixEvents>;
+  context: FingerContext;
+  pointer: FingerPointerEvent;
 };
 
-export type GestureProvideHandler = (params: GestureProviderParams) => void;
+export type FingerProvideHandler = (params: FingerProviderParams) => void;
 
-export type GestureProvider = Partial<{
-  handlePointerWillDown: GestureProvideHandler;
-  handlePointerDown: GestureProvideHandler;
-  handlePointerWillMove: GestureProvideHandler;
-  handlePointerMove: GestureProvideHandler;
-  handlePointerWillUp: GestureProvideHandler;
-  handlePointerUp: GestureProvideHandler;
-  handlePointerWillCancel: GestureProvideHandler;
-  handlePointerCancel: GestureProvideHandler;
+export type FingerProvider = Partial<{
+  handlePointerWillDown: FingerProvideHandler;
+  handlePointerDown: FingerProvideHandler;
+  handlePointerWillMove: FingerProvideHandler;
+  handlePointerMove: FingerProvideHandler;
+  handlePointerWillUp: FingerProvideHandler;
+  handlePointerUp: FingerProvideHandler;
+  handlePointerWillCancel: FingerProvideHandler;
+  handlePointerCancel: FingerProvideHandler;
 }>;
 
-const providers = new Set<GestureProvider>();
+const providers = new Set<FingerProvider>();
 
-export function registerGestureProvider(provider: GestureProvider) {
+export function registerFingerProvider(provider: FingerProvider) {
   providers.add(provider);
 }
 
-export function getAllGestureProviders() {
+export function getAllFingerProviders() {
   return providers;
 }

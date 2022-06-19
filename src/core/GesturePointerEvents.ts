@@ -3,20 +3,20 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-export type GesturePointerEvent<T extends Element = Element> = Omit<
+export type FingerPointerEvent<T extends Element = Element> = Omit<
   React.PointerEvent<T>,
   "detail"
 >;
 
-export type GesturePointerEventLike = { pointerId: number };
+export type FingerPointerEventLike = { pointerId: number };
 
-export type GesturePointerEventListener<T extends Element = Element> = (
-  event: GesturePointerEvent<T>
+export type FingerPointerEventListener<T extends Element = Element> = (
+  event: FingerPointerEvent<T>
 ) => void;
 
-export type GesturePointerEvents<T extends Element = Element> = {
-  onPointerDown: GesturePointerEventListener<T>;
-  onPointerMove: GesturePointerEventListener<T>;
-  onPointerUp: GesturePointerEventListener<T>;
-  onPointerCancel: GesturePointerEventListener<T>;
+export type FingerPointerEvents<T extends Element = Element> = {
+  onPointerDown: FingerPointerEventListener<T>;
+  onPointerMove: FingerPointerEventListener<T>;
+  onPointerUp: FingerPointerEventListener<T>;
+  onPointerCancel: FingerPointerEventListener<T>;
 };

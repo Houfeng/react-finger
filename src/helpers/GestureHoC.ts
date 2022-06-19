@@ -5,8 +5,8 @@
 
 import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
-import { GestureEvents } from "../core/GestureEvents";
-import { useGestureEvents } from "./GestureHook";
+import { FingerEvents } from "../core/GestureEvents";
+import { useFingerEvents } from "./GestureHook";
 
 function splitProps(props: any) {
   const {
@@ -47,8 +47,8 @@ function splitProps(props: any) {
   return { gestures, others };
 }
 
-type GesturedProps<T extends Element = Element> = HTMLAttributes<T> &
-  Partial<GestureEvents<T>> & {
+type FingerProps<T extends Element = Element> = HTMLAttributes<T> &
+  Partial<FingerEvents<T>> & {
     children: ReactNode;
   };
 
@@ -58,13 +58,13 @@ type GesturedProps<T extends Element = Element> = HTMLAttributes<T> &
  * @param type 原生 HTML 标签的 TagName
  * @returns 具备手势事件的高阶组件
  */
-export function Gestured<T extends keyof HTMLElementTagNameMap>(type: T) {
+export function Finger<T extends keyof HTMLElementTagNameMap>(type: T) {
   return forwardRef<
     HTMLAttributes<HTMLElementTagNameMap[T]>,
-    GesturedProps<HTMLElementTagNameMap[T]>
-  >(function GesturedComponent(props, ref) {
+    FingerProps<HTMLElementTagNameMap[T]>
+  >(function FingerComponent(props, ref) {
     const { gestures, others } = splitProps(props);
-    const events = useGestureEvents(gestures);
+    const events = useFingerEvents(gestures);
     return createElement(type, { ...others, ...events, ref });
   });
 }

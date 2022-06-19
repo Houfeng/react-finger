@@ -4,16 +4,16 @@
  */
 
 import {
-  GesturePointerEvent,
-  GesturePointerEventListener,
-  GesturePointerEvents,
+  FingerPointerEvent,
+  FingerPointerEventListener,
+  FingerPointerEvents,
 } from "./GesturePointerEvents";
 
-import { GestureContext } from "./GestureContext";
-import { GestureMixEvents } from "./GestureEvents";
-import { getAllGestureProviders } from "./GestureProviders";
+import { FingerContext } from "./GestureContext";
+import { FingerMixEvents } from "./GestureEvents";
+import { getAllFingerProviders } from "./GestureProviders";
 
-const providers = getAllGestureProviders();
+const providers = getAllFingerProviders();
 
 /**
  * 创建包含合成处理逻辑的 PointerDown Listener
@@ -22,10 +22,10 @@ const providers = getAllGestureProviders();
  * @returns
  */
 function createPointerDownListener(
-  events: Partial<GestureMixEvents>,
-  context: GestureContext
-): GesturePointerEventListener {
-  return (pointer: GesturePointerEvent) => {
+  events: Partial<FingerMixEvents>,
+  context: FingerContext
+): FingerPointerEventListener {
+  return (pointer: FingerPointerEvent) => {
     events.onPointerDown?.(pointer);
     providers.forEach((it) =>
       it.handlePointerWillDown?.({ events, context, pointer })
@@ -44,10 +44,10 @@ function createPointerDownListener(
  * @returns
  */
 function createPointerMoveListener(
-  events: Partial<GestureMixEvents>,
-  context: GestureContext
-): GesturePointerEventListener {
-  return (pointer: GesturePointerEvent) => {
+  events: Partial<FingerMixEvents>,
+  context: FingerContext
+): FingerPointerEventListener {
+  return (pointer: FingerPointerEvent) => {
     events.onPointerMove?.(pointer);
     if (context.getPointers().length < 1) return;
     providers.forEach((it) =>
@@ -67,10 +67,10 @@ function createPointerMoveListener(
  * @returns
  */
 function createPointerUpListener(
-  events: Partial<GestureMixEvents>,
-  context: GestureContext
-): GesturePointerEventListener {
-  return (pointer: GesturePointerEvent) => {
+  events: Partial<FingerMixEvents>,
+  context: FingerContext
+): FingerPointerEventListener {
+  return (pointer: FingerPointerEvent) => {
     events.onPointerUp?.(pointer);
     providers.forEach((it) =>
       it.handlePointerWillUp?.({ events, context, pointer })
@@ -89,10 +89,10 @@ function createPointerUpListener(
  * @returns
  */
 function createPointerCancelListener(
-  events: Partial<GestureMixEvents>,
-  context: GestureContext
-): GesturePointerEventListener {
-  return (pointer: GesturePointerEvent) => {
+  events: Partial<FingerMixEvents>,
+  context: FingerContext
+): FingerPointerEventListener {
+  return (pointer: FingerPointerEvent) => {
     events.onPointerCancel?.(pointer);
     providers.forEach((it) =>
       it.handlePointerWillCancel?.({ events, context, pointer })
@@ -112,10 +112,10 @@ function createPointerCancelListener(
  * @param context 一组合成手势事件的上下文对象
  * @returns 合成后的 Pointer Events
  */
-export function composeGestureEvents<T extends Element = Element>(
-  events: Partial<GestureMixEvents<T>>,
-  context = GestureContext()
-): GesturePointerEvents<T> {
+export function composeFingerEvents<T extends Element = Element>(
+  events: Partial<FingerMixEvents<T>>,
+  context = FingerContext()
+): FingerPointerEvents<T> {
   const onPointerDown = createPointerDownListener(events, context);
   const onPointerMove = createPointerMoveListener(events, context);
   const onPointerUp = createPointerUpListener(events, context);
