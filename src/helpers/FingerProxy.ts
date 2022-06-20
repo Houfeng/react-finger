@@ -26,7 +26,6 @@ import { FingerPointerEvents } from "../core/FingerPointerEvents";
 import { useFingerEvents } from "./FingerHook";
 
 type FingerProxyEventTarget = {
-  isProxyBoundary?: boolean;
   addEventListener: (
     name: string,
     listener: AnyFunction,
@@ -65,20 +64,18 @@ const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
  */
 export function FingerProxy(props: FingerProxyProps) {
   const contextTarget = useContext(FingerProxyContext);
-  const {
-    target = (contextTarget || document) as FingerProxyEventTarget,
-    ...others
-  } = props;
+  const { target = contextTarget || document, ...others } = props;
   const events = useFingerEvents(others);
+  const isProxyBoundary = !!contextTarget;
   useLayoutEffect(() => {
     const eventEntries = Object.entries<AnyFunction>(events);
     eventEntries.forEach(([name, listener]) => {
-      name = target.isProxyBoundary ? name : toNativeEventName(name);
+      name = isProxyBoundary ? name : toNativeEventName(name);
       target.addEventListener(name, listener);
     }, false);
     return () => {
       eventEntries.forEach(([name, listener]) => {
-        name = target.isProxyBoundary ? name : toNativeEventName(name);
+        name = isProxyBoundary ? name : toNativeEventName(name);
         target.removeEventListener(name, listener);
       }, false);
     };
@@ -109,8 +106,7 @@ function FingerProxyBoundaryOwner(): [
     name: keyof FingerPointerEvents,
     listener: FingerEventListener<FingerEvent>
   ) => emitter.removeListener(name, listener);
-  const isProxyBoundary = true;
-  return [events, { addEventListener, removeEventListener, isProxyBoundary }];
+  return [events, { addEventListener, removeEventListener }];
 }
 
 export type FingerProxyBoundaryProps = {
