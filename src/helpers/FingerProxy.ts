@@ -4,6 +4,11 @@
  */
 
 import {
+  FingerEvent,
+  FingerEventListener,
+  FingerMixEvents,
+} from "../core/FingerEvents";
+import {
   Fragment,
   HTMLAttributes,
   ReactNode,
@@ -12,51 +17,42 @@ import {
   forwardRef,
   useContext,
   useLayoutEffect,
-  useState,
+  useMemo,
 } from "react";
 
 import { AnyFunction } from "../core/FingerUtils";
-import { FingerMixEvents } from "../core/FingerEvents";
+import { EventEmitter } from "eify";
 import { FingerPointerEvents } from "../core/FingerPointerEvents";
 import { useFingerEvents } from "./FingerHook";
 
-const FingerProxyContext =
-  createContext<(events: Partial<FingerMixEvents<Element>>) => void>(null);
+type FingerProxyEventTarget = {
+  isProxyBoundary?: boolean;
+  addEventListener: (
+    name: string,
+    listener: AnyFunction,
+    options?: any
+  ) => void;
+  removeEventListener: (
+    name: string,
+    listener: AnyFunction,
+    options?: any
+  ) => void;
+};
 
 export type FingerProxyProps = Partial<FingerMixEvents> & {
-  target?: EventTarget;
-  capture?: boolean;
-  passive?: boolean;
+  target?: FingerProxyEventTarget;
 };
 
 function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
 }
 
-function FingerEventTargetProxy(props: FingerProxyProps) {
-  const { target = document, capture, passive, ...others } = props;
-  const events = useFingerEvents(others);
-  useLayoutEffect(() => {
-    const eventEntries = Object.entries(events);
-    const options = { capture, passive };
-    eventEntries.forEach(
-      ([name, listener]: [string, AnyFunction]) =>
-        target.addEventListener(toNativeEventName(name), listener),
-      options
-    );
-    return () => {
-      eventEntries.forEach(
-        ([name, listener]: [string, AnyFunction]) =>
-          target.removeEventListener(toNativeEventName(name), listener),
-        options
-      );
-    };
-  }, Object.values(props));
-  return createElement(Fragment);
-}
+const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
 
 /**
- * 手势事件代理组件，用于以组件式 API 代理到 window、document 等原生对象
+ * 手势事件代理组件，主要有两个能力
+ *    1. 用于以组件式 API 代理到 window、document 等原生对象
+ *    2. 将事件代理到父层的某个 FingerProxyBoundary 上
  *
  * 当前未指定 target 时：
  *    1. 如果上层有 FingerProxyBoundary 将代理到最近的 FingerProxyBoundary
@@ -68,20 +64,57 @@ function FingerEventTargetProxy(props: FingerProxyProps) {
  * @returns JSX.Element
  */
 export function FingerProxy(props: FingerProxyProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { target, capture, passive, ...others } = props;
-  const setFingerEvents = useContext(FingerProxyContext);
-  const isProxyToBoundary = setFingerEvents && !target;
+  const contextTarget = useContext(FingerProxyContext);
+  const {
+    target = (contextTarget || document) as FingerProxyEventTarget,
+    ...others
+  } = props;
+  const events = useFingerEvents(others);
   useLayoutEffect(() => {
-    if (isProxyToBoundary) setFingerEvents(others);
-  });
-  return isProxyToBoundary
-    ? createElement(Fragment)
-    : createElement(FingerEventTargetProxy, props);
+    const eventEntries = Object.entries<AnyFunction>(events);
+    eventEntries.forEach(([name, listener]) => {
+      name = target.isProxyBoundary ? name : toNativeEventName(name);
+      target.addEventListener(name, listener);
+    }, false);
+    return () => {
+      eventEntries.forEach(([name, listener]) => {
+        name = target.isProxyBoundary ? name : toNativeEventName(name);
+        target.removeEventListener(name, listener);
+      }, false);
+    };
+  }, Object.values(props));
+  return createElement(Fragment);
+}
+
+/**
+ * FingerProxyBoundaryEventTarget
+ */
+
+function FingerProxyBoundaryOwner(): [
+  FingerPointerEvents,
+  FingerProxyEventTarget
+] {
+  const emitter = new EventEmitter<FingerPointerEvents>();
+  const events: FingerPointerEvents = {
+    onPointerDown: (event) => emitter.emit("onPointerDown", event),
+    onPointerMove: (event) => emitter.emit("onPointerMove", event),
+    onPointerUp: (event) => emitter.emit("onPointerUp", event),
+    onPointerCancel: (event) => emitter.emit("onPointerCancel", event),
+  };
+  const addEventListener = (
+    name: keyof FingerPointerEvents,
+    listener: FingerEventListener<FingerEvent>
+  ) => emitter.addListener(name, listener);
+  const removeEventListener = (
+    name: keyof FingerPointerEvents,
+    listener: FingerEventListener<FingerEvent>
+  ) => emitter.removeListener(name, listener);
+  const isProxyBoundary = true;
+  return [events, { addEventListener, removeEventListener, isProxyBoundary }];
 }
 
 export type FingerProxyBoundaryProps = {
-  children: (events: FingerPointerEvents) => ReactNode;
+  children: (target: FingerPointerEvents) => ReactNode;
 };
 
 /**
@@ -93,11 +126,9 @@ export type FingerProxyBoundaryProps = {
  */
 export function FingerProxyBoundary(props: FingerProxyBoundaryProps) {
   const { children } = props;
-  const [eventMap, setFingerEvents] =
-    useState<Partial<FingerMixEvents<Element>>>(null);
-  const events = useFingerEvents(eventMap);
+  const [events, target] = useMemo(() => FingerProxyBoundaryOwner(), []);
   return createElement(FingerProxyContext.Provider, {
-    value: setFingerEvents,
+    value: target,
     children: children(events),
   });
 }
