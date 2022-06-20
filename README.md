@@ -8,25 +8,25 @@ React Finger is a React oriented gesture event library compatible with PC & Mobi
 npm install react-finger --save
 ```
 
-# Supported
+# Events
 
-Event | Description  
-------- | -------  
-onPointerDown  | 按下
-onPointerMove  | 移动
-onPointerUp | 弹起
-onPointerCancel | 取消
-onTap  | 快速点按 
-onTapHold  | 长按超过 600ms  
-onDoubleTap  | 快速连按 (300ms 内)  
-onSwipe  | 任意滑动
-onSwipeUp  | 向上滑动 
-onSwipeRight  | 向右滑动 
-onSwipeDown  | 向下滑动  
-onSwipeLeft  | 向左滑动
-onPinchStart  | 多指手势开始 (当前权支持两指缩放) 
-onPinch  | 多指手势更新 (当前权支持两指缩放) 
-onPinchEnd  | 多指手势结束 (当前权支持两指缩放) 
+```bash
+onPointerDown: 按下
+onPointerMove:  移动
+onPointerUp: 弹起
+onPointerCancel: 取消
+onTap: 快速点按 
+onTapHold: 长按超过 600ms  
+onDoubleTap: 快速连按 (300ms 内)  
+onSwipe: 任意滑动
+onSwipeUp: 向上滑动 
+onSwipeRight: 向右滑动 
+onSwipeDown: 向下滑动  
+onSwipeLeft: 向左滑动
+onPinchStart: 多指手势开始 (当前权支持两指缩放) 
+onPinch: 多指手势更新 (当前权支持两指缩放) 
+onPinchEnd: 多指手势结束 (当前权支持两指缩放) 
+```
 
 # Usage
 
