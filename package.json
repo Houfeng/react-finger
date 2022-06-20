@@ -1,6 +1,6 @@
 {
   "name": "react-finger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "./dist/react-finger-cjs.js",
   "module": "./dist/react-finger-es.js",
