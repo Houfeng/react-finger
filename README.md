@@ -60,7 +60,7 @@ function Demo(){
     onSwipe: event=>console.log('onSwipe',event.direction),
   });
   return (
-    <FingeredDiv {...events}> Something... </FingeredDiv>
+    <div {...events}> Something... </div>
   );
 }
 ```
@@ -77,7 +77,7 @@ class Demo extends Component {
   });
   render() {
     return (
-      <FingeredDiv {...this.events}> Something... </FingeredDiv>
+      <div {...this.events}> Something... </div>
     );
   }
 }
