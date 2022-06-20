@@ -1,30 +1,16 @@
 # React Finger
 
-React Finger 是一个面向 React 且同时兼容 PC & Mobile 的手势事件库。
+React Finger is a React oriented gesture event library compatible with PC & Mobile.
 
-## 基本使用
+# Install
 
 ```
 npm install react-finger --save
 ```
 
-在类组件中使用
+# Supported
 
-```jsx
-
-```
-
-在函数组件中使用
-
-```jsx
-
-```
-
-## 事件支持
-
-React Finger 支持多种常用的手势事件，并且所有事件都自动兼容 PC & Mobile
-
-事件 | 说明  
+Event | Description  
 ------- | -------  
 onPointerDown  | 按下
 onPointerMove  | 移动
@@ -41,3 +27,92 @@ onSwipeLeft  | 向左滑动
 onPinchStart  | 多指手势开始 (当前权支持两指缩放) 
 onPinch  | 多指手势更新 (当前权支持两指缩放) 
 onPinchEnd  | 多指手势结束 (当前权支持两指缩放) 
+
+# Usage
+
+**Example 1:** Hello React Finger
+
+```jsx
+import { Finger } from "react-finger";
+
+const FingeredDiv = Finger("div");
+
+function Demo(){
+  return (
+    <FingeredDiv 
+      onTap = { event=>console.log('onTap',event) }
+      onSwipe = { event=>console.log('onSwipe',event.direction) }
+    > 
+      Something...
+    </FingeredDiv>
+  );
+}
+```
+
+**Example 2:** Using useFingerEvents
+
+```jsx
+import { useFingerEvents } from "react-finger";
+
+function Demo(){
+  const events = useFingerEvents({
+    onTap: event=>console.log('onTap',event),
+    onSwipe: event=>console.log('onSwipe',event.direction),
+  });
+  return (
+    <FingeredDiv {...events}> Something... </FingeredDiv>
+  );
+}
+```
+
+**Example 3:** Using createFingerEvents
+
+```jsx
+import { createFingerEvents } from "react-finger";
+
+class Demo extends Component {
+  events = createFingerEvents({
+    onTap: event=>console.log('onTap',event),
+    onSwipe: event=>console.log('onSwipe',event.direction),
+  });
+  render() {
+    return (
+      <FingeredDiv {...this.events}> Something... </FingeredDiv>
+    );
+  }
+}
+```
+
+**Example 4:** Bound to the Document
+
+```jsx
+import { FingerProxy } from "react-finger";
+
+function Demo(){
+  return (
+    <FingerProxy 
+      onTap = { event=>console.log('Tap on the document',event) }
+    />
+  );
+}
+```
+
+**Example 5:** Bound to the Boundary
+
+```jsx
+import { FingerProxy, FingerProxyContainer } from "react-finger";
+
+const Wrapper = FingerProxyContainer("div");
+
+function Demo(){
+  return (
+    <Wrapper>
+      Something...
+      <FingerProxy 
+        onTap = { event=>console.log('Tap on the Boundary',event) }
+      />
+      Something...
+    </Wrapper>
+  );
+}
+```
