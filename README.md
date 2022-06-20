@@ -102,17 +102,17 @@ function Demo(){
 ```jsx
 import { FingerProxy, FingerProxyContainer } from "react-finger";
 
-const Wrapper = FingerProxyContainer("div");
+const YourBoundaryWrapper = FingerProxyContainer("div");
 
 function Demo(){
   return (
-    <Wrapper>
+    <YourBoundaryWrapper>
       Something...
       <FingerProxy 
         onTap = { event=>console.log('Tap on the Boundary',event) }
       />
       Something...
-    </Wrapper>
+    </YourBoundaryWrapper>
   );
 }
 ```
