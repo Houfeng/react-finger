@@ -1,6 +1,6 @@
 # React Finger
 
-React Finger is a React oriented gesture event library compatible with PC & Mobile.
+React Finger is a library of gesture events for React that allows developers to use a single set of events for both desktop and mobile devices.
 
 # Install
 
