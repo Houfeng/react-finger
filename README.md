@@ -10,23 +10,21 @@ npm install react-finger --save
 
 # Events
 
-```bash
-onPointerDown: Press the mouse or touch point
-onPointerMove: Moves the mouse or touch point
-onPointerUp: Bounce the mouse or touch point
-onPointerCancel: Cancels the mouse or touch point
-onTap: Quickly tap the mouse or touch point
-onTapHold: Hold for more than 600ms
-onDoubleTap: Quick tap twice (within 300ms)
-onSwipe: Swipe freely
-onSwipeUp: Swipe up
-onSwipeRight: Swipe right
-onSwipeDown: Swipes down
-onSwipeLeft: Swipe left
-onPinchStart: Multi-finger gesture start (currently supports two-finger pinch)
-onPinch: Multi-finger gesture update (currently supports two-finger pinch)
-onPinchEnd: Multi-finger gesture end (current weight supports two-finger pinch)
-```
+- **onPointerDown**: Press the mouse or touch point
+- **onPointerMove**: Moves the mouse or touch point
+- **onPointerUp**: Bounce the mouse or touch point
+- **onPointerCancel**: Cancels the mouse or touch point
+- **onTap**: Quickly tap the mouse or touch point
+- **onTapHold**: Hold for more than 600ms
+- **onDoubleTap**: Quick tap twice (within 300ms)
+- **onSwipe**: Swipe freely
+- **onSwipeUp**: Swipe up
+- **onSwipeRight**: Swipe right
+- **onSwipeDown**: Swipes down
+- **onSwipeLeft**: Swipe left
+- **onPinchStart**: Multi-finger gesture start (currently supports two-finger pinch)
+- **onPinch**: Multi-finger gesture update (currently supports two-finger pinch)
+- **onPinchEnd**: Multi-finger gesture end (current weight supports two-finger pinch)
 
 # Usage
 
