@@ -1,4 +1,4 @@
-![logo](http://houfeng.net/react-finger/logo.jpg)
+![logo](https://houfeng.net/react-finger/logo.png)
 
 React Finger is a library of gesture events for React that allows developers to use a single set of events for both desktop and mobile devices.
 
