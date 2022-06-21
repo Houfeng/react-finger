@@ -7,7 +7,7 @@ const FingerDiv = Finger("div");
 const FingerBoxWrapper = FingerProxyContainer("div");
 
 const boxStyle: CSSProperties = {
-  margin: 'auto', 
+  margin: 'auto',
   padding: 16,
   borderRadius: 8,
   width: 300,
@@ -46,7 +46,7 @@ export function App() {
       <FingerProxy {...events} />
       <button onClick={() => setDirection('xx')}>
         click
-      </button> 
+      </button>
       {direction}
       <FingerDiv
         onTap={event => { event.stopPropagation() }}

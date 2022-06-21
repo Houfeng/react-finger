@@ -109,13 +109,13 @@ function createPointerCancelListener(
  * 注意：上层应用通常不要直接使用此 API
  * @internal
  * @param events events 要绑定的手势事件 map
- * @param context 一组合成手势事件的上下文对象
  * @returns 合成后的 Pointer Events
  */
 export function composeFingerEvents<T extends Element = Element>(
-  events: Partial<FingerMixEvents<T>>,
-  context = FingerContext()
+  events: Partial<FingerMixEvents<T>>
 ): FingerPointerEvents<T> {
+  // 一组合成手势事件的上下文对象
+  const context = FingerContext();
   const onPointerDown = createPointerDownListener(events, context);
   const onPointerMove = createPointerMoveListener(events, context);
   const onPointerUp = createPointerUpListener(events, context);

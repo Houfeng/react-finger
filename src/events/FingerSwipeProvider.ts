@@ -44,8 +44,8 @@ export const FingerSwipeProvider: FingerProvider = {
     }
     const start = getPointers()[0];
     const end = getChangedPointers()[0];
-    const distX = end.clientX - start.clientX;
-    const distY = end.clientY - start.clientY;
+    const distX = end?.clientX - start?.clientX;
+    const distY = end?.clientY - start?.clientY;
     const direction = ((): "down" | "up" | "right" | "left" => {
       if (
         Math.abs(distX) > Math.abs(distY) &&
