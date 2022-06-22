@@ -5,7 +5,7 @@
 
 import { FingerPointerEvent, FingerPointerEvents } from "./FingerPointerEvents";
 
-import { toEventWrapper } from "./FingerUtils";
+import { toFingerEventWrapper } from "./FingerEventWrapper";
 
 export type FingerMixEvents<T extends Element = Element> = FingerEvents<T> &
   FingerPointerEvents<T>;
@@ -26,6 +26,8 @@ export type FingerSwipeEventDetail = {
 
 export type FingerPinchEventDetail = {
   scale: number;
+  moveX: number;
+  moveY: number;
 };
 
 export type FingerEvents<
@@ -55,7 +57,7 @@ export function FingerEvent<
   detail?: Parameters<FingerEvents<T, D>[G]>[0]["detail"]
 ): FingerEvent<T, Parameters<FingerEvents<T, D>[G]>[0]["detail"]> {
   pointerEvent.persist?.();
-  const fingerEvent = toEventWrapper(pointerEvent);
+  const fingerEvent = toFingerEventWrapper(pointerEvent);
   Object.assign(fingerEvent, { ...detail, finger, detail });
   return fingerEvent;
 }

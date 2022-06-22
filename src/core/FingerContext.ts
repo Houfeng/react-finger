@@ -4,7 +4,7 @@
  */
 
 import { FingerPointerEvent } from "./FingerPointerEvents";
-import { toEventWrapper } from "./FingerUtils";
+import { toFingerEventWrapper } from "./FingerEventWrapper";
 
 export type FingerContext = {
   addPointer: (pointer: FingerPointerEvent) => void;
@@ -17,24 +17,24 @@ export type FingerContext = {
 
 export function FingerContext(): FingerContext {
   const flags = new Map<symbol, unknown>();
-  const points = new Map<number, FingerPointerEvent>();
-  const changedPoints = new Map<number, FingerPointerEvent>();
+  const pointers = new Map<number, FingerPointerEvent>();
+  const changedPointers = new Map<number, FingerPointerEvent>();
   const addPointer = (pointer: FingerPointerEvent) => {
-    points.set(pointer.pointerId, toEventWrapper(pointer));
+    pointers.set(pointer.pointerId, toFingerEventWrapper(pointer));
     updatePointer(pointer);
   };
   const updatePointer = (pointer: FingerPointerEvent) => {
-    changedPoints.set(pointer.pointerId, toEventWrapper(pointer));
+    changedPointers.set(pointer.pointerId, toFingerEventWrapper(pointer));
   };
   const removePointer = (pointer: FingerPointerEvent) => {
-    points.delete(pointer.pointerId);
-    changedPoints.delete(pointer.pointerId);
+    pointers.delete(pointer.pointerId);
+    changedPointers.delete(pointer.pointerId);
   };
   const getPointers = (): FingerPointerEvent[] => {
-    return Array.from(points.values());
+    return Array.from(pointers.values());
   };
   const getChangedPointers = (): FingerPointerEvent[] => {
-    return Array.from(changedPoints.values());
+    return Array.from(changedPointers.values());
   };
   return {
     addPointer,

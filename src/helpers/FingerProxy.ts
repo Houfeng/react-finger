@@ -85,8 +85,8 @@ export function FingerProxy(props: FingerProxyProps) {
 
 /**
  * FingerProxyBoundaryEventTarget
+ * @returns events & Proxy EventTarget
  */
-
 function FingerProxyBoundaryOwner(): [
   FingerPointerEvents,
   FingerProxyEventTarget

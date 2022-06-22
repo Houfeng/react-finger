@@ -3,23 +3,24 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent } from "../core/FingerEvents";
+import { FingerEvent, FingerPinchEventDetail } from "../core/FingerEvents";
+import { calcCenter, calcDistance } from "../core/FingerUtils";
+
 import { FingerProvider } from "../core/FingerProviders";
-import { calcDistance } from "../core/FingerUtils";
 
 const pinch = Symbol("pinch");
 const pinchStarted = Symbol("pinchStarted");
-const pinchScale = Symbol("pinchScale");
 const pinchEnded = Symbol("pinchEnded");
+const pinchDetail = Symbol("pinchDetail");
 
 export const FingerPinchProvider: FingerProvider = {
   handlePointerDown: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (flags.get(pinch) && !flags.get(pinchStarted)) {
-      const scale = 1;
-      flags.set(pinchScale, scale);
-      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, { scale }));
+      const detail = { scale: 1, moveX: 0, moveY: 0 };
+      flags.set(pinchDetail, detail);
+      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchStarted, true);
       const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
@@ -34,16 +35,21 @@ export const FingerPinchProvider: FingerProvider = {
     const originDist = calcDistance(pointers[0], pointers[0]);
     const latestDist = calcDistance(changedPointers[0], changedPointers[0]);
     const scale = latestDist / originDist;
-    flags.set(pinchScale, scale);
-    events.onPinch?.(FingerEvent("onPinch", pointer, { scale }));
+    const originCenter = calcCenter(pointers[0], pointers[1]);
+    const latestCenter = calcCenter(pointers[0], pointers[1]);
+    const moveX = latestCenter.x - originCenter.x;
+    const moveY = latestCenter.y - originCenter.y;
+    const detail = { scale, moveX, moveY };
+    flags.set(pinchDetail, detail);
+    events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
-      const scale = flags.get(pinchScale) as number;
-      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, { scale }));
+      const detail = flags.get(pinchDetail) as FingerPinchEventDetail;
+      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchEnded, true);
     }
   },
@@ -52,8 +58,8 @@ export const FingerPinchProvider: FingerProvider = {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
-      const scale = flags.get(pinchScale) as number;
-      events?.onPinchStart?.(FingerEvent("onPinchStart", pointer, { scale }));
+      const detail = flags.get(pinchDetail) as FingerPinchEventDetail;
+      events?.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchEnded, true);
     }
   },

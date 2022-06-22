@@ -3,11 +3,12 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { calcDistance, clearTimer, createTimer } from "../core/FingerUtils";
+import { clearEventTimer, createEventTimer } from "../core/FingerEventTimer";
 
 import { FingerEvent } from "../core/FingerEvents";
 import { FingerOptions } from "../core/FingerOptions";
 import { FingerProvider } from "../core/FingerProviders";
+import { calcDistance } from "../core/FingerUtils";
 
 const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
   FingerOptions;
@@ -22,11 +23,11 @@ export const FingerTapProvider: FingerProvider = {
     const { flags, getPointers } = context;
     flags.set(tapCanceled, getPointers().length > 1);
     if (flags.get(tapCanceled)) {
-      clearTimer(flags.get(holdTimer) as number);
+      clearEventTimer(flags.get(holdTimer) as number);
     }
     flags.set(
       holdTimer,
-      createTimer(() => {
+      createEventTimer(() => {
         flags.set(tapCanceled, true);
         events.onTapHold?.(FingerEvent("onTapHold", pointer));
       }, holdDurationThreshold)
@@ -39,13 +40,13 @@ export const FingerTapProvider: FingerProvider = {
     const dist = calcDistance(getPointers()[0], getChangedPointers()[0]);
     if (dist > tapMaxDistanceThreshold) {
       flags.set(tapCanceled, true);
-      clearTimer(flags.get(holdTimer) as number);
+      clearEventTimer(flags.get(holdTimer) as number);
     }
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
     const { flags } = context;
-    clearTimer(flags.get(holdTimer) as number);
+    clearEventTimer(flags.get(holdTimer) as number);
     if (flags.get(tapCanceled)) return;
     events.onTap?.(FingerEvent("onTap", pointer));
     const prevTime = (flags.get(dblPrevTime) || 0) as number;
@@ -67,6 +68,6 @@ export const FingerTapProvider: FingerProvider = {
   handlePointerCancel: ({ context }) => {
     const { flags } = context;
     flags.set(tapCanceled, true);
-    clearTimer(flags.get(holdTimer) as number);
+    clearEventTimer(flags.get(holdTimer) as number);
   },
 };
