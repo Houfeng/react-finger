@@ -20,9 +20,7 @@ export const FingerPinchProvider: FingerProvider = {
     if (flags.get(pinch) && !flags.get(pinchStarted)) {
       const detail = { scale: 1, rotate: 0, moveX: 0, moveY: 0 };
       flags.set(pinchDetail, detail);
-      events.onPinchStart?.(
-        FingerEvent("onPinchStart", context, pointer, detail)
-      );
+      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchStarted, true);
       const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
@@ -46,7 +44,7 @@ export const FingerPinchProvider: FingerProvider = {
     const rotate = latestRotate - originRotate;
     const detail = { scale, moveX, moveY, rotate };
     flags.set(pinchDetail, detail);
-    events.onPinch?.(FingerEvent("onPinch", context, pointer, detail));
+    events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
@@ -54,9 +52,7 @@ export const FingerPinchProvider: FingerProvider = {
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
       const detail = flags.get(pinchDetail) as FingerPinchEventDetail;
-      events.onPinchStart?.(
-        FingerEvent("onPinchStart", context, pointer, detail)
-      );
+      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchEnded, true);
     }
   },
@@ -66,9 +62,7 @@ export const FingerPinchProvider: FingerProvider = {
     flags.set(pinch, getPointers().length > 1);
     if (!flags.get(pinch) && !flags.get(pinchEnded)) {
       const detail = flags.get(pinchDetail) as FingerPinchEventDetail;
-      events?.onPinchStart?.(
-        FingerEvent("onPinchStart", context, pointer, detail)
-      );
+      events?.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchEnded, true);
     }
   },

@@ -38,7 +38,7 @@ type FingerProxyEventTarget = {
   ) => void;
 };
 
-export type FingerProxyProps = Partial<FingerEvents> & {
+export type FingerProxyProps = Partial<HostPointerEvents & FingerEvents> & {
   target?: FingerProxyEventTarget;
 };
 
