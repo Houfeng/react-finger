@@ -28,6 +28,7 @@ export type FingerPinchEventDetail = {
   scale: number;
   moveX: number;
   moveY: number;
+  rotate: number;
 };
 
 export type FingerEvents<

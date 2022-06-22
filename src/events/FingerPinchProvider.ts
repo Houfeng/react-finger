@@ -4,7 +4,7 @@
  */
 
 import { FingerEvent, FingerPinchEventDetail } from "../core/FingerEvents";
-import { calcCenter, calcDistance } from "../core/FingerUtils";
+import { calcCenter, calcDistance, calcRotate } from "../core/FingerUtils";
 
 import { FingerProvider } from "../core/FingerProviders";
 
@@ -18,7 +18,7 @@ export const FingerPinchProvider: FingerProvider = {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (flags.get(pinch) && !flags.get(pinchStarted)) {
-      const detail = { scale: 1, moveX: 0, moveY: 0 };
+      const detail = { scale: 1, rotate: 0, moveX: 0, moveY: 0 };
       flags.set(pinchDetail, detail);
       events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchStarted, true);
@@ -39,7 +39,10 @@ export const FingerPinchProvider: FingerProvider = {
     const latestCenter = calcCenter(pointers[0], pointers[1]);
     const moveX = latestCenter.x - originCenter.x;
     const moveY = latestCenter.y - originCenter.y;
-    const detail = { scale, moveX, moveY };
+    const originRotate = calcRotate(pointers[0], pointers[1]);
+    const latestRotate = calcRotate(changedPointers[0], changedPointers[1]);
+    const rotate = latestRotate - originRotate;
+    const detail = { scale, moveX, moveY, rotate };
     flags.set(pinchDetail, detail);
     events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },

@@ -25,12 +25,23 @@ export function calcCenter(
   pointer1: PointerPointLike,
   pointer2: PointerPointLike
 ) {
-  return {
-    x:
-      Math.max(pointer1.clientX, pointer2.clientX) -
-      Math.min(pointer1.clientX, pointer2.clientX),
-    y:
-      Math.max(pointer1.clientY, pointer2.clientY) -
-      Math.min(pointer1.clientY, pointer2.clientY),
-  };
+  const x =
+    Math.max(pointer1.clientX, pointer2.clientX) -
+    Math.min(pointer1.clientX, pointer2.clientX);
+  const y =
+    Math.max(pointer1.clientY, pointer2.clientY) -
+    Math.min(pointer1.clientY, pointer2.clientY);
+  return { x, y };
+}
+
+export function calcRotate(
+  pointer1: PointerPointLike,
+  pointer2: PointerPointLike
+) {
+  const radians = Math.atan2(
+    pointer2.clientY - pointer1.clientY,
+    pointer2.clientX - pointer1.clientX
+  );
+  const degrees = radians * (180 / Math.PI);
+  return degrees;
 }
