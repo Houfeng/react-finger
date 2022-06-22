@@ -4,13 +4,13 @@
  */
 
 import { FingerContext } from "./FingerContext";
-import { FingerMixEvents } from "./FingerEvents";
-import { FingerPointerEvent } from "./FingerPointerEvents";
+import { FingerEvents } from "./FingerEvents";
+import { HostPointerEvent } from "./FingerHostEvents";
 
 export type FingerProviderParams = {
-  events: Partial<FingerMixEvents>;
+  events: Partial<FingerEvents>;
   context: FingerContext;
-  pointer: FingerPointerEvent;
+  pointer: HostPointerEvent;
 };
 
 export type FingerProvideHandler = (params: FingerProviderParams) => void;

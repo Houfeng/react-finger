@@ -73,7 +73,7 @@ POINTER_EVENT_KEYS.forEach((key) => {
   });
 });
 
-export function toFingerEventWrapper<T = object>(originEvent: T) {
+export function toFingerEventWrapper<T = object>(originEvent: T): any {
   //@ts-ignore
   return new FingerEventWrapper(originEvent);
 }

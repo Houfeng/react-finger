@@ -8,6 +8,7 @@ import "pepjs";
 import { registerFingerProvider } from "./core/FingerProviders";
 
 import { FingerPinchProvider } from "./events/FingerPinchProvider";
+import { FingerPointerProvider } from "./events/FingerPointerProvider";
 import { FingerSwipeProvider } from "./events/FingerSwipeProvider";
 import { FingerTapProvider } from "./events/FingerTapProvider";
 
@@ -23,6 +24,7 @@ export {
   FingerProxyContainer,
 } from "./helpers/FingerProxy";
 
+registerFingerProvider(FingerPointerProvider);
 registerFingerProvider(FingerTapProvider);
 registerFingerProvider(FingerSwipeProvider);
 registerFingerProvider(FingerPinchProvider);

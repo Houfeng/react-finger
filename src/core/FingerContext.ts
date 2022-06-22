@@ -3,37 +3,37 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerPointerEvent } from "./FingerPointerEvents";
+import { HostPointerEvent } from "./FingerHostEvents";
 import { toFingerEventWrapper } from "./FingerEventWrapper";
 
 export type FingerContext = {
-  addPointer: (pointer: FingerPointerEvent) => void;
-  updatePointer: (pointer: FingerPointerEvent) => void;
-  removePointer: (pointer: FingerPointerEvent) => void;
-  getPointers: () => FingerPointerEvent[];
-  getChangedPointers: () => FingerPointerEvent[];
+  addPointer: (pointer: HostPointerEvent) => void;
+  updatePointer: (pointer: HostPointerEvent) => void;
+  removePointer: (pointer: HostPointerEvent) => void;
+  getPointers: () => HostPointerEvent[];
+  getChangedPointers: () => HostPointerEvent[];
   flags: Map<symbol, unknown>;
 };
 
 export function FingerContext(): FingerContext {
   const flags = new Map<symbol, unknown>();
-  const pointers = new Map<number, FingerPointerEvent>();
-  const changedPointers = new Map<number, FingerPointerEvent>();
-  const addPointer = (pointer: FingerPointerEvent) => {
+  const pointers = new Map<number, HostPointerEvent>();
+  const changedPointers = new Map<number, HostPointerEvent>();
+  const addPointer = (pointer: HostPointerEvent) => {
     pointers.set(pointer.pointerId, toFingerEventWrapper(pointer));
     updatePointer(pointer);
   };
-  const updatePointer = (pointer: FingerPointerEvent) => {
+  const updatePointer = (pointer: HostPointerEvent) => {
     changedPointers.set(pointer.pointerId, toFingerEventWrapper(pointer));
   };
-  const removePointer = (pointer: FingerPointerEvent) => {
+  const removePointer = (pointer: HostPointerEvent) => {
     pointers.delete(pointer.pointerId);
     changedPointers.delete(pointer.pointerId);
   };
-  const getPointers = (): FingerPointerEvent[] => {
+  const getPointers = (): HostPointerEvent[] => {
     return Array.from(pointers.values());
   };
-  const getChangedPointers = (): FingerPointerEvent[] => {
+  const getChangedPointers = (): HostPointerEvent[] => {
     return Array.from(changedPointers.values());
   };
   return {

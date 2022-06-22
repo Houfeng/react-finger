@@ -6,7 +6,7 @@
 import {
   FingerEvent,
   FingerEventListener,
-  FingerMixEvents,
+  FingerEvents,
 } from "../core/FingerEvents";
 import {
   Fragment,
@@ -22,7 +22,7 @@ import {
 
 import { AnyFunction } from "../core/FingerUtils";
 import { EventEmitter } from "eify";
-import { FingerPointerEvents } from "../core/FingerPointerEvents";
+import { HostPointerEvents } from "../core/FingerHostEvents";
 import { useFingerEvents } from "./FingerHook";
 
 type FingerProxyEventTarget = {
@@ -38,7 +38,7 @@ type FingerProxyEventTarget = {
   ) => void;
 };
 
-export type FingerProxyProps = Partial<FingerMixEvents> & {
+export type FingerProxyProps = Partial<FingerEvents> & {
   target?: FingerProxyEventTarget;
 };
 
@@ -88,29 +88,29 @@ export function FingerProxy(props: FingerProxyProps) {
  * @returns events & Proxy EventTarget
  */
 function FingerProxyBoundaryOwner(): [
-  FingerPointerEvents,
+  HostPointerEvents,
   FingerProxyEventTarget
 ] {
-  const emitter = new EventEmitter<FingerPointerEvents>();
-  const events: FingerPointerEvents = {
+  const emitter = new EventEmitter<HostPointerEvents>();
+  const events: HostPointerEvents = {
     onPointerDown: (event) => emitter.emit("onPointerDown", event),
     onPointerMove: (event) => emitter.emit("onPointerMove", event),
     onPointerUp: (event) => emitter.emit("onPointerUp", event),
     onPointerCancel: (event) => emitter.emit("onPointerCancel", event),
   };
   const addEventListener = (
-    name: keyof FingerPointerEvents,
+    name: keyof HostPointerEvents,
     listener: FingerEventListener<FingerEvent>
   ) => emitter.addListener(name, listener);
   const removeEventListener = (
-    name: keyof FingerPointerEvents,
+    name: keyof HostPointerEvents,
     listener: FingerEventListener<FingerEvent>
   ) => emitter.removeListener(name, listener);
   return [events, { addEventListener, removeEventListener }];
 }
 
 export type FingerProxyBoundaryProps = {
-  children: (target: FingerPointerEvents) => ReactNode;
+  children: (target: HostPointerEvents) => ReactNode;
 };
 
 /**

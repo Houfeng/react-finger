@@ -3,17 +3,13 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerPointerEvent, FingerPointerEvents } from "./FingerPointerEvents";
-
+import { HostPointerEvent } from "./FingerHostEvents";
 import { toFingerEventWrapper } from "./FingerEventWrapper";
-
-export type FingerMixEvents<T extends Element = Element> = FingerEvents<T> &
-  FingerPointerEvents<T>;
 
 export type FingerEvent<
   T extends Element = Element,
   D extends object = Record<string, any>
-> = FingerPointerEvent<T> & {
+> = HostPointerEvent<T> & {
   finger: keyof FingerEvents;
   detail?: D;
 } & D;
@@ -35,6 +31,10 @@ export type FingerEvents<
   T extends Element = Element,
   D extends object = Record<string, any>
 > = {
+  onPointerDown: FingerEventListener<FingerEvent<T, D>>;
+  onPointerMove: FingerEventListener<FingerEvent<T, D>>;
+  onPointerUp: FingerEventListener<FingerEvent<T, D>>;
+  onPointerCancel: FingerEventListener<FingerEvent<T, D>>;
   onTap: FingerEventListener<FingerEvent<T, D>>;
   onTapHold: FingerEventListener<FingerEvent<T>>;
   onDoubleTap: FingerEventListener<FingerEvent<T>>;
@@ -54,7 +54,7 @@ export function FingerEvent<
   G extends keyof FingerEvents<T, D>
 >(
   finger: G,
-  pointerEvent: FingerPointerEvent,
+  pointerEvent: HostPointerEvent,
   detail?: Parameters<FingerEvents<T, D>[G]>[0]["detail"]
 ): FingerEvent<T, Parameters<FingerEvents<T, D>[G]>[0]["detail"]> {
   pointerEvent.persist?.();
