@@ -38,18 +38,10 @@ export type FingerEvents<
   T extends Element = Element,
   D extends object = Record<string, any>
 > = {
-  onFingerPointerDown: FingerEventListener<
-    FingerEvent<T, FingerPointerEventDetail>
-  >;
-  onFingerPointerMove: FingerEventListener<
-    FingerEvent<T, FingerPointerEventDetail>
-  >;
-  onFingerPointerUp: FingerEventListener<
-    FingerEvent<T, FingerPointerEventDetail>
-  >;
-  onFingerPointerCancel: FingerEventListener<
-    FingerEvent<T, FingerPointerEventDetail>
-  >;
+  onFingerDown: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
+  onFingerMove: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
+  onFingerUp: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
+  onFingerCancel: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
   onTap: FingerEventListener<FingerEvent<T, D>>;
   onTapHold: FingerEventListener<FingerEvent<T>>;
   onDoubleTap: FingerEventListener<FingerEvent<T>>;

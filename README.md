@@ -13,10 +13,21 @@ npm install react-finger --save
 
 # Events
 
+**Host Events**
+
 - **onPointerDown**: Press the mouse or touch point
 - **onPointerMove**: Moves the mouse or touch point
 - **onPointerUp**: Bounce the mouse or touch point
 - **onPointerCancel**: Cancels the mouse or touch point
+
+**Basic Events**
+
+- **onFingerDown**: Press the mouse or touch point
+- **onFingerMove**: Press & Moves the mouse or touch point
+- **onFingerUp**: Bounce the mouse or touch point
+- **onFingerCancel**: Cancels the mouse or touch point
+
+**Gesture Events**
 - **onTap**: Quickly tap the mouse or touch point
 - **onTapHold**: Hold for more than 600ms
 - **onDoubleTap**: Quick tap twice (within 300ms)
