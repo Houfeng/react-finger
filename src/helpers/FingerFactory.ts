@@ -3,8 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvents } from "../core/FingerEvents";
-import { composeFingerEvents } from "../core/FingerCompose";
+import { FingerMixEvents, composeFingerEvents } from "../core/FingerCompose";
 
 /**
  * 通过「方法」创建可用于 Element 的 Finger Events，通常用类组件中，
@@ -15,7 +14,7 @@ import { composeFingerEvents } from "../core/FingerCompose";
  * @returns 合成后的 PointerEvents，需要直接解构到一个元素的 props 上
  */
 export function createFingerEvents<T extends Element = Element>(
-  events: Partial<FingerEvents<T>>
+  events: Partial<FingerMixEvents<T>>
 ) {
   return composeFingerEvents(events);
 }

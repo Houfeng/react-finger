@@ -13,8 +13,8 @@ import { FingerContext } from "./FingerContext";
 import { FingerEvents } from "./FingerEvents";
 import { getAllFingerProviders } from "./FingerProviders";
 
-type FingerMixEvents<T extends Element = Element> = HostPointerEvents<T> &
-  FingerEvents<T>;
+export type FingerMixEvents<T extends Element = Element> =
+  HostPointerEvents<T> & FingerEvents<T>;
 
 const providers = getAllFingerProviders();
 

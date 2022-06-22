@@ -3,10 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { FingerMixEvents, composeFingerEvents } from "../core/FingerCompose";
 import { useLayoutEffect, useMemo } from "react";
-
-import { FingerEvents } from "../core/FingerEvents";
-import { composeFingerEvents } from "../core/FingerCompose";
 
 /**
  * 通过 Hook 创建可用于 Element 的 Finger Events
@@ -16,9 +14,9 @@ import { composeFingerEvents } from "../core/FingerCompose";
  * @returns 合成后的 Pointer Events，需要直接解构到一个元素的 props 上
  */
 export function useFingerEvents<T extends Element = Element>(
-  events: Partial<FingerEvents<T>>
+  events: Partial<FingerMixEvents<T>>
 ) {
-  const eventsRef = useMemo<Partial<FingerEvents<T>>>(() => ({}), []);
+  const eventsRef = useMemo<Partial<FingerMixEvents<T>>>(() => ({}), []);
   useLayoutEffect(() => {
     if (events) Object.assign(eventsRef, events);
   });

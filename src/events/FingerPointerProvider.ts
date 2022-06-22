@@ -7,21 +7,43 @@ import { FingerEvent } from "../core/FingerEvents";
 import { FingerProvider } from "../core/FingerProviders";
 
 export const FingerPointerProvider: FingerProvider = {
-  handlePointerDown: ({ events, pointer }) => {
-    events.onFingerPointerDown?.(FingerEvent("onFingerPointerDown", pointer));
+  handlePointerDown: ({ events, context, pointer }) => {
+    const { getPointers, getChangedPointers } = context;
+    const pointers = getPointers();
+    const changedPointers = getChangedPointers();
+    const detail = { pointers, changedPointers };
+    events.onFingerPointerDown?.(
+      FingerEvent("onFingerPointerDown", pointer, detail)
+    );
   },
 
-  handlePointerMove: ({ events, pointer }) => {
-    events.onFingerPointerMove?.(FingerEvent("onFingerPointerMove", pointer));
+  handlePointerMove: ({ events, context, pointer }) => {
+    const { getPointers, getChangedPointers } = context;
+    const pointers = getPointers();
+    const changedPointers = getChangedPointers();
+    const detail = { pointers, changedPointers };
+    events.onFingerPointerMove?.(
+      FingerEvent("onFingerPointerMove", pointer, detail)
+    );
   },
 
-  handlePointerUp: ({ events, pointer }) => {
-    events.onFingerPointerUp?.(FingerEvent("onFingerPointerUp", pointer));
+  handlePointerUp: ({ events, context, pointer }) => {
+    const { getPointers, getChangedPointers } = context;
+    const pointers = getPointers();
+    const changedPointers = getChangedPointers();
+    const detail = { pointers, changedPointers };
+    events.onFingerPointerUp?.(
+      FingerEvent("onFingerPointerUp", pointer, detail)
+    );
   },
 
-  handlePointerCancel: ({ events, pointer }) => {
+  handlePointerCancel: ({ events, context, pointer }) => {
+    const { getPointers, getChangedPointers } = context;
+    const pointers = getPointers();
+    const changedPointers = getChangedPointers();
+    const detail = { pointers, changedPointers };
     events.onFingerPointerCancel?.(
-      FingerEvent("onFingerPointerCancel", pointer)
+      FingerEvent("onFingerPointerCancel", pointer, detail)
     );
   },
 };

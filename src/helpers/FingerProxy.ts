@@ -3,11 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import {
-  FingerEvent,
-  FingerEventListener,
-  FingerEvents,
-} from "../core/FingerEvents";
+import { FingerEvent, FingerEventListener } from "../core/FingerEvents";
 import {
   Fragment,
   HTMLAttributes,
@@ -22,6 +18,7 @@ import {
 
 import { AnyFunction } from "../core/FingerUtils";
 import { EventEmitter } from "eify";
+import { FingerMixEvents } from "../core/FingerCompose";
 import { HostPointerEvents } from "../core/FingerHostEvents";
 import { useFingerEvents } from "./FingerHook";
 
@@ -38,7 +35,7 @@ type FingerProxyEventTarget = {
   ) => void;
 };
 
-export type FingerProxyProps = Partial<HostPointerEvents & FingerEvents> & {
+export type FingerProxyProps = Partial<FingerMixEvents> & {
   target?: FingerProxyEventTarget;
 };
 
