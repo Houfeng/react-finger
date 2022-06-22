@@ -29,7 +29,7 @@ export const FingerTapProvider: FingerProvider = {
       holdTimer,
       createEventTimer(() => {
         flags.set(tapCanceled, true);
-        events.onTapHold?.(FingerEvent("onTapHold", pointer));
+        events.onTapHold?.(FingerEvent("onTapHold", context, pointer));
       }, holdDurationThreshold)
     );
   },
@@ -48,7 +48,7 @@ export const FingerTapProvider: FingerProvider = {
     const { flags } = context;
     clearEventTimer(flags.get(holdTimer) as number);
     if (flags.get(tapCanceled)) return;
-    events.onTap?.(FingerEvent("onTap", pointer));
+    events.onTap?.(FingerEvent("onTap", context, pointer));
     const prevTime = (flags.get(dblPrevTime) || 0) as number;
     if (
       !flags.get(dblWaitNext) ||
@@ -59,7 +59,7 @@ export const FingerTapProvider: FingerProvider = {
     } else {
       const prevTime = flags.get(dblPrevTime) as number;
       if (Date.now() - prevTime < dblIntervalThreshold) {
-        events.onDoubleTap?.(FingerEvent("onDoubleTap", pointer));
+        events.onDoubleTap?.(FingerEvent("onDoubleTap", context, pointer));
       }
       flags.set(dblWaitNext, false);
     }

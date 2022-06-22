@@ -20,22 +20,22 @@ let prevEvents: any;
 
 export function App() {
   const [direction, setDirection] = useState('none');
-  const events = useFingerEvents({
+  const events = useFingerEvents({ 
     onPointerDown: event => {
       console.log('onPointerDown', event);
-    },
+    },  
     onTap: event => {
-      console.log('onTap', event);
-    },
-    onTapHold: event => {
+      console.log('onTap', event); 
+    },  
+    onTapHold: event => { 
       console.log('onTapHold', event);
     },
-    onDoubleTap: event => {
-      console.log('onDoubleTap', event);
+    onDoubleTap: event => { 
+      console.log('onDoubleTap', event); 
     },
     onSwipe: event => {
-      setDirection(event.direction);
-    },
+      setDirection(event.direction); 
+    }, 
     onSwipeLeft: event => {
       console.log('onSwipeLeft', event.direction, event);
     }

@@ -3,14 +3,17 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { FingerContext } from "./FingerContext";
 import { HostPointerEvent } from "./FingerHostEvents";
-import { toFingerEventWrapper } from "./FingerEventWrapper";
+import { createEventWrapper } from "./FingerEventWrapper";
 
 export type FingerEvent<
   T extends Element = Element,
   D extends object = Record<string, any>
 > = HostPointerEvent<T> & {
+  originEvent: HostPointerEvent;
   finger: keyof FingerEvents;
+  context: FingerContext;
   detail?: D;
 } & D;
 
@@ -51,14 +54,19 @@ export type FingerEvents<
 export function FingerEvent<
   T extends Element,
   D extends object,
-  G extends keyof FingerEvents<T, D>
+  F extends keyof FingerEvents<T, D>
 >(
-  finger: G,
-  pointerEvent: HostPointerEvent,
-  detail?: Parameters<FingerEvents<T, D>[G]>[0]["detail"]
-): FingerEvent<T, Parameters<FingerEvents<T, D>[G]>[0]["detail"]> {
-  pointerEvent.persist?.();
-  const fingerEvent = toFingerEventWrapper(pointerEvent);
-  Object.assign(fingerEvent, { ...detail, finger, detail });
+  finger: F,
+  context: FingerContext,
+  hostEvent: HostPointerEvent,
+  detail?: Parameters<FingerEvents<T, D>[F]>[0]["detail"]
+): FingerEvent<T, Parameters<FingerEvents<T, D>[F]>[0]["detail"]> {
+  hostEvent.persist?.();
+  const fingerEvent = createEventWrapper<FingerEvent<T>>(hostEvent, {
+    ...detail,
+    finger,
+    context,
+    detail,
+  });
   return fingerEvent;
 }

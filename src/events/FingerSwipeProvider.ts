@@ -61,9 +61,9 @@ export const FingerSwipeProvider: FingerProvider = {
     })();
     if (!direction) return;
     const detail = { direction };
-    events.onSwipe?.(FingerEvent("onSwipe", pointer, detail));
+    events.onSwipe?.(FingerEvent("onSwipe", context, pointer, detail));
     const eventName = swipeDirectionToEventNames[direction];
-    events[eventName]?.(FingerEvent(eventName, pointer, detail));
+    events[eventName]?.(FingerEvent(eventName, context, pointer, detail));
   },
 
   handlePointerCancel: ({ context }) => {

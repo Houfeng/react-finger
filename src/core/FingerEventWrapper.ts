@@ -3,6 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { HostPointerEvent } from "./FingerHostEvents";
 import { clearAllEventTimer } from "./FingerEventTimer";
 import { isFunction } from "./FingerUtils";
 
@@ -48,32 +49,32 @@ const POINTER_EVENT_KEYS = [
   "path",
 ];
 
-function FingerEventWrapper<T = object>(originEvent: T) {
-  this.originEvent = originEvent;
-}
-
-FingerEventWrapper.prototype.stopImmediatePropagation = function () {
-  clearAllEventTimer();
-  this.originEvent?.stopImmediatePropagation?.();
-};
-
-FingerEventWrapper.prototype.stopPropagation = function () {
-  clearAllEventTimer();
-  this.originEvent?.stopPropagation?.();
+const EventWrapperPrototype = {
+  stopImmediatePropagation() {
+    clearAllEventTimer();
+    this.hostEvent?.stopImmediatePropagation?.();
+  },
+  stopPropagation() {
+    clearAllEventTimer();
+    this.hostEvent?.stopPropagation?.();
+  },
 };
 
 POINTER_EVENT_KEYS.forEach((key) => {
-  Object.defineProperty(FingerEventWrapper.prototype, key, {
-    enumerable: false,
-    configurable: true,
+  Object.defineProperty(EventWrapperPrototype, key, {
     get: function () {
-      const value = this.originEvent[key];
-      return isFunction(value) ? value.bind(this.originEvent) : value;
+      const value = this.hostEvent[key];
+      return isFunction(value) ? value.bind(this.hostEvent) : value;
     },
   });
 });
 
-export function toFingerEventWrapper<T = object>(originEvent: T): any {
-  //@ts-ignore
-  return new FingerEventWrapper(originEvent);
+export function createEventWrapper<T extends object>(
+  hostEvent: HostPointerEvent,
+  fields?: Record<string, any>
+): T {
+  const wrapper = fields ? fields : {};
+  Object.setPrototypeOf(wrapper, EventWrapperPrototype);
+  wrapper.hostEvent = hostEvent;
+  return wrapper as T;
 }

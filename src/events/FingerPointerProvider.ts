@@ -7,19 +7,23 @@ import { FingerEvent } from "../core/FingerEvents";
 import { FingerProvider } from "../core/FingerProviders";
 
 export const FingerPointerProvider: FingerProvider = {
-  handlePointerDown: ({ events, pointer }) => {
-    events.onPointerDown(FingerEvent("onPointerDown", pointer));
+  handlePointerDown: ({ events, context, pointer }) => {
+    if (!events.onPointerDown) return;
+    events.onPointerDown(FingerEvent("onPointerDown", context, pointer));
   },
 
-  handlePointerMove: ({ events, pointer }) => {
-    events.onPointerMove(FingerEvent("onPointerMove", pointer));
+  handlePointerMove: ({ events, context, pointer }) => {
+    if (!events.onPointerMove) return;
+    events.onPointerMove(FingerEvent("onPointerMove", context, pointer));
   },
 
-  handlePointerUp: ({ events, pointer }) => {
-    events.onPointerUp(FingerEvent("onPointerUp", pointer));
+  handlePointerUp: ({ events, context, pointer }) => {
+    if (!events.onPointerUp) return;
+    events.onPointerUp(FingerEvent("onPointerUp", context, pointer));
   },
 
-  handlePointerCancel: ({ events, pointer }) => {
-    events.onPointerCancel(FingerEvent("onPointerCancel", pointer));
+  handlePointerCancel: ({ events, context, pointer }) => {
+    if (!events.onPointerCancel) return;
+    events.onPointerCancel(FingerEvent("onPointerCancel", context, pointer));
   },
 };
