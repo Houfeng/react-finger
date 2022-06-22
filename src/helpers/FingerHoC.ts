@@ -60,7 +60,7 @@ type FingerProps<T extends Element = Element> = HTMLAttributes<T> &
  */
 export function Finger<T extends keyof HTMLElementTagNameMap>(type: T) {
   return forwardRef<
-    HTMLAttributes<HTMLElementTagNameMap[T]>,
+    HTMLElementTagNameMap[T],
     FingerProps<HTMLElementTagNameMap[T]>
   >(function FingerComponent(props, ref) {
     const { eventProps, otherProps } = splitProps(props);

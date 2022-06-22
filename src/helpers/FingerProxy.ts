@@ -139,7 +139,7 @@ export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
   type: T
 ) {
   return forwardRef<
-    HTMLAttributes<HTMLElementTagNameMap[T]>,
+    HTMLElementTagNameMap[T],
     FingerProxyContainerProps<HTMLElementTagNameMap[T]>
   >(function FingerProxyContainerComponent(props, ref) {
     return createElement(FingerProxyBoundary, {
