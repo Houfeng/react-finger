@@ -1,7 +1,7 @@
 {
   "name": "react-finger",
-  "version": "1.0.7",
-  "description": "",
+  "version": "1.0.8",
+  "description": "React Finger is a library of gesture events for React that allows developers to use a single set of events for both desktop and mobile devices.",
   "main": "./dist/react-finger-cjs.js",
   "module": "./dist/react-finger-es.js",
   "types": "./types/index.d.ts",
