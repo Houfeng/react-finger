@@ -12,9 +12,7 @@ export const FingerPointerProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerPointerDown?.(
-      FingerEvent("onFingerPointerDown", pointer, detail)
-    );
+    events.onFingerDown?.(FingerEvent("onFingerDown", pointer, detail));
   },
 
   handlePointerMove: ({ events, context, pointer }) => {
@@ -22,9 +20,7 @@ export const FingerPointerProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerPointerMove?.(
-      FingerEvent("onFingerPointerMove", pointer, detail)
-    );
+    events.onFingerMove?.(FingerEvent("onFingerMove", pointer, detail));
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
@@ -32,9 +28,7 @@ export const FingerPointerProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerPointerUp?.(
-      FingerEvent("onFingerPointerUp", pointer, detail)
-    );
+    events.onFingerUp?.(FingerEvent("onFingerUp", pointer, detail));
   },
 
   handlePointerCancel: ({ events, context, pointer }) => {
@@ -42,8 +36,6 @@ export const FingerPointerProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerPointerCancel?.(
-      FingerEvent("onFingerPointerCancel", pointer, detail)
-    );
+    events.onFingerCancel?.(FingerEvent("onFingerCancel", pointer, detail));
   },
 };
