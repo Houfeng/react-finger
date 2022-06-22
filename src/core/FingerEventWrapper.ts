@@ -71,7 +71,7 @@ POINTER_EVENT_KEYS.forEach((key) => {
 
 export function createEventWrapper<T extends object>(
   hostEvent: HostPointerEvent,
-  fields?: Record<string, any>
+  fields?: Record<string, unknown>
 ): T {
   const wrapper = fields ? fields : {};
   Object.setPrototypeOf(wrapper, EventWrapperPrototype);

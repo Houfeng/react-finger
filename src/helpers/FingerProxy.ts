@@ -26,12 +26,12 @@ type FingerProxyEventTarget = {
   addEventListener: (
     name: string,
     listener: AnyFunction,
-    options?: any
+    options?: unknown
   ) => void;
   removeEventListener: (
     name: string,
     listener: AnyFunction,
-    options?: any
+    options?: unknown
   ) => void;
 };
 

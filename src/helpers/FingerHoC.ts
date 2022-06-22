@@ -8,7 +8,7 @@ import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 import { FingerMixEvents } from "../core/FingerCompose";
 import { useFingerEvents } from "./FingerHook";
 
-function splitProps(props: any) {
+function splitProps(props: Record<string, any>) {
   const {
     onTap,
     onTapHold,

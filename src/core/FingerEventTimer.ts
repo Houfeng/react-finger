@@ -3,7 +3,9 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-const eventTimerOwner = new Set<any>();
+type Timer = number | NodeJS.Timeout;
+
+const eventTimerOwner = new Set<Timer>();
 
 export function createEventTimer(fn: () => void, timeout: number) {
   const timer = setTimeout(() => {
@@ -14,8 +16,8 @@ export function createEventTimer(fn: () => void, timeout: number) {
   return timer;
 }
 
-export function clearEventTimer(timer: any) {
-  clearTimeout(timer);
+export function clearEventTimer(timer: Timer) {
+  clearTimeout(timer as number);
   return eventTimerOwner.delete(timer);
 }
 
