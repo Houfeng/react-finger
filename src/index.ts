@@ -12,7 +12,27 @@ import { FingerBasicProvider } from "./events/FingerBasicProvider";
 import { FingerSwipeProvider } from "./events/FingerSwipeProvider";
 import { FingerTapProvider } from "./events/FingerTapProvider";
 
-export { type FingerEvent } from "./core/FingerEvents";
+export {
+  type HostPointerEvent,
+  type HostPointerEventLike,
+  type HostPointerEventListener,
+  type HostPointerEvents,
+} from "./core/FingerHostEvents";
+
+export {
+  type FingerEvent,
+  type FingerEvents,
+  type FingerEventListener,
+  type FingerBasicEvent,
+  type FingerSwipeEvent,
+  type FingerPinchEvent,
+} from "./core/FingerEvents";
+
+export {
+  type FingerMixEvents,
+  composeFingerEvents,
+} from "./core/FingerCompose";
+
 export { FingerOptions } from "./core/FingerOptions";
 
 export { createFingerEvents } from "./helpers/FingerFactory";
