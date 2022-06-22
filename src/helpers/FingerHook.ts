@@ -3,10 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { FingerMixEvents, composeFingerEvents } from "../core/FingerCompose";
 import { useLayoutEffect, useMemo } from "react";
-
-import { FingerMixEvents } from "../core/FingerEvents";
-import { composeFingerEvents } from "../core/FingerCompose";
 
 /**
  * 通过 Hook 创建可用于 Element 的 Finger Events

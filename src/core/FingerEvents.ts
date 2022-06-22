@@ -3,18 +3,16 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerPointerEvent, FingerPointerEvents } from "./FingerPointerEvents";
-
-import { toFingerEventWrapper } from "./FingerEventWrapper";
-
-export type FingerMixEvents<T extends Element = Element> = FingerEvents<T> &
-  FingerPointerEvents<T>;
+import { FingerPointer } from "./FingerContext";
+import { HostPointerEvent } from "./FingerHostEvents";
+import { createEventWrapper } from "./FingerEventWrapper";
 
 export type FingerEvent<
   T extends Element = Element,
   D extends object = Record<string, any>
-> = FingerPointerEvent<T> & {
-  finger: keyof FingerEvents;
+> = HostPointerEvent<T> & {
+  hostEvent: HostPointerEvent;
+  fingerType: keyof FingerEvents;
   detail?: D;
 } & D;
 
@@ -31,10 +29,27 @@ export type FingerPinchEventDetail = {
   rotate: number;
 };
 
+export type FingerPointerEventDetail = {
+  pointers: FingerPointer[];
+  changedPointers: FingerPointer[];
+};
+
 export type FingerEvents<
   T extends Element = Element,
   D extends object = Record<string, any>
 > = {
+  onFingerPointerDown: FingerEventListener<
+    FingerEvent<T, FingerPointerEventDetail>
+  >;
+  onFingerPointerMove: FingerEventListener<
+    FingerEvent<T, FingerPointerEventDetail>
+  >;
+  onFingerPointerUp: FingerEventListener<
+    FingerEvent<T, FingerPointerEventDetail>
+  >;
+  onFingerPointerCancel: FingerEventListener<
+    FingerEvent<T, FingerPointerEventDetail>
+  >;
   onTap: FingerEventListener<FingerEvent<T, D>>;
   onTapHold: FingerEventListener<FingerEvent<T>>;
   onDoubleTap: FingerEventListener<FingerEvent<T>>;
@@ -51,14 +66,17 @@ export type FingerEvents<
 export function FingerEvent<
   T extends Element,
   D extends object,
-  G extends keyof FingerEvents<T, D>
+  F extends keyof FingerEvents<T, D>
 >(
-  finger: G,
-  pointerEvent: FingerPointerEvent,
-  detail?: Parameters<FingerEvents<T, D>[G]>[0]["detail"]
-): FingerEvent<T, Parameters<FingerEvents<T, D>[G]>[0]["detail"]> {
-  pointerEvent.persist?.();
-  const fingerEvent = toFingerEventWrapper(pointerEvent);
-  Object.assign(fingerEvent, { ...detail, finger, detail });
+  fingerType: F,
+  hostEvent: HostPointerEvent,
+  detail?: Parameters<FingerEvents<T, D>[F]>[0]["detail"]
+): FingerEvent<T, Parameters<FingerEvents<T, D>[F]>[0]["detail"]> {
+  hostEvent.persist?.();
+  const fingerEvent = createEventWrapper<any>(hostEvent, {
+    ...detail,
+    fingerType,
+    detail,
+  });
   return fingerEvent;
 }

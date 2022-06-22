@@ -5,7 +5,7 @@
 
 import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
-import { FingerEvents } from "../core/FingerEvents";
+import { FingerMixEvents } from "../core/FingerCompose";
 import { useFingerEvents } from "./FingerHook";
 
 function splitProps(props: any) {
@@ -48,7 +48,7 @@ function splitProps(props: any) {
 }
 
 type FingerProps<T extends Element = Element> = HTMLAttributes<T> &
-  Partial<FingerEvents<T>> & {
+  Partial<FingerMixEvents<T>> & {
     children: ReactNode;
   };
 
@@ -60,7 +60,7 @@ type FingerProps<T extends Element = Element> = HTMLAttributes<T> &
  */
 export function Finger<T extends keyof HTMLElementTagNameMap>(type: T) {
   return forwardRef<
-    HTMLAttributes<HTMLElementTagNameMap[T]>,
+    HTMLElementTagNameMap[T],
     FingerProps<HTMLElementTagNameMap[T]>
   >(function FingerComponent(props, ref) {
     const { eventProps, otherProps } = splitProps(props);

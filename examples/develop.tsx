@@ -1,5 +1,5 @@
 import { Finger, FingerProxy, FingerProxyContainer, useFingerEvents } from '../src';
-import React, { CSSProperties, useState } from "react"
+import React, { CSSProperties, createRef, useState } from "react"
 
 import { createRoot } from "react-dom/client";
 
@@ -40,6 +40,7 @@ export function App() {
       console.log('onSwipeLeft', event.direction, event);
     }
   });
+  const domRef = createRef<HTMLDivElement>();
   if (!prevEvents) prevEvents = events;
   return (
     <FingerBoxWrapper className='box' style={boxStyle} >
@@ -49,6 +50,7 @@ export function App() {
       </button>
       {direction}
       <FingerDiv
+        ref={domRef}
         onTap={event => { event.stopPropagation() }}
         onSwipe={event => {
           event.stopPropagation();
