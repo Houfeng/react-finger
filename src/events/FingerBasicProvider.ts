@@ -6,7 +6,7 @@
 import { FingerEvent } from "../core/FingerEvents";
 import { FingerProvider } from "../core/FingerProviders";
 
-export const FingerPointerProvider: FingerProvider = {
+export const FingerBasicProvider: FingerProvider = {
   handlePointerDown: ({ events, context, pointer }) => {
     const { getPointers, getChangedPointers } = context;
     const pointers = getPointers();

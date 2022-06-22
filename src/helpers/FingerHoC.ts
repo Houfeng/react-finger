@@ -49,7 +49,7 @@ function splitProps(props: any) {
 
 type FingerProps<T extends Element = Element> = HTMLAttributes<T> &
   Partial<FingerMixEvents<T>> & {
-    children: ReactNode;
+    children?: ReactNode;
   };
 
 /**

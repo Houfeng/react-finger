@@ -127,7 +127,7 @@ export function FingerProxyBoundary(props: FingerProxyBoundaryProps) {
 }
 
 export type FingerProxyContainerProps<T extends Element = Element> =
-  HTMLAttributes<T> & { children: ReactNode };
+  HTMLAttributes<T> & { children?: ReactNode };
 
 /**
  * 将一个原生 HTML 标签，转换为具备 FingerProxyBoundary 能力的高阶容器组件

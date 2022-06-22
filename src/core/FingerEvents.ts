@@ -9,7 +9,7 @@ import { createEventWrapper } from "./FingerEventWrapper";
 
 export type FingerEvent<
   T extends Element = Element,
-  D extends object = Record<string, any>
+  D extends object = {}
 > = HostPointerEvent<T> & {
   hostEvent: HostPointerEvent;
   fingerType: keyof FingerEvents;
@@ -29,19 +29,16 @@ export type FingerPinchEventDetail = {
   rotate: number;
 };
 
-export type FingerPointerEventDetail = {
+export type FingerBasicEventDetail = {
   pointers: FingerPointer[];
   changedPointers: FingerPointer[];
 };
 
-export type FingerEvents<
-  T extends Element = Element,
-  D extends object = Record<string, any>
-> = {
-  onFingerDown: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
-  onFingerMove: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
-  onFingerUp: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
-  onFingerCancel: FingerEventListener<FingerEvent<T, FingerPointerEventDetail>>;
+export type FingerEvents<T extends Element = Element, D extends object = {}> = {
+  onFingerDown: FingerEventListener<FingerEvent<T, FingerBasicEventDetail>>;
+  onFingerMove: FingerEventListener<FingerEvent<T, FingerBasicEventDetail>>;
+  onFingerUp: FingerEventListener<FingerEvent<T, FingerBasicEventDetail>>;
+  onFingerCancel: FingerEventListener<FingerEvent<T, FingerBasicEventDetail>>;
   onTap: FingerEventListener<FingerEvent<T, D>>;
   onTapHold: FingerEventListener<FingerEvent<T>>;
   onDoubleTap: FingerEventListener<FingerEvent<T>>;
