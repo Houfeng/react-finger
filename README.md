@@ -30,9 +30,9 @@ npm install react-finger --save
 - **onSwipeRight**: Swipe right
 - **onSwipeDown**: Swipes down
 - **onSwipeLeft**: Swipe left
-- **onPinchStart**: Multi-finger gesture start (currently supports two-finger pinch)
-- **onPinch**: Multi-finger gesture update (currently supports two-finger pinch)
-- **onPinchEnd**: Multi-finger gesture end (current weight supports two-finger pinch)
+- **onPinchStart**: Multi-finger gesture start (supports two-finger scale/move/rotate)
+- **onPinch**: Multi-finger gesture update (supports two-finger scale/move/rotate)
+- **onPinchEnd**: Multi-finger gesture end (supports two-finger scale/move/rotate)
 
 # Usage
 
