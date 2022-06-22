@@ -1,4 +1,5 @@
-<h1 align="center" style="padding-top: 30px;">
+<h1 align="center">
+  <br/>
   <img src="https://houfeng.net/react-finger/logo.png" alt="React Finger">
 </h1>
 
