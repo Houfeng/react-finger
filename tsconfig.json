@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/es",
+    "outDir": "./dist/",
     "declarationDir": "./types/",
     "sourceMap": false,
     "allowJs": false,
@@ -11,7 +11,7 @@
     "removeComments": true,
     "jsx": "react",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "emitDecoratorMetadata": false,
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -21,7 +21,7 @@
     "skipDefaultLibCheck": true,
     "lib": [
       "dom",
-      "es2017"
+      "ES2022"
     ]
   },
   "include": [
