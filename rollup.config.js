@@ -39,7 +39,7 @@ const createConf = ({
         name: toCamelCase(name, 1)
       }
     ],
-    external: ['react', 'react-dom'],
+    external: Object.keys(externals),
     plugins: [
       resolve(),
       min && terser(),
