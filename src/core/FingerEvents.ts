@@ -63,11 +63,7 @@ export type FingerEvents<T extends Element = Element> = {
   onPinchEnd: FingerEventListener<FingerPinchEvent<T>>;
 };
 
-export function FingerEvent<
-  T extends Element,
-  D extends object,
-  F extends keyof FingerEvents<T>
->(
+export function FingerEvent<T extends Element, F extends keyof FingerEvents<T>>(
   fingerType: F,
   hostEvent: HostPointerEvent,
   detail?: Parameters<FingerEvents<T>[F]>[0]["detail"]

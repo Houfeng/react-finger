@@ -21,6 +21,10 @@
     "@typescript-eslint/no-empty-function": 0,
     "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/ban-types": 0,
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ]
   }
 }

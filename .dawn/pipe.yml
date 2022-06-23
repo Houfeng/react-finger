@@ -31,7 +31,7 @@ build:
 test:
   - name: shell
     script:
-      - eslint --fix ./src/**/*.ts
+      - eslint ./src/**/*.ts --fix
   - name: unit
     env: browser_typescript
     extension: .ts
