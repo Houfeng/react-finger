@@ -108,11 +108,11 @@ function createPointerCancelListener(
 }
 
 /**
- * 将一组手手势事件转换为可直接用 element 的 Pointer Events
+ * 将一组手手势事件转换为可直接用 element 的 pointer events
  * 注意：上层应用通常不要直接使用此 API
  * @internal
  * @param events events 要绑定的手势事件 map
- * @returns 合成后的 Pointer Events
+ * @returns 合成后的 pointer events
  */
 export function composeFingerEvents<T extends Element = Element>(
   events: Partial<FingerMixEvents<T>>

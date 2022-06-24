@@ -6,12 +6,12 @@
 import { FingerMixEvents, composeFingerEvents } from "../core/FingerCompose";
 
 /**
- * 通过「方法」创建可用于 Element 的 Finger Events，通常用类组件中，
- * 在构建函数或 class fields 中创建，然后在 render 中使用
- * 注意：不能 render 中即时创建，每次都是一个新的 events 将导致不必要的渲染或 Bug
+ * 通过「方法」创建可用于 element 的 events，通常用于类组件，
+ * 在「构造函数」或 class fields 中创建，然后在 render 中元素上使用
+ * 注意：不能在 render 中即时创建，如果都是一个新的 events 将导致不必要的渲染或造成 Bug
  *
  * @param events 要绑定的手势事件 map
- * @returns 合成后的 PointerEvents，需要直接解构到一个元素的 props 上
+ * @returns 合成后的 pointer events，需要直接解构到一个元素的 props 上
  */
 export function createFingerEvents<T extends Element = Element>(
   events: Partial<FingerMixEvents<T>>
