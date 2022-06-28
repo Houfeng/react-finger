@@ -11,6 +11,7 @@ import {
   createContext,
   createElement,
   forwardRef,
+  memo,
   useContext,
   useLayoutEffect,
   useMemo,
@@ -37,6 +38,7 @@ type FingerProxyEventTarget = {
 
 export type FingerProxyProps = Partial<FingerMixEvents> & {
   target?: FingerProxyEventTarget;
+  passive?: boolean;
 };
 
 function toNativeEventName(name: string) {
@@ -59,16 +61,20 @@ const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
  * @param props 属性
  * @returns JSX.Element
  */
-export function FingerProxy(props: FingerProxyProps) {
+export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   const contextTarget = useContext(FingerProxyContext);
-  const { target = contextTarget || document, ...others } = props;
+  const {
+    target = contextTarget || document,
+    passive = true,
+    ...others
+  } = props;
   const events = useFingerEvents(others);
   const isProxyBoundary = !!contextTarget;
   useLayoutEffect(() => {
     const eventEntries = Object.entries<AnyFunction>(events);
     eventEntries.forEach(([name, listener]) => {
       name = isProxyBoundary ? name : toNativeEventName(name);
-      target.addEventListener(name, listener);
+      target.addEventListener(name, listener, { passive });
     }, false);
     return () => {
       eventEntries.forEach(([name, listener]) => {
@@ -78,7 +84,7 @@ export function FingerProxy(props: FingerProxyProps) {
     };
   }, Object.values(props));
   return createElement(Fragment);
-}
+});
 
 /**
  * FingerProxyBoundaryEventTarget
@@ -117,14 +123,16 @@ export type FingerProxyBoundaryProps = {
  * @param props 属性
  * @returns JSX.Element
  */
-export function FingerProxyBoundary(props: FingerProxyBoundaryProps) {
+export const FingerProxyBoundary = memo(function FingerProxyBoundary(
+  props: FingerProxyBoundaryProps
+) {
   const { children } = props;
   const [events, target] = useMemo(() => FingerProxyBoundaryOwner(), []);
   return createElement(FingerProxyContext.Provider, {
     value: target,
     children: children(events),
   });
-}
+});
 
 export type FingerProxyContainerProps<T extends Element = Element> =
   HTMLAttributes<T> & { children?: ReactNode };
