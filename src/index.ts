@@ -21,7 +21,7 @@ export {
   type FingerEvent,
   type FingerEvents,
   type FingerEventListener,
-  type FingerPointerEvent as FingerBasicEvent,
+  type FingerPointerEvent,
   type FingerSwipeEvent,
   type FingerPinchEvent,
 } from "./core/FingerEvents";
