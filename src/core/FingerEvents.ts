@@ -18,7 +18,7 @@ export type FingerEvent<
 
 export type FingerEventListener<E extends FingerEvent> = (event: E) => void;
 
-export type FingerBasicEvent<T extends Element = Element> = FingerEvent<
+export type FingerPointerEvent<T extends Element = Element> = FingerEvent<
   T,
   {
     pointers: FingerPointer[];
@@ -46,10 +46,10 @@ export type FingerPinchEvent<T extends Element = Element> = FingerEvent<
 export type FingerTapEvent<T extends Element = Element> = FingerEvent<T, {}>;
 
 export type FingerEvents<T extends Element = Element> = {
-  onFingerDown: FingerEventListener<FingerBasicEvent<T>>;
-  onFingerMove: FingerEventListener<FingerBasicEvent<T>>;
-  onFingerUp: FingerEventListener<FingerBasicEvent<T>>;
-  onFingerCancel: FingerEventListener<FingerBasicEvent<T>>;
+  onFingerDown: FingerEventListener<FingerPointerEvent<T>>;
+  onFingerMove: FingerEventListener<FingerPointerEvent<T>>;
+  onFingerUp: FingerEventListener<FingerPointerEvent<T>>;
+  onFingerCancel: FingerEventListener<FingerPointerEvent<T>>;
   onTap: FingerEventListener<FingerTapEvent<T>>;
   onTapHold: FingerEventListener<FingerTapEvent<T>>;
   onDoubleTap: FingerEventListener<FingerTapEvent<T>>;

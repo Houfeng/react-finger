@@ -3,8 +3,6 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import "pepjs";
-
 import { registerFingerProvider } from "./core/FingerProviders";
 
 import { FingerPinchProvider } from "./events/FingerPinchProvider";
@@ -23,7 +21,7 @@ export {
   type FingerEvent,
   type FingerEvents,
   type FingerEventListener,
-  type FingerBasicEvent,
+  type FingerPointerEvent as FingerBasicEvent,
   type FingerSwipeEvent,
   type FingerPinchEvent,
 } from "./core/FingerEvents";
