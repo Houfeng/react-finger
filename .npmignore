@@ -10,7 +10,12 @@ test/
 examples/
 tslint.json
 tsconfig.json
+tsconfig.dev.json
 .eslintrc.yml
 server.yml
 .dawn/
 *.js.map
+rollup.config.dev.js
+rollup.config.js
+.vscode/
+docs/
