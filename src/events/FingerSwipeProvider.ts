@@ -11,12 +11,14 @@ const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = FingerOptions;
 const canceled = Symbol("swipeCanceled");
 const startTime = Symbol("swipeStartTime");
 
-const swipeDirectionToEventNames: {
-  down: "onSwipeDown";
-  up: "onSwipeUp";
-  right: "onSwipeRight";
-  left: "onSwipeLeft";
-} = {
+type SwipeDirection = "up" | "down" | "left" | "right";
+type SwipeEventNames =
+  | "onSwipeUp"
+  | "onSwipeDown"
+  | "onSwipeLeft"
+  | "onSwipeRight";
+
+const swipeDirectionToEventNames: Record<SwipeDirection, SwipeEventNames> = {
   down: "onSwipeDown",
   up: "onSwipeUp",
   right: "onSwipeRight",
@@ -46,7 +48,7 @@ export const FingerSwipeProvider: FingerProvider = {
     const end = getChangedPointers()[0];
     const distX = end?.clientX - start?.clientX;
     const distY = end?.clientY - start?.clientY;
-    const direction = ((): "down" | "up" | "right" | "left" => {
+    const direction = ((): SwipeDirection => {
       if (
         Math.abs(distX) > Math.abs(distY) &&
         Math.abs(distX) > swipeMinDistanceThreshold

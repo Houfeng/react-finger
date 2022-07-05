@@ -12,6 +12,7 @@ import { isFunction } from "./FingerUtils";
  * 以上两个需要清理 timer ，所以不列在此处
  */
 const POINTER_EVENT_KEYS = [
+  "nativeEvent",
   "pointerId",
   "width",
   "height",
