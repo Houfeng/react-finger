@@ -8,7 +8,6 @@ import {
   Fragment,
   HTMLAttributes,
   ReactNode,
-  RefObject,
   createContext,
   createElement,
   forwardRef,
@@ -37,21 +36,13 @@ type FingerProxyEventTarget = {
   ) => void;
 };
 
-type WheelEvents = {
-  onWheel: (event: React.WheelEvent | WheelEvent) => void;
-};
-
-export type FingerProxyProps = Partial<FingerMixEvents & WheelEvents> & {
-  target?: FingerProxyEventTarget | RefObject<FingerProxyEventTarget>;
+export type FingerProxyProps = Partial<FingerMixEvents> & {
+  target?: FingerProxyEventTarget;
   passive?: boolean;
 };
 
 function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
-}
-
-function isEventTarget(value: any): value is FingerProxyEventTarget {
-  return "addEventListener" in value;
 }
 
 const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
@@ -75,23 +66,20 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   const {
     target = contextTarget || (document as FingerProxyEventTarget),
     passive = true,
-    onWheel,
     ...others
   } = props;
   const events = useFingerEvents(others);
   useLayoutEffect(() => {
     const isProxyBoundary = !!contextTarget;
-    const computedTarget = isEventTarget(target) ? target : target.current;
     const eventEntries = Object.entries<AnyFunction>(events);
-    if (onWheel) eventEntries.push(["onWheel", onWheel]);
     eventEntries.forEach(([name, listener]) => {
       name = isProxyBoundary ? name : toNativeEventName(name);
-      computedTarget.addEventListener(name, listener, { passive });
+      target.addEventListener(name, listener, { passive });
     }, false);
     return () => {
       eventEntries.forEach(([name, listener]) => {
         name = isProxyBoundary ? name : toNativeEventName(name);
-        computedTarget.removeEventListener(name, listener);
+        target.removeEventListener(name, listener);
       }, false);
     };
   }, Object.values(props));
@@ -106,13 +94,12 @@ function FingerProxyBoundaryOwner(): [
   HostPointerEvents,
   FingerProxyEventTarget
 ] {
-  const emitter = new EventEmitter<HostPointerEvents & WheelEvents>();
-  const events: HostPointerEvents & WheelEvents = {
+  const emitter = new EventEmitter<HostPointerEvents>();
+  const events: HostPointerEvents = {
     onPointerDown: (event) => emitter.emit("onPointerDown", event),
     onPointerMove: (event) => emitter.emit("onPointerMove", event),
     onPointerUp: (event) => emitter.emit("onPointerUp", event),
     onPointerCancel: (event) => emitter.emit("onPointerCancel", event),
-    onWheel: (event) => emitter.emit("onWheel", event),
   };
   const addEventListener = (
     name: keyof HostPointerEvents,
