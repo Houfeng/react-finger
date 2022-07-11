@@ -47,22 +47,22 @@ export const FingerPinchProvider: FingerProvider = {
     events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },
 
-  handlePointerUp: ({ events, context, pointer }) => {
+  handlePointerWillUp: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
-    if (!flags.get(pinch) && !flags.get(pinchEnded)) {
+    if (flags.get(pinch) && !flags.get(pinchEnded)) {
       const detail = flags.get(pinchDetail) as FingerPinchEvent["detail"];
-      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
+      events.onPinchEnd?.(FingerEvent("onPinchEnd", pointer, detail));
       flags.set(pinchEnded, true);
     }
   },
 
-  handlePointerCancel: ({ events, context, pointer }) => {
+  handlePointerWillCancel: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
-    if (!flags.get(pinch) && !flags.get(pinchEnded)) {
+    if (flags.get(pinch) && !flags.get(pinchEnded)) {
       const detail = flags.get(pinchDetail) as FingerPinchEvent["detail"];
-      events?.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
+      events?.onPinchEnd?.(FingerEvent("onPinchEnd", pointer, detail));
       flags.set(pinchEnded, true);
     }
   },

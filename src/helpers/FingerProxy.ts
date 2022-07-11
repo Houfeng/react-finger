@@ -47,6 +47,10 @@ function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
 }
 
+function isEventTarget(value: any): value is FingerProxyEventTarget {
+  return "addEventListener" in value;
+}
+
 const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
 
 /**
@@ -72,11 +76,10 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
     ...others
   } = props;
   const events = useFingerEvents(others);
-  const isProxyBoundary = !!contextTarget;
-  const computedTarget = "addEventListener" in target ? target : target.current;
   useLayoutEffect(() => {
-    const eventEntries = Object.entries<AnyFunction>(events);
-    eventEntries.push(["onWheel", onWheel]);
+    const isProxyBoundary = !!contextTarget;
+    const computedTarget = isEventTarget(target) ? target : target.current;
+    const eventEntries = Object.entries<AnyFunction>({ ...events, onWheel });
     eventEntries.forEach(([name, listener]) => {
       name = isProxyBoundary ? name : toNativeEventName(name);
       computedTarget.addEventListener(name, listener, { passive });
