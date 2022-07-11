@@ -8,6 +8,7 @@ import {
   Fragment,
   HTMLAttributes,
   ReactNode,
+  RefObject,
   createContext,
   createElement,
   forwardRef,
@@ -37,7 +38,7 @@ type FingerProxyEventTarget = {
 };
 
 export type FingerProxyProps = Partial<FingerMixEvents> & {
-  target?: FingerProxyEventTarget;
+  target?: FingerProxyEventTarget | RefObject<FingerProxyEventTarget>;
   passive?: boolean;
 };
 
@@ -64,22 +65,23 @@ const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
 export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   const contextTarget = useContext(FingerProxyContext);
   const {
-    target = contextTarget || document,
+    target = contextTarget || (document as FingerProxyEventTarget),
     passive = true,
     ...others
   } = props;
   const events = useFingerEvents(others);
   const isProxyBoundary = !!contextTarget;
+  const computedTarget = "addEventListener" in target ? target : target.current;
   useLayoutEffect(() => {
     const eventEntries = Object.entries<AnyFunction>(events);
     eventEntries.forEach(([name, listener]) => {
       name = isProxyBoundary ? name : toNativeEventName(name);
-      target.addEventListener(name, listener, { passive });
+      computedTarget.addEventListener(name, listener, { passive });
     }, false);
     return () => {
       eventEntries.forEach(([name, listener]) => {
         name = isProxyBoundary ? name : toNativeEventName(name);
-        target.removeEventListener(name, listener);
+        computedTarget.removeEventListener(name, listener);
       }, false);
     };
   }, Object.values(props));
