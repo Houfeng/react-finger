@@ -37,8 +37,11 @@ type FingerProxyEventTarget = {
   ) => void;
 };
 
-export type FingerProxyProps = Partial<FingerMixEvents> & {
-  onWheel?: (event: React.WheelEvent | WheelEvent) => void;
+type WheelEvents = {
+  onWheel: (event: React.WheelEvent | WheelEvent) => void;
+};
+
+export type FingerProxyProps = Partial<FingerMixEvents & WheelEvents> & {
   target?: FingerProxyEventTarget | RefObject<FingerProxyEventTarget>;
   passive?: boolean;
 };
@@ -102,12 +105,13 @@ function FingerProxyBoundaryOwner(): [
   HostPointerEvents,
   FingerProxyEventTarget
 ] {
-  const emitter = new EventEmitter<HostPointerEvents>();
-  const events: HostPointerEvents = {
+  const emitter = new EventEmitter<HostPointerEvents & WheelEvents>();
+  const events: HostPointerEvents & WheelEvents = {
     onPointerDown: (event) => emitter.emit("onPointerDown", event),
     onPointerMove: (event) => emitter.emit("onPointerMove", event),
     onPointerUp: (event) => emitter.emit("onPointerUp", event),
     onPointerCancel: (event) => emitter.emit("onPointerCancel", event),
+    onWheel: (event) => emitter.emit("onWheel", event),
   };
   const addEventListener = (
     name: keyof HostPointerEvents,
