@@ -82,7 +82,8 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   useLayoutEffect(() => {
     const isProxyBoundary = !!contextTarget;
     const computedTarget = isEventTarget(target) ? target : target.current;
-    const eventEntries = Object.entries<AnyFunction>({ ...events, onWheel });
+    const eventEntries = Object.entries<AnyFunction>(events);
+    if (onWheel) eventEntries.push(["onWheel", onWheel]);
     eventEntries.forEach(([name, listener]) => {
       name = isProxyBoundary ? name : toNativeEventName(name);
       computedTarget.addEventListener(name, listener, { passive });
