@@ -38,6 +38,7 @@ type FingerProxyEventTarget = {
 };
 
 export type FingerProxyProps = Partial<FingerMixEvents> & {
+  onWheel?: (event: React.WheelEvent | WheelEvent) => void;
   target?: FingerProxyEventTarget | RefObject<FingerProxyEventTarget>;
   passive?: boolean;
 };
@@ -67,6 +68,7 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   const {
     target = contextTarget || (document as FingerProxyEventTarget),
     passive = true,
+    onWheel,
     ...others
   } = props;
   const events = useFingerEvents(others);
@@ -74,6 +76,7 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   const computedTarget = "addEventListener" in target ? target : target.current;
   useLayoutEffect(() => {
     const eventEntries = Object.entries<AnyFunction>(events);
+    eventEntries.push(["onWheel", onWheel]);
     eventEntries.forEach(([name, listener]) => {
       name = isProxyBoundary ? name : toNativeEventName(name);
       computedTarget.addEventListener(name, listener, { passive });
