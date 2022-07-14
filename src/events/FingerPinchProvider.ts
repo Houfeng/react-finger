@@ -15,10 +15,19 @@ const pinchDetail = Symbol("pinchDetail");
 
 export const FingerPinchProvider: FingerProvider = {
   handlePointerDown: ({ events, context, pointer }) => {
-    const { flags, getPointers } = context;
-    flags.set(pinch, getPointers().length > 1);
+    const { flags, getPointers, getChangedPointers } = context;
+    const pointers = getPointers();
+    const changedPointers = getChangedPointers();
+    flags.set(pinch, pointers.length > 1);
     if (flags.get(pinch) && !flags.get(pinchStarted)) {
-      const detail = { scale: 1, rotate: 0, moveX: 0, moveY: 0 };
+      const detail = {
+        pointers,
+        changedPointers,
+        scale: 1,
+        rotate: 0,
+        moveX: 0,
+        moveY: 0,
+      };
       flags.set(pinchDetail, detail);
       events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
       flags.set(pinchStarted, true);
@@ -30,9 +39,9 @@ export const FingerPinchProvider: FingerProvider = {
   handlePointerMove: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
+    const changedPointers = getChangedPointers();
     flags.set(pinch, pointers.length > 1);
     if (!flags.get(pinch)) return;
-    const changedPointers = getChangedPointers();
     const originDist = calcDistance(pointers[0], pointers[1]);
     const latestDist = calcDistance(changedPointers[0], changedPointers[1]);
     const scale = latestDist / originDist;
@@ -43,7 +52,7 @@ export const FingerPinchProvider: FingerProvider = {
     const originRotate = calcRotate(pointers[0], pointers[1]);
     const latestRotate = calcRotate(changedPointers[0], changedPointers[1]);
     const rotate = latestRotate - originRotate;
-    const detail = { scale, moveX, moveY, rotate };
+    const detail = { pointers, changedPointers, scale, moveX, moveY, rotate };
     flags.set(pinchDetail, detail);
     events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },

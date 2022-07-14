@@ -38,14 +38,13 @@ export const FingerSwipeProvider: FingerProvider = {
 
   handlePointerWillUp: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
-    if (
-      flags.get(canceled) ||
-      Date.now() - (flags.get(startTime) as number) > swipeMaxDurationThreshold
-    ) {
-      return;
-    }
-    const start = getPointers()[0];
-    const end = getChangedPointers()[0];
+    const invalidTime =
+      Date.now() - (flags.get(startTime) as number) > swipeMaxDurationThreshold;
+    if (flags.get(canceled) || invalidTime) return;
+    const pointers = getPointers();
+    const changedPointers = getChangedPointers();
+    const start = pointers[0];
+    const end = changedPointers[0];
     const distX = end?.clientX - start?.clientX;
     const distY = end?.clientY - start?.clientY;
     const direction = ((): SwipeDirection => {
@@ -62,7 +61,7 @@ export const FingerSwipeProvider: FingerProvider = {
       }
     })();
     if (!direction) return;
-    const detail = { direction };
+    const detail = { pointers, changedPointers, direction };
     events.onSwipe?.(FingerEvent("onSwipe", pointer, detail));
     const eventName = swipeDirectionToEventNames[direction];
     events[eventName]?.(FingerEvent(eventName, pointer, detail));

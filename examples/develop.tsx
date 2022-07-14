@@ -27,7 +27,7 @@ export function App() {
     onTap: event => {
       console.log('onTap', event);
     }, 
-    onTapHold: event => {
+    onTapHold: event => { 
       console.log('onTapHold', event);
     },
     onDoubleTap: event => {

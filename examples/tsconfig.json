@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "allowJs": false,
+    "declaration": true,
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "target": "es5",
+    "removeComments": true,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "lib": [
+      "dom",
+      "ES2022"
+    ]
+  },
+  "include": [
+    "./**/*.tsx"
+  ]
+}
