@@ -23,10 +23,10 @@ export function App() {
   const events = useFingerEvents({
     onPointerDown: event => {
       console.log('onPointerDown', event);
-    },
+    }, 
     onTap: event => {
       console.log('onTap', event);
-    },
+    }, 
     onTapHold: event => {
       console.log('onTapHold', event);
     },
@@ -38,8 +38,11 @@ export function App() {
     },
     onSwipeLeft: event => {
       console.log('onSwipeLeft', event.direction, event);
+    },
+    onPinch: event => {
+      console.info('onPinch', event.detail);
     }
-  }); 
+  });
   const domRef = createRef<HTMLDivElement>();
   if (!prevEvents) prevEvents = events;
   return (

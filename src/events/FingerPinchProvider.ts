@@ -29,14 +29,15 @@ export const FingerPinchProvider: FingerProvider = {
 
   handlePointerMove: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
-    if (!flags.get(pinch)) return;
     const pointers = getPointers();
+    flags.set(pinch, pointers.length > 1);
+    if (!flags.get(pinch)) return;
     const changedPointers = getChangedPointers();
-    const originDist = calcDistance(pointers[0], pointers[0]);
-    const latestDist = calcDistance(changedPointers[0], changedPointers[0]);
+    const originDist = calcDistance(pointers[0], pointers[1]);
+    const latestDist = calcDistance(changedPointers[0], changedPointers[1]);
     const scale = latestDist / originDist;
     const originCenter = calcCenter(pointers[0], pointers[1]);
-    const latestCenter = calcCenter(pointers[0], pointers[1]);
+    const latestCenter = calcCenter(changedPointers[0], changedPointers[1]);
     const moveX = latestCenter.x - originCenter.x;
     const moveY = latestCenter.y - originCenter.y;
     const originRotate = calcRotate(pointers[0], pointers[1]);
@@ -47,7 +48,7 @@ export const FingerPinchProvider: FingerProvider = {
     events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },
 
-  handlePointerWillUp: ({ events, context, pointer }) => {
+  handlePointerUp: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (flags.get(pinch) && !flags.get(pinchEnded)) {
@@ -57,7 +58,7 @@ export const FingerPinchProvider: FingerProvider = {
     }
   },
 
-  handlePointerWillCancel: ({ events, context, pointer }) => {
+  handlePointerCancel: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(pinch, getPointers().length > 1);
     if (flags.get(pinch) && !flags.get(pinchEnded)) {

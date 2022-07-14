@@ -25,12 +25,12 @@ export function calcCenter(
   pointer1: PointerPointLike,
   pointer2: PointerPointLike
 ) {
-  const x =
-    Math.max(pointer1.clientX, pointer2.clientX) -
-    Math.min(pointer1.clientX, pointer2.clientX);
-  const y =
-    Math.max(pointer1.clientY, pointer2.clientY) -
-    Math.min(pointer1.clientY, pointer2.clientY);
+  const maxX = Math.max(pointer1.clientX, pointer2.clientX);
+  const minX = Math.min(pointer1.clientX, pointer2.clientX);
+  const x = minX + (maxX - minX) / 2;
+  const maxY = Math.max(pointer1.clientY, pointer2.clientY);
+  const minY = Math.min(pointer1.clientY, pointer2.clientY);
+  const y = minY + (maxY - minY) / 2;
   return { x, y };
 }
 
