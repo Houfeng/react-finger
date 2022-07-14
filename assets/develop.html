@@ -28,6 +28,14 @@
 <body>
   <h1>React Finger</h1>
   <div id="root"></div>
+  <script>
+    if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+      const script = document.createElement('script');
+      script.src = "https://unpkg.com/vconsole@latest/dist/vconsole.min.js";
+      script.onload = () => new window.VConsole();
+      document.body.appendChild(script);
+    }
+  </script>
   <script crossorigin src="//g.alicdn.com/code/lib/react/18.1.0/umd/react.development.min.js"></script>
   <script crossorigin src="//g.alicdn.com/code/lib/react-dom/18.1.0/umd/react-dom.development.min.js"></script>
   <script src="./js/develop.js"></script>

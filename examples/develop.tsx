@@ -39,7 +39,7 @@ export function App() {
     onSwipeLeft: event => {
       console.log('onSwipeLeft', event.direction, event);
     }
-  });
+  }); 
   const domRef = createRef<HTMLDivElement>();
   if (!prevEvents) prevEvents = events;
   return (

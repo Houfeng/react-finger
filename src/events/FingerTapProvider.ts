@@ -23,7 +23,7 @@ export const FingerTapProvider: FingerProvider = {
     const { flags, getPointers } = context;
     flags.set(tapCanceled, getPointers().length > 1);
     if (flags.get(tapCanceled)) {
-      clearEventTimer(flags.get(holdTimer) as number);
+      return clearEventTimer(flags.get(holdTimer) as number);
     }
     flags.set(
       holdTimer,
