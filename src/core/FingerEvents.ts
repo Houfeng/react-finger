@@ -38,6 +38,8 @@ export type FingerPinchEvent<T extends Element = Element> = FingerEvent<
     scale: number;
     moveX: number;
     moveY: number;
+    movementX: number;
+    movementY: number;
     rotate: number;
   }
 >;

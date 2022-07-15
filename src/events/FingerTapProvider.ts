@@ -13,10 +13,10 @@ import { calcDistance } from "../core/FingerUtils";
 const { tapMaxDistanceThreshold, holdDurationThreshold, dblIntervalThreshold } =
   FingerOptions;
 
-const holdTimer = Symbol("holdTimer");
-const tapCanceled = Symbol("tapCanceled");
-const dblWaitNext = Symbol("dblWaitNext");
-const dblPrevTime = Symbol("dblPrevTime");
+const HOLD_TIMER = Symbol();
+const CANCELED = Symbol();
+const DBL_WAIT_NEXT = Symbol();
+const DBL_PREV_TIME = Symbol();
 
 export const FingerTapProvider: FingerProvider = {
   name: "Tap",
@@ -26,15 +26,15 @@ export const FingerTapProvider: FingerProvider = {
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
-    flags.set(tapCanceled, pointers.length > 1);
-    if (flags.get(tapCanceled)) {
-      return clearEventTimer(flags.get(holdTimer) as number);
+    flags.set(CANCELED, pointers.length > 1);
+    if (flags.get(CANCELED)) {
+      return clearEventTimer(flags.get(HOLD_TIMER) as number);
     }
     const detail = { pointers, changedPointers };
     flags.set(
-      holdTimer,
+      HOLD_TIMER,
       createEventTimer(() => {
-        flags.set(tapCanceled, true);
+        flags.set(CANCELED, true);
         events.onTapHold?.(FingerEvent("onTapHold", pointer, detail));
       }, holdDurationThreshold)
     );
@@ -42,43 +42,43 @@ export const FingerTapProvider: FingerProvider = {
 
   handlePointerMove: ({ context }) => {
     const { flags, getPointers, getChangedPointers } = context;
-    if (flags.get(tapCanceled)) return;
+    if (flags.get(CANCELED)) return;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const dist = calcDistance(pointers[0], changedPointers[0]);
     if (dist > tapMaxDistanceThreshold) {
-      flags.set(tapCanceled, true);
-      clearEventTimer(flags.get(holdTimer) as number);
+      flags.set(CANCELED, true);
+      clearEventTimer(flags.get(HOLD_TIMER) as number);
     }
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
-    clearEventTimer(flags.get(holdTimer) as number);
-    if (flags.get(tapCanceled)) return;
+    clearEventTimer(flags.get(HOLD_TIMER) as number);
+    if (flags.get(CANCELED)) return;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
     events.onTap?.(FingerEvent("onTap", pointer, detail));
-    const prevTime = (flags.get(dblPrevTime) || 0) as number;
+    const prevTime = (flags.get(DBL_PREV_TIME) || 0) as number;
     if (
-      !flags.get(dblWaitNext) ||
+      !flags.get(DBL_WAIT_NEXT) ||
       Date.now() - prevTime > dblIntervalThreshold
     ) {
-      flags.set(dblPrevTime, Date.now());
-      flags.set(dblWaitNext, true);
+      flags.set(DBL_PREV_TIME, Date.now());
+      flags.set(DBL_WAIT_NEXT, true);
     } else {
-      const prevTime = flags.get(dblPrevTime) as number;
+      const prevTime = flags.get(DBL_PREV_TIME) as number;
       if (Date.now() - prevTime < dblIntervalThreshold) {
         events.onDoubleTap?.(FingerEvent("onDoubleTap", pointer, detail));
       }
-      flags.set(dblWaitNext, false);
+      flags.set(DBL_WAIT_NEXT, false);
     }
   },
 
   handlePointerCancel: ({ context }) => {
     const { flags } = context;
-    flags.set(tapCanceled, true);
-    clearEventTimer(flags.get(holdTimer) as number);
+    flags.set(CANCELED, true);
+    clearEventTimer(flags.get(HOLD_TIMER) as number);
   },
 };

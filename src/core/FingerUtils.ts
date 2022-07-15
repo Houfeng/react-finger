@@ -24,14 +24,14 @@ export function calcDistance(from: PointerPointLike, to: PointerPointLike) {
 export function calcCenter(
   pointer1: PointerPointLike,
   pointer2: PointerPointLike
-) {
+): PointerPointLike {
   const maxX = Math.max(pointer1.clientX, pointer2.clientX);
   const minX = Math.min(pointer1.clientX, pointer2.clientX);
-  const x = minX + (maxX - minX) / 2;
+  const clientX = minX + (maxX - minX) / 2;
   const maxY = Math.max(pointer1.clientY, pointer2.clientY);
   const minY = Math.min(pointer1.clientY, pointer2.clientY);
-  const y = minY + (maxY - minY) / 2;
-  return { x, y };
+  const clientY = minY + (maxY - minY) / 2;
+  return { clientX, clientY };
 }
 
 export function calcRotate(

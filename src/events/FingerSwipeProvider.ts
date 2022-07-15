@@ -8,8 +8,9 @@ import { FingerOptions } from "../core/FingerOptions";
 import { FingerProvider } from "../core/FingerProviders";
 
 const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = FingerOptions;
-const canceled = Symbol("swipeCanceled");
-const startTime = Symbol("swipeStartTime");
+
+const CANCELED = Symbol();
+const START_TIME = Symbol();
 
 type SwipeDirection = "up" | "down" | "left" | "right";
 type SwipeEventNames =
@@ -37,9 +38,9 @@ export const FingerSwipeProvider: FingerProvider = {
 
   handlePointerDown: ({ context, pointer }) => {
     const { flags, getPointers } = context;
-    flags.set(canceled, getPointers().length > 1);
-    flags.set(startTime, Date.now());
-    if (!flags.get(canceled)) {
+    flags.set(CANCELED, getPointers().length > 1);
+    flags.set(START_TIME, Date.now());
+    if (!flags.get(CANCELED)) {
       const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
     }
@@ -48,8 +49,9 @@ export const FingerSwipeProvider: FingerProvider = {
   handlePointerWillUp: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     const invalidTime =
-      Date.now() - (flags.get(startTime) as number) > swipeMaxDurationThreshold;
-    if (flags.get(canceled) || invalidTime) return;
+      Date.now() - (flags.get(START_TIME) as number) >
+      swipeMaxDurationThreshold;
+    if (flags.get(CANCELED) || invalidTime) return;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const start = pointers[0];
@@ -78,6 +80,6 @@ export const FingerSwipeProvider: FingerProvider = {
 
   handlePointerCancel: ({ context }) => {
     const { flags } = context;
-    flags.set(canceled, true);
+    flags.set(CANCELED, true);
   },
 };
