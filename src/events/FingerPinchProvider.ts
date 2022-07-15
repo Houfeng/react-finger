@@ -21,7 +21,6 @@ export const FingerPinchProvider: FingerProvider = {
     const changedPointers = getChangedPointers();
     if (pointers.length > 1 && !flags.get(pinching)) {
       flags.set(pinching, true);
-      console.log("onPinchStart X", events.onPinchStart);
       const detail = {
         pointers,
         changedPointers,
