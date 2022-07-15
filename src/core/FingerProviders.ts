@@ -31,12 +31,24 @@ export type FingerProvider<
 
 const providers = new Set<FingerProvider<string, string>>();
 
+const eventNames = new Set([
+  "onPointerDown",
+  "onPointerMove",
+  "onPointerUp",
+  "onPointerCancel",
+]);
+
 export function registerFingerProvider(
   provider: FingerProvider<string, string>
 ) {
   providers.add(provider);
+  provider.events.forEach((name) => eventNames.add(name));
 }
 
 export function getAllFingerProviders() {
   return providers;
+}
+
+export function getAllEventNames() {
+  return eventNames;
 }

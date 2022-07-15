@@ -6,21 +6,11 @@
 import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
 import { FingerMixEvents } from "../core/FingerCompose";
-import { getAllFingerProviders } from "../core/FingerProviders";
+import { getAllEventNames } from "../core/FingerProviders";
 import { useFingerEvents } from "./FingerHook";
 
-const eventNames = new Set([
-  "onPointerDown",
-  "onPointerMove",
-  "onPointerUp",
-  "onPointerCancel",
-]);
-
-getAllFingerProviders().forEach((provider) => {
-  provider.events.forEach((name) => eventNames.add(name));
-});
-
 function splitProps(props: Record<string, any>) {
+  const eventNames = getAllEventNames();
   const eventProps: Record<string, any> = {};
   const otherProps: Record<string, any> = {};
   Object.entries(props).forEach(([key, value]) => {
