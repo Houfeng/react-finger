@@ -21,26 +21,29 @@ let prevEvents: any;
 export function App() {
   const [direction, setDirection] = useState('none');
   const events = useFingerEvents({
-    onPointerDown: event => {
-      console.log('onPointerDown', event);
+    // onPointerDown: event => {
+    //   console.log('onPointerDown', event);
+    // }, 
+    // onTap: event => { 
+    //   console.log('onTap', event);
+    // }, 
+    // onTapHold: event => { 
+    //   console.log('onTapHold', event);
+    // },
+    // onDoubleTap: event => {
+    //   console.log('onDoubleTap', event);
+    // }, 
+    // onSwipe: event => {
+    //   setDirection(event.direction);
+    // },
+    // onSwipeLeft: event => {
+    //   console.log('onSwipeLeft', event.direction, event);
+    // },
+    onPinchStart: event => {
+      console.log('onPinchStart', event);
     }, 
-    onTap: event => {
-      console.log('onTap', event);
-    }, 
-    onTapHold: event => { 
-      console.log('onTapHold', event);
-    },
-    onDoubleTap: event => {
-      console.log('onDoubleTap', event);
-    },
-    onSwipe: event => {
-      setDirection(event.direction);
-    },
-    onSwipeLeft: event => {
-      console.log('onSwipeLeft', event.direction, event);
-    },
     onPinch: event => {
-      console.info('onPinch', event.detail);
+      console.log('onPinch', event.detail);
     }
   });
   const domRef = createRef<HTMLDivElement>();
@@ -54,9 +57,9 @@ export function App() {
       {direction}
       <FingerDiv
         ref={domRef}
-        onTap={event => { event.stopPropagation() }}
+        onTap={event => { event.preventDefault() }}
         onSwipe={event => {
-          event.stopPropagation();
+          event.preventDefault();
           console.log('event.direction', event.direction);
         }}
       >

@@ -42,7 +42,7 @@ export {
   FingerProxyContainer,
 } from "./helpers/FingerProxy";
 
-registerFingerProvider(FingerBasicProvider);
-registerFingerProvider(FingerTapProvider);
-registerFingerProvider(FingerSwipeProvider);
 registerFingerProvider(FingerPinchProvider);
+registerFingerProvider(FingerSwipeProvider);
+registerFingerProvider(FingerTapProvider);
+registerFingerProvider(FingerBasicProvider);
