@@ -1,73 +1,36 @@
-import { Finger, FingerProxy, FingerProxyContainer, useFingerEvents } from '../src';
-import React, { CSSProperties, createRef, useState } from "react"
+import { FingerProxy, FingerProxyContainer, useFingerEvents } from '../src';
+import React, { CSSProperties } from "react"
 
 import { createRoot } from "react-dom/client";
 
-const FingerDiv = Finger("div");
 const FingerBoxWrapper = FingerProxyContainer("div");
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
   padding: 16,
   borderRadius: 8,
-  width: 300,
-  height: 300,
+  width: 600,      
+  height: 500,
   backgroundColor: '#fff',
   cursor: 'pointer'
 };
 
-let prevEvents: any;
-
 export function App() {
-  const [direction, setDirection] = useState('none');
   const events = useFingerEvents({
-    // onPointerDown: event => {
-    //   console.log('onPointerDown', event);
-    // }, 
-    // onTap: event => { 
-    //   console.log('onTap', event);
-    // }, 
-    // onTapHold: event => { 
-    //   console.log('onTapHold', event);
-    // },
-    // onDoubleTap: event => {
-    //   console.log('onDoubleTap', event);
-    // }, 
-    // onSwipe: event => {
-    //   setDirection(event.direction);
-    // },
-    // onSwipeLeft: event => {
-    //   console.log('onSwipeLeft', event.direction, event);
-    // },
     onPinchStart: event => {
       console.log('onPinchStart', event);
-    }, 
-    onPinch: event => {
-      console.log('onPinch', event.detail);
-    }
+    },
+    // onPinch: event => {
+    //   console.log('onPinch', event.detail);
+    // }
   });
-  const domRef = createRef<HTMLDivElement>();
-  if (!prevEvents) prevEvents = events;
   return (
     <FingerBoxWrapper className='box' style={boxStyle} >
       <FingerProxy {...events} />
-      <button onClick={() => setDirection('xx')}>
-        click
-      </button>
-      {direction}
-      <FingerDiv
-        ref={domRef}
-        onTap={event => { event.preventDefault() }}
-        onSwipe={event => {
-          event.preventDefault();
-          console.log('event.direction', event.direction);
-        }}
-      >
-        xxx
-      </FingerDiv>
     </FingerBoxWrapper>
   );
 }
 
 const root = createRoot(document.getElementById("root")!);
 root.render(<App />);  
+     

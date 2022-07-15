@@ -26,6 +26,15 @@ const swipeDirectionToEventNames: Record<SwipeDirection, SwipeEventNames> = {
 };
 
 export const FingerSwipeProvider: FingerProvider = {
+  name: "Swipe",
+  events: [
+    "onSwipe",
+    "onSwipeUp",
+    "onSwipeDown",
+    "onSwipeLeft",
+    "onSwipeRight",
+  ],
+
   handlePointerDown: ({ context, pointer }) => {
     const { flags, getPointers } = context;
     flags.set(canceled, getPointers().length > 1);

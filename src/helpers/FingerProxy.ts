@@ -113,7 +113,7 @@ function FingerProxyBoundaryOwner(): [
 }
 
 export type FingerProxyBoundaryProps = {
-  children: (target: HostPointerEvents) => ReactNode;
+  children: (events: HostPointerEvents) => ReactNode;
 };
 
 /**

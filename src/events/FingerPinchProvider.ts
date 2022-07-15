@@ -12,12 +12,16 @@ const pinching = Symbol("pinchStarted");
 const pinchDetail = Symbol("pinchDetail");
 
 export const FingerPinchProvider: FingerProvider = {
+  name: "Pinch",
+  events: ["onPinchStart", "onPinch", "onPinchEnd"],
+
   handlePointerDown: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     if (pointers.length > 1 && !flags.get(pinching)) {
-      console.log("onPinchStart inner", pointers, changedPointers);
+      flags.set(pinching, true);
+      console.log("onPinchStart X", events.onPinchStart);
       const detail = {
         pointers,
         changedPointers,
@@ -28,7 +32,6 @@ export const FingerPinchProvider: FingerProvider = {
       };
       flags.set(pinchDetail, detail);
       events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
-      flags.set(pinching, true);
       const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
     }
@@ -57,20 +60,20 @@ export const FingerPinchProvider: FingerProvider = {
   handlePointerWillUp: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     const pointers = getPointers();
-    if (pointers.length > 1 && flags.get(pinching)) {
+    if (pointers.length === 2 && flags.get(pinching)) {
+      flags.set(pinching, false);
       const detail = flags.get(pinchDetail) as FingerPinchEvent["detail"];
       events.onPinchEnd?.(FingerEvent("onPinchEnd", pointer, detail));
-      flags.set(pinching, false);
     }
   },
 
   handlePointerWillCancel: ({ events, context, pointer }) => {
     const { flags, getPointers } = context;
     const pointers = getPointers();
-    if (pointers.length > 1 && flags.get(pinching)) {
+    if (pointers.length === 2 && flags.get(pinching)) {
+      flags.set(pinching, false);
       const detail = flags.get(pinchDetail) as FingerPinchEvent["detail"];
       events.onPinchEnd?.(FingerEvent("onPinchEnd", pointer, detail));
-      flags.set(pinching, false);
     }
   },
 };

@@ -6,52 +6,27 @@
 import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
 import { FingerMixEvents } from "../core/FingerCompose";
+import { getAllFingerProviders } from "../core/FingerProviders";
 import { useFingerEvents } from "./FingerHook";
 
+const eventNames = new Set([
+  "onPointerDown",
+  "onPointerMove",
+  "onPointerUp",
+  "onPointerCancel",
+]);
+
+getAllFingerProviders().forEach((provider) => {
+  provider.events.forEach((name) => eventNames.add(name));
+});
+
 function splitProps(props: Record<string, any>) {
-  const {
-    onTap,
-    onTapHold,
-    onDoubleTap,
-    onSwipe,
-    onSwipeUp,
-    onSwipeRight,
-    onSwipeDown,
-    onSwipeLeft,
-    onPinchStart,
-    onPinch,
-    onPinchEnd,
-    onFingerDown,
-    onFingerMove,
-    onFingerUp,
-    onFingerCancel,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    onPointerCancel,
-    ...otherProps
-  } = props;
-  const eventProps = {
-    onTap,
-    onTapHold,
-    onDoubleTap,
-    onSwipe,
-    onSwipeUp,
-    onSwipeRight,
-    onSwipeDown,
-    onSwipeLeft,
-    onPinchStart,
-    onPinch,
-    onPinchEnd,
-    onFingerDown,
-    onFingerMove,
-    onFingerUp,
-    onFingerCancel,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    onPointerCancel,
-  };
+  const eventProps: Record<string, any> = {};
+  const otherProps: Record<string, any> = {};
+  Object.entries(props).forEach(([key, value]) => {
+    if (eventNames.has(key)) eventProps[key] = value;
+    else otherProps[key] = value;
+  });
   return { eventProps, otherProps };
 }
 

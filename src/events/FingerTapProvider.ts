@@ -19,6 +19,9 @@ const dblWaitNext = Symbol("dblWaitNext");
 const dblPrevTime = Symbol("dblPrevTime");
 
 export const FingerTapProvider: FingerProvider = {
+  name: "Tap",
+  events: ["onTap", "onTapHold", "onDoubleTap"],
+
   handlePointerDown: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();

@@ -15,7 +15,10 @@ export type FingerProviderParams = {
 
 export type FingerProvideHandler = (params: FingerProviderParams) => void;
 
-export type FingerProvider = Partial<{
+export type FingerProvider<
+  N extends string = string,
+  E extends string = string
+> = Partial<{
   handlePointerWillDown: FingerProvideHandler;
   handlePointerDown: FingerProvideHandler;
   handlePointerWillMove: FingerProvideHandler;
@@ -24,11 +27,13 @@ export type FingerProvider = Partial<{
   handlePointerUp: FingerProvideHandler;
   handlePointerWillCancel: FingerProvideHandler;
   handlePointerCancel: FingerProvideHandler;
-}>;
+}> & { name: N; events: E[] };
 
-const providers = new Set<FingerProvider>();
+const providers = new Set<FingerProvider<string, string>>();
 
-export function registerFingerProvider(provider: FingerProvider) {
+export function registerFingerProvider(
+  provider: FingerProvider<string, string>
+) {
   providers.add(provider);
 }
 
