@@ -33,6 +33,8 @@ export type FingerSwipeEvent<T extends Element = Element> = FingerEvent<
 export type FingerPinchEvent<T extends Element = Element> = FingerEvent<
   T,
   {
+    centerX: number;
+    centerY: number;
     scale: number;
     moveX: number;
     moveY: number;

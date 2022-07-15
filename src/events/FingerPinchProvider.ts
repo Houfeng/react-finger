@@ -21,9 +21,14 @@ export const FingerPinchProvider: FingerProvider = {
     const changedPointers = getChangedPointers();
     if (pointers.length > 1 && !flags.get(pinching)) {
       flags.set(pinching, true);
+      const center = calcCenter(changedPointers[0], changedPointers[1]);
+      const centerX = center.x;
+      const centerY = center.y;
       const detail = {
         pointers,
         changedPointers,
+        centerX,
+        centerY,
         scale: 1,
         rotate: 0,
         moveX: 0,
@@ -46,12 +51,23 @@ export const FingerPinchProvider: FingerProvider = {
     const scale = latestDist / originDist;
     const originCenter = calcCenter(pointers[0], pointers[1]);
     const latestCenter = calcCenter(changedPointers[0], changedPointers[1]);
+    const centerX = latestCenter.x;
+    const centerY = latestCenter.y;
     const moveX = latestCenter.x - originCenter.x;
     const moveY = latestCenter.y - originCenter.y;
     const originRotate = calcRotate(pointers[0], pointers[1]);
     const latestRotate = calcRotate(changedPointers[0], changedPointers[1]);
     const rotate = latestRotate - originRotate;
-    const detail = { pointers, changedPointers, scale, moveX, moveY, rotate };
+    const detail = {
+      pointers,
+      changedPointers,
+      centerX,
+      centerY,
+      scale,
+      moveX,
+      moveY,
+      rotate,
+    };
     flags.set(pinchDetail, detail);
     events.onPinch?.(FingerEvent("onPinch", pointer, detail));
   },
