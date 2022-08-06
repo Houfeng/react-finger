@@ -128,3 +128,26 @@ function Demo(){
   );
 }
 ```
+
+**Example 6:** Binding shortcut keys
+
+```jsx
+import { FingerProxy, FingerProxyContainer } from "react-finger";
+
+function Demo(){
+  return (
+    <YourBoundaryWrapper>
+      <FingerProxy 
+        onShortcut = { event => {
+          event.when(['control','shift','a'], ()=>{
+            // Something...
+          });
+          event.when(['control','shift','b'], ()=>{
+            // Something...
+          });
+        }}
+      />
+    </YourBoundaryWrapper>
+  );
+}
+```
