@@ -5,7 +5,7 @@
 
 import { HTMLAttributes, ReactNode, createElement, forwardRef } from "react";
 
-import { FingerMixEvents } from "../core/FingerCompose";
+import { FingerMixEvents } from "../core/FingerMixEvents";
 import { getAllEventNames } from "../core/FingerProviders";
 import { useFingerEvents } from "./FingerHook";
 

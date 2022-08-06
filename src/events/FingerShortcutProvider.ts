@@ -18,13 +18,15 @@ export const FingerShortcutProvider: FingerProvider = {
 
   handleKeyDown: ({ events, context, event }) => {
     const { flags } = context;
-    const keySet = flags.has(KEY_SET)
+    const set = flags.has(KEY_SET)
       ? (flags.get(KEY_SET) as Set<string>)
       : new Set<string>();
-    if (!flags.has(KEY_SET)) flags.set(KEY_SET, keySet);
-    keySet.add(event.key.toLowerCase());
+    if (!flags.has(KEY_SET)) flags.set(KEY_SET, set);
+    set.add(event.key.toLowerCase());
     const when: FingerShortcutEvent["detail"]["when"] = (keys, handler) => {
-      if (keys.every((key) => keySet.has(key))) handler();
+      if (keys.length === set.size && keys.every((key) => set.has(key))) {
+        handler();
+      }
     };
     const shortcutEvent = FingerKeyboardEvent("onShortcut", event, { when });
     events.onShortcut?.(shortcutEvent);

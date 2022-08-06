@@ -36,10 +36,9 @@ export {
   type FingerShortcutEvent,
 } from "./core/FingerKeyboardEvents";
 
-export {
-  type FingerMixEvents,
-  composeFingerEvents,
-} from "./core/FingerCompose";
+export { composeFingerEvents } from "./core/FingerCompose";
+
+export { type FingerMixEvents } from "./core/FingerMixEvents";
 
 export { FingerOptions } from "./core/FingerOptions";
 

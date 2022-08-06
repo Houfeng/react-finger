@@ -22,7 +22,7 @@ import {
 
 import { AnyFunction } from "../core/FingerUtils";
 import { EventEmitter } from "eify";
-import { FingerMixEvents } from "../core/FingerCompose";
+import { FingerMixEvents } from "../core/FingerMixEvents";
 import { HostEvents } from "../core/FingerHostEvents";
 import { useFingerEvents } from "./FingerHook";
 

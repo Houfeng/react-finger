@@ -3,7 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerMixEvents, composeFingerEvents } from "../core/FingerCompose";
+import { FingerMixEvents } from "../core/FingerMixEvents";
+import { composeFingerEvents } from "../core/FingerCompose";
 
 /**
  * 通过「方法」创建可用于 element 的 events，通常用于类组件，

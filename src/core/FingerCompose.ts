@@ -8,6 +8,7 @@ import {
   FingerKeyboardContext,
   FingerPointerContext,
 } from "./FingerContext";
+import { FingerProvider, getAllFingerProviders } from "./FingerProviders";
 import {
   HostEvents,
   HostKeyboardEvent,
@@ -16,15 +17,16 @@ import {
   HostPointerEventListener,
 } from "./FingerHostEvents";
 
-import { FingerKeyboardEvents } from "./FingerKeyboardEvents";
-import { FingerPointerEvents } from "./FingerPointerEvents";
-import { getAllFingerProviders } from "./FingerProviders";
-
-export type FingerMixEvents<T extends Element = Element> = HostEvents<T> &
-  FingerPointerEvents<T> &
-  FingerKeyboardEvents;
+import { FingerMixEvents } from "./FingerMixEvents";
 
 const providers = getAllFingerProviders();
+
+function shouldTrigger(
+  provider: FingerProvider,
+  events: Partial<FingerMixEvents>
+) {
+  return provider.events.some((it) => !!events[it as keyof FingerMixEvents]);
+}
 
 /**
  * 创建包含合成处理逻辑的 PointerDown Listener
@@ -38,12 +40,16 @@ function createPointerDownListener(
 ): HostPointerEventListener {
   return (pointer: HostPointerEvent) => {
     events.onPointerDown?.(pointer);
-    providers.forEach((it) =>
-      it.handlePointerWillDown?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerWillDown?.({ events, context, pointer })
     );
     context.addPointer(pointer);
-    providers.forEach((it) =>
-      it.handlePointerDown?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerDown?.({ events, context, pointer })
     );
   };
 }
@@ -61,12 +67,16 @@ function createPointerMoveListener(
   return (pointer: HostPointerEvent) => {
     events.onPointerMove?.(pointer);
     if (context.getPointers().length < 1) return;
-    providers.forEach((it) =>
-      it.handlePointerWillMove?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerWillMove?.({ events, context, pointer })
     );
     context.updatePointer(pointer);
-    providers.forEach((it) =>
-      it.handlePointerMove?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerMove?.({ events, context, pointer })
     );
   };
 }
@@ -83,12 +93,16 @@ function createPointerUpListener(
 ): HostPointerEventListener {
   return (pointer: HostPointerEvent) => {
     events.onPointerUp?.(pointer);
-    providers.forEach((it) =>
-      it.handlePointerWillUp?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerWillUp?.({ events, context, pointer })
     );
     context.removePointer(pointer);
-    providers.forEach((it) =>
-      it.handlePointerUp?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerUp?.({ events, context, pointer })
     );
   };
 }
@@ -105,12 +119,16 @@ function createPointerCancelListener(
 ): HostPointerEventListener {
   return (pointer: HostPointerEvent) => {
     events.onPointerCancel?.(pointer);
-    providers.forEach((it) =>
-      it.handlePointerWillCancel?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerWillCancel?.({ events, context, pointer })
     );
     context.removePointer(pointer);
-    providers.forEach((it) =>
-      it.handlePointerCancel?.({ events, context, pointer })
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handlePointerCancel?.({ events, context, pointer })
     );
   };
 }
@@ -127,7 +145,11 @@ function createKeyDownListener(
 ): HostKeyboardEventListener {
   return (event: HostKeyboardEvent) => {
     events.onKeyDown?.(event);
-    providers.forEach((it) => it.handleKeyDown?.({ events, context, event }));
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handleKeyDown?.({ events, context, event })
+    );
   };
 }
 
@@ -143,7 +165,11 @@ function createKeyUpListener(
 ): HostKeyboardEventListener {
   return (event: HostKeyboardEvent) => {
     events.onKeyUp?.(event);
-    providers.forEach((it) => it.handleKeyUp?.({ events, context, event }));
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handleKeyUp?.({ events, context, event })
+    );
   };
 }
 
