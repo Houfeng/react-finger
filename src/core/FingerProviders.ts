@@ -53,6 +53,7 @@ const eventNames = new Set([
   "onPointerUp",
   "onPointerCancel",
   "onKeyDown",
+  "onKeyUp",
 ]);
 
 export function registerFingerProvider(
