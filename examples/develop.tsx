@@ -20,9 +20,12 @@ const boxStyle: CSSProperties = {
 const onShortcut = (event: FingerShortcutEvent) => {
   event.when(["f", "a"], () => {
     console.log('FingerProxy onShortcut', event);
-  }); 
+  });
+  event.when(["f1", "f2"], () => {
+    console.log('FingerProxy onShortcut', event.key);
+  });
 };
- 
+
 export function App() {
 
   return (

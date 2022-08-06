@@ -11,6 +11,7 @@ import {
 import { FingerProvider } from "../core/FingerProviders";
 
 const KEY_SET = Symbol();
+const LAST_ACTION = Symbol();
 
 export const FingerShortcutProvider: FingerProvider = {
   name: "Shortcut",
@@ -18,6 +19,8 @@ export const FingerShortcutProvider: FingerProvider = {
 
   handleKeyDown: ({ events, context, event }) => {
     const { flags } = context;
+    if (!event.repeat) flags.set(LAST_ACTION, "down");
+    if (flags.get(LAST_ACTION) === "up") return;
     const set = flags.has(KEY_SET)
       ? (flags.get(KEY_SET) as Set<string>)
       : new Set<string>();
@@ -28,13 +31,16 @@ export const FingerShortcutProvider: FingerProvider = {
         handler();
       }
     };
-    const shortcutEvent = FingerKeyboardEvent("onShortcut", event, { when });
+    const keys = Array.from(set);
+    const detail = { when, keys };
+    const shortcutEvent = FingerKeyboardEvent("onShortcut", event, detail);
     events.onShortcut?.(shortcutEvent);
   },
 
   handleKeyUp: ({ context, event }) => {
     const { flags } = context;
     if (!flags.has(KEY_SET)) return;
+    flags.set(LAST_ACTION, "up");
     (flags.get(KEY_SET) as Set<string>).delete(event.key.toLowerCase());
   },
 };

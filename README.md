@@ -137,20 +137,20 @@ function Demo(){
 ```jsx
 import { FingerProxy, FingerProxyContainer } from "react-finger";
 
+const FingeredDiv = Finger("div");
+
 function Demo(){
   return (
-    <YourBoundaryWrapper>
-      <FingerProxy 
-        onShortcut = { event => {
-          event.when(['control','shift','a'], ()=>{
-            // Something...
-          });
-          event.when(['control','shift','b'], ()=>{
-            // Something...
-          });
-        }}
-      />
-    </YourBoundaryWrapper>
+    <FingeredDiv 
+      onShortcut = { event => {
+        event.when(['control','shift','a'], ()=>{
+          // Something...
+        });
+        event.when(['control','shift','b'], ()=>{
+          // Something...
+        });
+      }}
+    />
   );
 }
 ```
