@@ -21,7 +21,7 @@ export type FingerPointerEvent<
   detail: FingerPointerEventDetail<D>;
 } & FingerPointerEventDetail<D>;
 
-export type FingerEventListener<E extends FingerPointerEvent> = (
+export type FingerPointerEventListener<E extends FingerPointerEvent> = (
   event: E
 ) => void;
 
@@ -52,21 +52,21 @@ export type FingerTapEvent<T extends Element = Element> = FingerPointerEvent<
 >;
 
 export type FingerPointerEvents<T extends Element = Element> = {
-  onFingerDown: FingerEventListener<FingerPointerEvent<T>>;
-  onFingerMove: FingerEventListener<FingerPointerEvent<T>>;
-  onFingerUp: FingerEventListener<FingerPointerEvent<T>>;
-  onFingerCancel: FingerEventListener<FingerPointerEvent<T>>;
-  onTap: FingerEventListener<FingerTapEvent<T>>;
-  onTapHold: FingerEventListener<FingerTapEvent<T>>;
-  onDoubleTap: FingerEventListener<FingerTapEvent<T>>;
-  onSwipe: FingerEventListener<FingerSwipeEvent<T>>;
-  onSwipeUp: FingerEventListener<FingerSwipeEvent<T>>;
-  onSwipeRight: FingerEventListener<FingerSwipeEvent<T>>;
-  onSwipeDown: FingerEventListener<FingerSwipeEvent<T>>;
-  onSwipeLeft: FingerEventListener<FingerSwipeEvent<T>>;
-  onPinchStart: FingerEventListener<FingerPinchEvent<T>>;
-  onPinch: FingerEventListener<FingerPinchEvent<T>>;
-  onPinchEnd: FingerEventListener<FingerPinchEvent<T>>;
+  onFingerDown: FingerPointerEventListener<FingerPointerEvent<T>>;
+  onFingerMove: FingerPointerEventListener<FingerPointerEvent<T>>;
+  onFingerUp: FingerPointerEventListener<FingerPointerEvent<T>>;
+  onFingerCancel: FingerPointerEventListener<FingerPointerEvent<T>>;
+  onTap: FingerPointerEventListener<FingerTapEvent<T>>;
+  onTapHold: FingerPointerEventListener<FingerTapEvent<T>>;
+  onDoubleTap: FingerPointerEventListener<FingerTapEvent<T>>;
+  onSwipe: FingerPointerEventListener<FingerSwipeEvent<T>>;
+  onSwipeUp: FingerPointerEventListener<FingerSwipeEvent<T>>;
+  onSwipeRight: FingerPointerEventListener<FingerSwipeEvent<T>>;
+  onSwipeDown: FingerPointerEventListener<FingerSwipeEvent<T>>;
+  onSwipeLeft: FingerPointerEventListener<FingerSwipeEvent<T>>;
+  onPinchStart: FingerPointerEventListener<FingerPinchEvent<T>>;
+  onPinch: FingerPointerEventListener<FingerPinchEvent<T>>;
+  onPinchEnd: FingerPointerEventListener<FingerPinchEvent<T>>;
 };
 
 export function FingerPointerEvent<

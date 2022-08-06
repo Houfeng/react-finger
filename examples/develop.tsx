@@ -1,7 +1,7 @@
 import { Finger, FingerProxy, FingerProxyContainer } from '../src';
 import React, { CSSProperties } from "react"
 
-import { FingerKeyboardEvent } from '../src/core/FingerKeyboardEvents';
+import { FingerShortcutEvent } from '../src';
 import { createRoot } from "react-dom/client";
 
 const FingerBoxWrapper = FingerProxyContainer("div");
@@ -16,11 +16,13 @@ const boxStyle: CSSProperties = {
   backgroundColor: '#fff',
   cursor: 'pointer'
 };
- 
-const onShortcut = (event: FingerKeyboardEvent) => {
-  console.log('FingerProxy onShortcut', event);
-};
 
+const onShortcut = (event: FingerShortcutEvent) => {
+  event.when(["f", "a"], () => {
+    console.log('FingerProxy onShortcut', event);
+  });
+};
+ 
 export function App() {
 
   return (

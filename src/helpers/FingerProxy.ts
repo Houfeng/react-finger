@@ -4,8 +4,8 @@
  */
 
 import {
-  FingerEventListener,
   FingerPointerEvent,
+  FingerPointerEventListener,
 } from "../core/FingerPointerEvents";
 import {
   Fragment,
@@ -108,11 +108,11 @@ function FingerProxyBoundaryOwner(): [HostEvents, FingerProxyEventTarget] {
   };
   const addEventListener = (
     name: keyof HostEvents,
-    listener: FingerEventListener<FingerPointerEvent>
+    listener: FingerPointerEventListener<FingerPointerEvent>
   ) => emitter.addListener(name, listener);
   const removeEventListener = (
     name: keyof HostEvents,
-    listener: FingerEventListener<FingerPointerEvent>
+    listener: FingerPointerEventListener<FingerPointerEvent>
   ) => emitter.removeListener(name, listener);
   return [events, { addEventListener, removeEventListener }];
 }

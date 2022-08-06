@@ -11,18 +11,26 @@ export type FingerKeyboardEventDetail<T> = T;
 export type FingerKeyboardEvent<
   T extends Element = Element,
   D extends object = {}
-  > = HostKeyboardEvent<T> & {
-    hostEvent: HostKeyboardEvent;
-    fingerType: keyof FingerKeyboardEvents;
-    detail: FingerKeyboardEventDetail<D>;
-  } & FingerKeyboardEventDetail<D>;
+> = HostKeyboardEvent<T> & {
+  hostEvent: HostKeyboardEvent;
+  fingerType: keyof FingerKeyboardEvents;
+  detail: FingerKeyboardEventDetail<D>;
+} & FingerKeyboardEventDetail<D>;
+
+export type FingerShortcutEvent<T extends Element = Element> =
+  FingerKeyboardEvent<
+    T,
+    {
+      when: (keys: string[], handler: () => void) => void;
+    }
+  >;
 
 export type FingerKeyboardEventListener<E extends FingerKeyboardEvent> = (
   event: E
 ) => void;
 
 export type FingerKeyboardEvents<T extends Element = Element> = {
-  onShortcut: FingerKeyboardEventListener<FingerKeyboardEvent<T>>;
+  onShortcut: FingerKeyboardEventListener<FingerShortcutEvent<T>>;
 };
 
 export function FingerKeyboardEvent<

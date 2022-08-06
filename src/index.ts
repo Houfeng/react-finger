@@ -15,17 +15,26 @@ export {
   type HostPointerEvent,
   type HostPointerEventLike,
   type HostPointerEventListener,
-  type HostEvents as HostPointerEvents,
+  type HostKeyboardEvent,
+  type HostKeyboardEventListener,
+  type HostEvents,
 } from "./core/FingerHostEvents";
 
 export {
-  type FingerPointerEvent as FingerEvent,
-  type FingerPointerEvents as FingerEvents,
-  type FingerEventListener,
+  type FingerPointerEvent,
+  type FingerPointerEvents,
+  type FingerPointerEventListener,
   type FingerTapEvent,
   type FingerSwipeEvent,
   type FingerPinchEvent,
 } from "./core/FingerPointerEvents";
+
+export {
+  type FingerKeyboardEvent,
+  type FingerKeyboardEvents,
+  type FingerKeyboardEventListener,
+  type FingerShortcutEvent,
+} from "./core/FingerKeyboardEvents";
 
 export {
   type FingerMixEvents,

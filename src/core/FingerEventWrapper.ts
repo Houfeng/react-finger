@@ -49,6 +49,7 @@ const POINTER_EVENT_KEYS = [
   "composedPath",
   "preventDefault",
   "eventPhase",
+  "location",
   "path",
   "view",
   "charCode",
