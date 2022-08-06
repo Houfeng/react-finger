@@ -3,7 +3,7 @@
   <img src="https://houfeng.net/react-finger/logo.png" alt="React Finger">
 </h1>
 
-React Finger is a library of gesture events for React that allows developers to use a single set of events for both desktop and mobile devices.
+React Finger is a library of gesture/shortcuts events for React that allows developers to use a single set of events for both desktop and mobile devices.
 
 # Install
 
@@ -26,12 +26,16 @@ npm install react-finger --save
 - **onPinch**: Multi-finger gesture update (supports two-finger scale/move/rotate)
 - **onPinchEnd**: Multi-finger gesture end (supports two-finger scale/move/rotate)
 
-**Basic Events**
+**Basic Pointer Events**
 
 - **onFingerDown**: Press the mouse or touch point
 - **onFingerMove**: Press & Moves the mouse or touch point
 - **onFingerUp**: Bounce the mouse or touch point
 - **onFingerCancel**: Cancels the mouse or touch point
+
+**Shortcuts Events**
+
+- **onShortcut**: When the shortcut key is pressed
 
 **Host Events**
 
@@ -39,6 +43,8 @@ npm install react-finger --save
 - **onPointerMove**: Moves the mouse or touch point
 - **onPointerUp**: Bounce the mouse or touch point
 - **onPointerCancel**: Cancels the mouse or touch point
+- **onKeyDown**: When the keyboard is pressed
+- **onKeyUp**: When the keyboard comes up
 
 # Usage
 
