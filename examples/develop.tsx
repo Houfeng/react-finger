@@ -20,7 +20,7 @@ const boxStyle: CSSProperties = {
 const onShortcut = (event: FingerShortcutEvent) => {
   event.when(["f", "a"], () => {
     console.log('FingerProxy onShortcut', event);
-  });
+  }); 
 };
  
 export function App() {

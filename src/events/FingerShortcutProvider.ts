@@ -24,9 +24,7 @@ export const FingerShortcutProvider: FingerProvider = {
     if (!flags.has(KEY_SET)) flags.set(KEY_SET, keySet);
     keySet.add(event.key.toLowerCase());
     const when: FingerShortcutEvent["detail"]["when"] = (keys, handler) => {
-      if (!keys.every((key) => keySet.has(key))) return;
-      handler();
-      flags.delete(KEY_SET);
+      if (keys.every((key) => keySet.has(key))) handler();
     };
     const shortcutEvent = FingerKeyboardEvent("onShortcut", event, { when });
     events.onShortcut?.(shortcutEvent);
