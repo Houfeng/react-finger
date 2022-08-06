@@ -13,7 +13,7 @@ npm install react-finger --save
 
 # Events
 
-**Gesture Events**
+**Gesture Events**  
 - **onTap**: Quickly tap the mouse or touch point
 - **onTapHold**: Hold for more than 600ms
 - **onDoubleTap**: Quick tap twice (within 300ms)
@@ -25,27 +25,24 @@ npm install react-finger --save
 - **onPinchStart**: Multi-finger gesture start (supports two-finger scale/move/rotate)
 - **onPinch**: Multi-finger gesture update (supports two-finger scale/move/rotate)
 - **onPinchEnd**: Multi-finger gesture end (supports two-finger scale/move/rotate)
-
-**Basic Pointer Events**
-
+  
+**Basic Events**  
 - **onFingerDown**: Press the mouse or touch point
 - **onFingerMove**: Press & Moves the mouse or touch point
 - **onFingerUp**: Bounce the mouse or touch point
 - **onFingerCancel**: Cancels the mouse or touch point
-
-**Shortcuts Events**
-
+  
+**Shortcuts Events**  
 - **onShortcut**: When the shortcut key is pressed
-
-**Host Events**
-
+  
+**Host Events**  
 - **onPointerDown**: Press the mouse or touch point
 - **onPointerMove**: Moves the mouse or touch point
 - **onPointerUp**: Bounce the mouse or touch point
 - **onPointerCancel**: Cancels the mouse or touch point
 - **onKeyDown**: When the keyboard is pressed
 - **onKeyUp**: When the keyboard comes up
-
+  
 # Usage
 
 **Example 1:** Hello React Finger
