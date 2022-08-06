@@ -1,6 +1,7 @@
-import { Finger, FingerProxy, FingerProxyContainer, useFingerEvents } from '../src';
+import { Finger, FingerProxy, FingerProxyContainer } from '../src';
 import React, { CSSProperties } from "react"
 
+import { FingerKeyboardEvent } from '../src/core/FingerKeyboardEvents';
 import { createRoot } from "react-dom/client";
 
 const FingerBoxWrapper = FingerProxyContainer("div");
@@ -15,22 +16,19 @@ const boxStyle: CSSProperties = {
   backgroundColor: '#fff',
   cursor: 'pointer'
 };
+ 
+const onShortcut = (event: FingerKeyboardEvent) => {
+  console.log('FingerProxy onShortcut', event);
+};
 
 export function App() {
-  const events = useFingerEvents({
-    onPinchStart: event => {
-      console.log('onPinchStart', event);
-    },
-    // onPinch: event => {
-    //   console.log('onPinch', event.detail);
-    // }
-  });
+
   return (
-    <FingerBoxWrapper className='box' style={boxStyle} >
-      <FingerProxy {...events} />
+    <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0}>
+      <FingerProxy onShortcut={onShortcut} />
       <FingeredDiv onTap={(event) => console.log('onTap', event)}>
         Tap me
-      </FingeredDiv> 
+      </FingeredDiv >
     </FingerBoxWrapper>
   );
 }

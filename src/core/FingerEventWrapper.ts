@@ -3,7 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { HostPointerEvent } from "./FingerHostEvents";
+import { HostKeyboardEvent, HostPointerEvent } from "./FingerHostEvents";
+
 import { clearAllEventTimer } from "./FingerEventTimer";
 import { isFunction } from "./FingerUtils";
 
@@ -47,7 +48,15 @@ const POINTER_EVENT_KEYS = [
   "cancelBubble",
   "composedPath",
   "preventDefault",
+  "eventPhase",
   "path",
+  "view",
+  "charCode",
+  "code",
+  "key",
+  "keyCode",
+  "which",
+  "repeat",
 ];
 
 const EventWrapperPrototype = {
@@ -71,7 +80,7 @@ POINTER_EVENT_KEYS.forEach((key) => {
 });
 
 export function createEventWrapper<T extends object>(
-  hostEvent: HostPointerEvent,
+  hostEvent: HostPointerEvent | HostKeyboardEvent,
   fields?: Record<string, unknown>
 ): T {
   const wrapper = fields ? fields : {};

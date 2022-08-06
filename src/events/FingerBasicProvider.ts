@@ -3,7 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent } from "../core/FingerEvents";
+import { FingerPointerEvent } from "../core/FingerPointerEvents";
 import { FingerProvider } from "../core/FingerProviders";
 
 export const FingerBasicProvider: FingerProvider = {
@@ -15,7 +15,7 @@ export const FingerBasicProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerDown?.(FingerEvent("onFingerDown", pointer, detail));
+    events.onFingerDown?.(FingerPointerEvent("onFingerDown", pointer, detail));
   },
 
   handlePointerMove: ({ events, context, pointer }) => {
@@ -23,7 +23,7 @@ export const FingerBasicProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerMove?.(FingerEvent("onFingerMove", pointer, detail));
+    events.onFingerMove?.(FingerPointerEvent("onFingerMove", pointer, detail));
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
@@ -31,7 +31,7 @@ export const FingerBasicProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerUp?.(FingerEvent("onFingerUp", pointer, detail));
+    events.onFingerUp?.(FingerPointerEvent("onFingerUp", pointer, detail));
   },
 
   handlePointerCancel: ({ events, context, pointer }) => {
@@ -39,6 +39,8 @@ export const FingerBasicProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onFingerCancel?.(FingerEvent("onFingerCancel", pointer, detail));
+    events.onFingerCancel?.(
+      FingerPointerEvent("onFingerCancel", pointer, detail)
+    );
   },
 };

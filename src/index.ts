@@ -9,22 +9,23 @@ import { FingerPinchProvider } from "./events/FingerPinchProvider";
 import { FingerBasicProvider } from "./events/FingerBasicProvider";
 import { FingerSwipeProvider } from "./events/FingerSwipeProvider";
 import { FingerTapProvider } from "./events/FingerTapProvider";
+import { FingerShortcutProvider } from "./events/FingerShortcutProvider";
 
 export {
   type HostPointerEvent,
   type HostPointerEventLike,
   type HostPointerEventListener,
-  type HostPointerEvents,
+  type HostEvents as HostPointerEvents,
 } from "./core/FingerHostEvents";
 
 export {
-  type FingerEvent,
-  type FingerEvents,
+  type FingerPointerEvent as FingerEvent,
+  type FingerPointerEvents as FingerEvents,
   type FingerEventListener,
   type FingerTapEvent,
   type FingerSwipeEvent,
   type FingerPinchEvent,
-} from "./core/FingerEvents";
+} from "./core/FingerPointerEvents";
 
 export {
   type FingerMixEvents,
@@ -46,3 +47,4 @@ registerFingerProvider(FingerPinchProvider);
 registerFingerProvider(FingerSwipeProvider);
 registerFingerProvider(FingerTapProvider);
 registerFingerProvider(FingerBasicProvider);
+registerFingerProvider(FingerShortcutProvider);

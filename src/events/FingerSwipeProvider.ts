@@ -3,8 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent } from "../core/FingerEvents";
 import { FingerOptions } from "../core/FingerOptions";
+import { FingerPointerEvent } from "../core/FingerPointerEvents";
 import { FingerProvider } from "../core/FingerProviders";
 
 const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = FingerOptions;
@@ -73,9 +73,9 @@ export const FingerSwipeProvider: FingerProvider = {
     })();
     if (!direction) return;
     const detail = { pointers, changedPointers, direction };
-    events.onSwipe?.(FingerEvent("onSwipe", pointer, detail));
+    events.onSwipe?.(FingerPointerEvent("onSwipe", pointer, detail));
     const eventName = swipeDirectionToEventNames[direction];
-    events[eventName]?.(FingerEvent(eventName, pointer, detail));
+    events[eventName]?.(FingerPointerEvent(eventName, pointer, detail));
   },
 
   handlePointerCancel: ({ context }) => {

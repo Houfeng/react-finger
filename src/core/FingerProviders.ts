@@ -3,30 +3,46 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerContext } from "./FingerContext";
-import { FingerEvents } from "./FingerEvents";
-import { HostPointerEvent } from "./FingerHostEvents";
+import { FingerKeyboardContext, FingerPointerContext } from "./FingerContext";
+import { HostKeyboardEvent, HostPointerEvent } from "./FingerHostEvents";
 
-export type FingerProviderParams = {
-  events: Partial<FingerEvents>;
-  context: FingerContext;
+import { FingerKeyboardEvents } from "./FingerKeyboardEvents";
+import { FingerPointerEvents } from "./FingerPointerEvents";
+
+export type FingerProviderPointerParams = {
+  events: Partial<FingerPointerEvents>;
+  context: FingerPointerContext;
   pointer: HostPointerEvent;
 };
 
-export type FingerProvideHandler = (params: FingerProviderParams) => void;
+export type FingerProviderPointerHandler = (
+  params: FingerProviderPointerParams
+) => void;
+
+export type FingerProviderKeyboardParams = {
+  events: Partial<FingerKeyboardEvents>;
+  context: FingerKeyboardContext;
+  event: HostKeyboardEvent;
+};
+
+export type FingerProviderKeyboardHandler = (
+  params: FingerProviderKeyboardParams
+) => void;
 
 export type FingerProvider<
   N extends string = string,
   E extends string = string
 > = Partial<{
-  handlePointerWillDown: FingerProvideHandler;
-  handlePointerDown: FingerProvideHandler;
-  handlePointerWillMove: FingerProvideHandler;
-  handlePointerMove: FingerProvideHandler;
-  handlePointerWillUp: FingerProvideHandler;
-  handlePointerUp: FingerProvideHandler;
-  handlePointerWillCancel: FingerProvideHandler;
-  handlePointerCancel: FingerProvideHandler;
+  handlePointerWillDown: FingerProviderPointerHandler;
+  handlePointerDown: FingerProviderPointerHandler;
+  handlePointerWillMove: FingerProviderPointerHandler;
+  handlePointerMove: FingerProviderPointerHandler;
+  handlePointerWillUp: FingerProviderPointerHandler;
+  handlePointerUp: FingerProviderPointerHandler;
+  handlePointerWillCancel: FingerProviderPointerHandler;
+  handlePointerCancel: FingerProviderPointerHandler;
+  handleKeyDown: FingerProviderKeyboardHandler;
+  handleKeyUp: FingerProviderKeyboardHandler;
 }> & { name: N; events: E[] };
 
 const providers = new Set<FingerProvider<string, string>>();
@@ -36,6 +52,7 @@ const eventNames = new Set([
   "onPointerMove",
   "onPointerUp",
   "onPointerCancel",
+  "onKeyDown",
 ]);
 
 export function registerFingerProvider(

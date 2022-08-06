@@ -5,8 +5,8 @@
 
 import { clearEventTimer, createEventTimer } from "../core/FingerEventTimer";
 
-import { FingerEvent } from "../core/FingerEvents";
 import { FingerOptions } from "../core/FingerOptions";
+import { FingerPointerEvent } from "../core/FingerPointerEvents";
 import { FingerProvider } from "../core/FingerProviders";
 import { calcDistance } from "../core/FingerUtils";
 
@@ -35,7 +35,7 @@ export const FingerTapProvider: FingerProvider = {
       HOLD_TIMER,
       createEventTimer(() => {
         flags.set(CANCELED, true);
-        events.onTapHold?.(FingerEvent("onTapHold", pointer, detail));
+        events.onTapHold?.(FingerPointerEvent("onTapHold", pointer, detail));
       }, holdDurationThreshold)
     );
   },
@@ -59,7 +59,7 @@ export const FingerTapProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
-    events.onTap?.(FingerEvent("onTap", pointer, detail));
+    events.onTap?.(FingerPointerEvent("onTap", pointer, detail));
     const prevTime = (flags.get(DBL_PREV_TIME) || 0) as number;
     if (
       !flags.get(DBL_WAIT_NEXT) ||
@@ -70,7 +70,9 @@ export const FingerTapProvider: FingerProvider = {
     } else {
       const prevTime = flags.get(DBL_PREV_TIME) as number;
       if (Date.now() - prevTime < dblIntervalThreshold) {
-        events.onDoubleTap?.(FingerEvent("onDoubleTap", pointer, detail));
+        events.onDoubleTap?.(
+          FingerPointerEvent("onDoubleTap", pointer, detail)
+        );
       }
       flags.set(DBL_WAIT_NEXT, false);
     }

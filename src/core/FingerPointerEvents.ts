@@ -7,30 +7,32 @@ import { FingerPointer } from "./FingerContext";
 import { HostPointerEvent } from "./FingerHostEvents";
 import { createEventWrapper } from "./FingerEventWrapper";
 
-export type FingerEventDetail<T> = {
+export type FingerPointerEventDetail<T> = {
   pointers: FingerPointer[];
   changedPointers: FingerPointer[];
 } & T;
 
-export type FingerEvent<
+export type FingerPointerEvent<
   T extends Element = Element,
   D extends object = {}
 > = HostPointerEvent<T> & {
   hostEvent: HostPointerEvent;
-  fingerType: keyof FingerEvents;
-  detail: FingerEventDetail<D>;
-} & FingerEventDetail<D>;
+  fingerType: keyof FingerPointerEvents;
+  detail: FingerPointerEventDetail<D>;
+} & FingerPointerEventDetail<D>;
 
-export type FingerEventListener<E extends FingerEvent> = (event: E) => void;
+export type FingerEventListener<E extends FingerPointerEvent> = (
+  event: E
+) => void;
 
-export type FingerSwipeEvent<T extends Element = Element> = FingerEvent<
+export type FingerSwipeEvent<T extends Element = Element> = FingerPointerEvent<
   T,
   {
     direction: "up" | "right" | "down" | "left";
   }
 >;
 
-export type FingerPinchEvent<T extends Element = Element> = FingerEvent<
+export type FingerPinchEvent<T extends Element = Element> = FingerPointerEvent<
   T,
   {
     centerX: number;
@@ -44,13 +46,16 @@ export type FingerPinchEvent<T extends Element = Element> = FingerEvent<
   }
 >;
 
-export type FingerTapEvent<T extends Element = Element> = FingerEvent<T, {}>;
+export type FingerTapEvent<T extends Element = Element> = FingerPointerEvent<
+  T,
+  {}
+>;
 
-export type FingerEvents<T extends Element = Element> = {
-  onFingerDown: FingerEventListener<FingerEvent<T>>;
-  onFingerMove: FingerEventListener<FingerEvent<T>>;
-  onFingerUp: FingerEventListener<FingerEvent<T>>;
-  onFingerCancel: FingerEventListener<FingerEvent<T>>;
+export type FingerPointerEvents<T extends Element = Element> = {
+  onFingerDown: FingerEventListener<FingerPointerEvent<T>>;
+  onFingerMove: FingerEventListener<FingerPointerEvent<T>>;
+  onFingerUp: FingerEventListener<FingerPointerEvent<T>>;
+  onFingerCancel: FingerEventListener<FingerPointerEvent<T>>;
   onTap: FingerEventListener<FingerTapEvent<T>>;
   onTapHold: FingerEventListener<FingerTapEvent<T>>;
   onDoubleTap: FingerEventListener<FingerTapEvent<T>>;
@@ -64,11 +69,14 @@ export type FingerEvents<T extends Element = Element> = {
   onPinchEnd: FingerEventListener<FingerPinchEvent<T>>;
 };
 
-export function FingerEvent<T extends Element, F extends keyof FingerEvents<T>>(
+export function FingerPointerEvent<
+  T extends Element,
+  F extends keyof FingerPointerEvents<T>
+>(
   fingerType: F,
   hostEvent: HostPointerEvent,
-  detail: Parameters<FingerEvents<T>[F]>[0]["detail"]
-): FingerEvent<T, Parameters<FingerEvents<T>[F]>[0]["detail"]> {
+  detail: Parameters<FingerPointerEvents<T>[F]>[0]["detail"]
+): FingerPointerEvent<T, Parameters<FingerPointerEvents<T>[F]>[0]["detail"]> {
   hostEvent.persist?.();
   const fingerEvent = createEventWrapper<any>(hostEvent, {
     ...detail,

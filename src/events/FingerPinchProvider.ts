@@ -3,7 +3,10 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent, FingerPinchEvent } from "../core/FingerEvents";
+import {
+  FingerPinchEvent,
+  FingerPointerEvent,
+} from "../core/FingerPointerEvents";
 import {
   PointerPointLike,
   calcCenter,
@@ -52,7 +55,9 @@ export const FingerPinchProvider: FingerProvider = {
         movementY: 0,
       };
       flags.set(DETAIL, detail);
-      events.onPinchStart?.(FingerEvent("onPinchStart", pointer, detail));
+      events.onPinchStart?.(
+        FingerPointerEvent("onPinchStart", pointer, detail)
+      );
       const target = pointer.target as HTMLElement | SVGElement;
       target.setPointerCapture?.(pointer.pointerId);
     }
@@ -92,7 +97,7 @@ export const FingerPinchProvider: FingerProvider = {
       rotate,
     };
     flags.set(DETAIL, detail);
-    events.onPinch?.(FingerEvent("onPinch", pointer, detail));
+    events.onPinch?.(FingerPointerEvent("onPinch", pointer, detail));
   },
 
   handlePointerWillUp: ({ events, context, pointer }) => {
@@ -101,7 +106,7 @@ export const FingerPinchProvider: FingerProvider = {
     if (pointers.length === 2 && flags.get(PINCHING)) {
       flags.set(PINCHING, false);
       const detail = flags.get(DETAIL) as FingerPinchEvent["detail"];
-      events.onPinchEnd?.(FingerEvent("onPinchEnd", pointer, detail));
+      events.onPinchEnd?.(FingerPointerEvent("onPinchEnd", pointer, detail));
     }
   },
 
@@ -111,7 +116,7 @@ export const FingerPinchProvider: FingerProvider = {
     if (pointers.length === 2 && flags.get(PINCHING)) {
       flags.set(PINCHING, false);
       const detail = flags.get(DETAIL) as FingerPinchEvent["detail"];
-      events.onPinchEnd?.(FingerEvent("onPinchEnd", pointer, detail));
+      events.onPinchEnd?.(FingerPointerEvent("onPinchEnd", pointer, detail));
     }
   },
 };

@@ -6,6 +6,12 @@
 import { HostPointerEvent } from "./FingerHostEvents";
 import { createEventWrapper } from "./FingerEventWrapper";
 
+export type FingerPointer = HostPointerEvent;
+
+function createFingerPointer(hostEvent: HostPointerEvent): FingerPointer {
+  return createEventWrapper(hostEvent);
+}
+
 export type FingerContext = {
   addPointer: (pointer: HostPointerEvent) => void;
   updatePointer: (pointer: HostPointerEvent) => void;
@@ -15,11 +21,8 @@ export type FingerContext = {
   flags: Map<symbol, unknown>;
 };
 
-export type FingerPointer = HostPointerEvent;
-
-function createFingerPointer(hostEvent: HostPointerEvent): FingerPointer {
-  return createEventWrapper(hostEvent);
-}
+export type FingerPointerContext = FingerContext;
+export type FingerKeyboardContext = Pick<FingerContext, "flags">;
 
 export function FingerContext(): FingerContext {
   const flags = new Map<symbol, unknown>();

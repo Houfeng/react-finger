@@ -3,7 +3,10 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { FingerEvent, FingerEventListener } from "../core/FingerEvents";
+import {
+  FingerEventListener,
+  FingerPointerEvent,
+} from "../core/FingerPointerEvents";
 import {
   Fragment,
   HTMLAttributes,
@@ -20,7 +23,7 @@ import {
 import { AnyFunction } from "../core/FingerUtils";
 import { EventEmitter } from "eify";
 import { FingerMixEvents } from "../core/FingerCompose";
-import { HostPointerEvents } from "../core/FingerHostEvents";
+import { HostEvents } from "../core/FingerHostEvents";
 import { useFingerEvents } from "./FingerHook";
 
 type FingerProxyEventTarget = {
@@ -62,6 +65,9 @@ const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
  * @returns JSX.Element
  */
 export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
+  // * 当使用 useFingerEvents 返回结果再作为属性用于 FingerProxy 时,
+  // * 在 Provider 中的 handle 方法看起来会进入两次，是因为经历了两次 compose
+  // * 在 FingerProxy 上直接使用事件，便不会两次。此外，进入两次并不会产生问题。
   const contextTarget = useContext(FingerProxyContext);
   const {
     target = contextTarget || (document as FingerProxyEventTarget),
@@ -90,30 +96,29 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
  * FingerProxyBoundaryEventTarget
  * @returns events & Proxy EventTarget
  */
-function FingerProxyBoundaryOwner(): [
-  HostPointerEvents,
-  FingerProxyEventTarget
-] {
-  const emitter = new EventEmitter<HostPointerEvents>();
-  const events: HostPointerEvents = {
+function FingerProxyBoundaryOwner(): [HostEvents, FingerProxyEventTarget] {
+  const emitter = new EventEmitter<HostEvents>();
+  const events: HostEvents = {
     onPointerDown: (event) => emitter.emit("onPointerDown", event),
     onPointerMove: (event) => emitter.emit("onPointerMove", event),
     onPointerUp: (event) => emitter.emit("onPointerUp", event),
     onPointerCancel: (event) => emitter.emit("onPointerCancel", event),
+    onKeyDown: (event) => emitter.emit("onKeyDown", event),
+    onKeyUp: (event) => emitter.emit("onKeyUp", event),
   };
   const addEventListener = (
-    name: keyof HostPointerEvents,
-    listener: FingerEventListener<FingerEvent>
+    name: keyof HostEvents,
+    listener: FingerEventListener<FingerPointerEvent>
   ) => emitter.addListener(name, listener);
   const removeEventListener = (
-    name: keyof HostPointerEvents,
-    listener: FingerEventListener<FingerEvent>
+    name: keyof HostEvents,
+    listener: FingerEventListener<FingerPointerEvent>
   ) => emitter.removeListener(name, listener);
   return [events, { addEventListener, removeEventListener }];
 }
 
 export type FingerProxyBoundaryProps = {
-  children: (events: HostPointerEvents) => ReactNode;
+  children: (events: HostEvents) => ReactNode;
 };
 
 /**
