@@ -27,7 +27,10 @@ export const FingerShortcutProvider: FingerProvider = {
     if (!flags.has(KEY_SET)) flags.set(KEY_SET, set);
     set.add(event.key.toLowerCase());
     const when: FingerShortcutEvent["detail"]["when"] = (keys, handler) => {
-      if (keys.length === set.size && keys.every((key) => set.has(key))) {
+      if (
+        keys.length === set.size &&
+        keys.every((key) => set.has(key.toLowerCase()))
+      ) {
         handler();
       }
     };
