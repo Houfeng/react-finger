@@ -25,7 +25,7 @@ const onShortcut = (event: FingerShortcutEvent) => {
     console.log('FingerProxy onShortcut', event.key);
   });
 };
-
+  
 export function App() {
 
   return (

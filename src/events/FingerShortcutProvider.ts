@@ -44,6 +44,10 @@ export const FingerShortcutProvider: FingerProvider = {
     const { flags } = context;
     if (!flags.has(KEY_SET)) return;
     flags.set(LAST_ACTION, "up");
-    (flags.get(KEY_SET) as Set<string>).delete(event.key.toLowerCase());
+    const set = flags.get(KEY_SET) as Set<string>;
+    set.delete(event.key.toLowerCase());
+    // 在 Mac 上，在 meta 按下时，其他键的的 keyup 不会触发，
+    // 所以 meta 弹起时清空之前所有按键
+    if (event.key === "Meta") set.clear();
   },
 };
