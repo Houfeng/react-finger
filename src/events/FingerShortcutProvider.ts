@@ -12,6 +12,11 @@ import { FingerProvider } from "../core/FingerProviders";
 
 const KEY_SET = Symbol();
 const LAST_ACTION = Symbol();
+const CONTROL_KEYS = ["control", "meta", "shift", "alt"];
+
+function isControlKey(key: string) {
+  return CONTROL_KEYS.includes(key);
+}
 
 export const FingerShortcutProvider: FingerProvider = {
   name: "Shortcut",
@@ -25,12 +30,19 @@ export const FingerShortcutProvider: FingerProvider = {
       ? (flags.get(KEY_SET) as Set<string>)
       : new Set<string>();
     if (!flags.has(KEY_SET)) flags.set(KEY_SET, set);
-    set.add(event.key.toLowerCase());
+    const currentKey = event.key.toLowerCase();
+    if (set.has("meta")) {
+      // 在 Mac 上，在 meta 按下时，其他非控制键的 keyup 不会触发，
+      // 所以 meta 如按下了，再其他键清楚所有不会触发 keyup 的普通键
+      Array.from(set).forEach((key) => !isControlKey(key) && set.delete(key));
+    }
+    set.add(currentKey);
     const when: FingerShortcutEvent["detail"]["when"] = (keys, handler) => {
       if (
         keys.length === set.size &&
         keys.every((key) => set.has(key.toLowerCase()))
       ) {
+        event.preventDefault();
         handler();
       }
     };
@@ -46,8 +58,5 @@ export const FingerShortcutProvider: FingerProvider = {
     flags.set(LAST_ACTION, "up");
     const set = flags.get(KEY_SET) as Set<string>;
     set.delete(event.key.toLowerCase());
-    // 在 Mac 上，在 meta 按下时，其他键的的 keyup 不会触发，
-    // 所以 meta 弹起时清空之前所有按键
-    if (event.key === "Meta") set.clear();
   },
 };
