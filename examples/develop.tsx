@@ -9,12 +9,12 @@ const FingeredDiv = Finger('div');
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
-  padding: 16,
+  padding: 16,  
   borderRadius: 8,
   width: 600,
   height: 500,
   backgroundColor: '#fff',
-  cursor: 'pointer'
+  cursor: 'pointer'   
 };
 
 const onShortcut = (event: FingerShortcutEvent) => {
