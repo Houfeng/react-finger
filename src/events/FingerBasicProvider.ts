@@ -15,6 +15,7 @@ export const FingerBasicProvider: FingerProvider = {
   events: ["onFingerDown", "onFingerMove", "onFingerUp", "onFingerCancel"],
 
   handlePointerDown: ({ events, context, pointer }) => {
+    context.flags.delete(LATEST_POS);
     if (!events.onFingerDown) return;
     const { getPointers, getChangedPointers } = context;
     const pointers = getPointers();
@@ -43,7 +44,6 @@ export const FingerBasicProvider: FingerProvider = {
       const detail = { pointers, changedPointers, movementX, movementY };
       events.onFingerMove(FingerPointerEvent("onFingerMove", pointer, detail));
       flags.set(LATEST_POS, { clientX, clientY });
-      console.log("=++++++++++", pointer.movementX, pointer.movementY);
     } else {
       const detail = { pointers, changedPointers };
       events.onFingerMove(FingerPointerEvent("onFingerMove", pointer, detail));
@@ -51,6 +51,7 @@ export const FingerBasicProvider: FingerProvider = {
   },
 
   handlePointerUp: ({ events, context, pointer }) => {
+    context.flags.delete(LATEST_POS);
     if (!events.onFingerUp) return;
     const { getPointers, getChangedPointers } = context;
     const pointers = getPointers();
@@ -60,6 +61,7 @@ export const FingerBasicProvider: FingerProvider = {
   },
 
   handlePointerCancel: ({ events, context, pointer }) => {
+    context.flags.delete(LATEST_POS);
     if (!events.onFingerCancel) return;
     const { getPointers, getChangedPointers } = context;
     const pointers = getPointers();
