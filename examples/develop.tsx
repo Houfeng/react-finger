@@ -14,8 +14,8 @@ const boxStyle: CSSProperties = {
   width: 600,
   height: 500,
   backgroundColor: '#fff',
-  cursor: 'pointer'  
-};
+  cursor: 'pointer'   
+};  
 
 const onShortcut = (event: FingerShortcutEvent) => {
   event.preventDefault();

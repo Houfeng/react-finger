@@ -3,9 +3,10 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import { PointerPointLike, isIOS } from "../core/FingerUtils";
+
 import { FingerPointerEvent } from "../core/FingerPointerEvents";
 import { FingerProvider } from "../core/FingerProviders";
-import { PointerPointLike } from "../core/FingerUtils";
 
 const LATEST_POS = Symbol();
 
@@ -27,7 +28,13 @@ export const FingerBasicProvider: FingerProvider = {
     const { getPointers, getChangedPointers, flags } = context;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
-    if (pointers.length === 1 && !pointer.movementX && !pointer.movementY) {
+    if (
+      isIOS &&
+      pointer.pointerType !== "mouse" &&
+      pointers.length === 1 &&
+      !pointer.movementX &&
+      !pointer.movementY
+    ) {
       // 让 ios 在上 pointerType !== 'mouse' 但仅单指时兼容 movementX/Y
       const { clientX, clientY } = pointer;
       const prev = (flags.get(LATEST_POS) || pointers[0]) as PointerPointLike;
@@ -36,6 +43,7 @@ export const FingerBasicProvider: FingerProvider = {
       const detail = { pointers, changedPointers, movementX, movementY };
       events.onFingerMove(FingerPointerEvent("onFingerMove", pointer, detail));
       flags.set(LATEST_POS, { clientX, clientY });
+      console.log("=++++++++++", pointer.movementX, pointer.movementY);
     } else {
       const detail = { pointers, changedPointers };
       events.onFingerMove(FingerPointerEvent("onFingerMove", pointer, detail));

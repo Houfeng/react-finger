@@ -45,3 +45,9 @@ export function calcRotate(
   const degrees = radians * (180 / Math.PI);
   return degrees;
 }
+
+export const isIPadPro =
+  navigator.platform.match("Mac") && (navigator.maxTouchPoints || 0) > 1;
+
+export const isIOS =
+  /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || isIPadPro;
