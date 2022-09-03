@@ -9,12 +9,12 @@ const FingeredDiv = Finger('div');
 
 const boxStyle: CSSProperties = {
   margin: 'auto',
-  padding: 16,  
+  padding: 16,
   borderRadius: 8,
   width: 600,
   height: 500,
   backgroundColor: '#fff',
-  cursor: 'pointer'   
+  cursor: 'pointer'  
 };
 
 const onShortcut = (event: FingerShortcutEvent) => {
@@ -32,7 +32,9 @@ export function App() {
 
   return (
     <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0}>
-      <FingerProxy onShortcut={onShortcut} />
+      <FingerProxy onShortcut={onShortcut} onFingerMove={(event) => {
+        console.log('onFingerMove movementX', event.movementX);
+      }} />
       <FingeredDiv onTap={(event) => console.log('onTap', event)}>
         Tap me
       </FingeredDiv >
