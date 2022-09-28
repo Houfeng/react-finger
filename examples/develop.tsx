@@ -14,9 +14,9 @@ const boxStyle: CSSProperties = {
   width: 600,
   height: 500,
   backgroundColor: '#fff',
-  cursor: 'pointer'   
-};  
- 
+  cursor: 'pointer'
+};
+
 const onShortcut = (event: FingerShortcutEvent) => {
   event.preventDefault();
   console.log('onShortcut', event.keys);
@@ -35,7 +35,10 @@ export function App() {
       <FingerProxy onShortcut={onShortcut} onFingerMove={(event) => {
         console.log('onFingerMove movementX', event.movementX);
       }} />
-      <FingeredDiv onTap={(event) => console.log('onTap', event)}>
+      <FingeredDiv
+        onTap={(event) => console.log('onTap', event)}
+        onDoubleTap={event => console.log('onDoubleTap', event)}
+      >
         Tap me
       </FingeredDiv >
     </FingerBoxWrapper>
