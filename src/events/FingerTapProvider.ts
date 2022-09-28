@@ -54,7 +54,7 @@ export const FingerTapProvider: FingerProvider = {
     }
   },
 
-  handlePointerUp: ({ events, context, pointer }) => {
+  handlePointerWillUp: ({ events, context, pointer }) => {
     const { flags, getPointers, getChangedPointers } = context;
     clearEventTimer(flags.get(HOLD_TIMER) as number);
     if (flags.get(CANCELED)) return;
