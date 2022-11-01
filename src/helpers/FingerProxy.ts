@@ -156,7 +156,7 @@ export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
     FingerProxyContainerProps<HTMLElementTagNameMap[T]>
   >(function FingerProxyContainerComponent(props, ref) {
     const { eventBoundary, ...others } = props;
-    if (eventBoundary) return createElement(type, { ...others, ref });
+    if (eventBoundary === false) return createElement(type, { ...others, ref });
     return createElement(FingerProxyBoundary, {
       children: (events) => createElement(type, { ...others, ...events, ref }),
     });
