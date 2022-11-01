@@ -140,7 +140,7 @@ export const FingerProxyBoundary = memo(function FingerProxyBoundary(
 });
 
 export type FingerProxyContainerProps<T extends Element = Element> =
-  HTMLAttributes<T> & { children?: ReactNode };
+  HTMLAttributes<T> & { children?: ReactNode; eventBoundary?: boolean };
 
 /**
  * 将一个原生 HTML 标签，转换为具备 FingerProxyBoundary 能力的高阶容器组件
@@ -155,8 +155,10 @@ export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
     HTMLElementTagNameMap[T],
     FingerProxyContainerProps<HTMLElementTagNameMap[T]>
   >(function FingerProxyContainerComponent(props, ref) {
+    const { eventBoundary, ...others } = props;
+    if (eventBoundary) return createElement(type, { ...others, ref });
     return createElement(FingerProxyBoundary, {
-      children: (events) => createElement(type, { ...props, ...events, ref }),
+      children: (events) => createElement(type, { ...others, ...events, ref }),
     });
   });
 }
