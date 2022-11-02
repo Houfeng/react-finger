@@ -27,5 +27,5 @@ export const FingerOptions = {
   /**
    * 双击 触发间隔阈值
    */
-  dblIntervalThreshold: 300,
+  dblIntervalThreshold: 500,
 };
