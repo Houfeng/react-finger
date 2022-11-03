@@ -18,6 +18,15 @@ function isControlKey(key: string) {
   return CONTROL_KEYS.includes(key);
 }
 
+function isMatch(keySet: Set<string>, keys: string[]) {
+  return (
+    keySet &&
+    keys &&
+    keys.length === keySet.size &&
+    keys.every((key) => keySet.has(key.toLowerCase()))
+  );
+}
+
 export const FingerShortcutProvider: FingerProvider = {
   name: "Shortcut",
   events: ["onShortcut"],
@@ -26,27 +35,23 @@ export const FingerShortcutProvider: FingerProvider = {
     const { flags } = context;
     if (!event.repeat) flags.set(LAST_ACTION, "down");
     if (flags.get(LAST_ACTION) === "up") return;
-    const set = flags.has(KEY_SET)
+    const keySet = flags.has(KEY_SET)
       ? (flags.get(KEY_SET) as Set<string>)
       : new Set<string>();
-    if (!flags.has(KEY_SET)) flags.set(KEY_SET, set);
+    if (!flags.has(KEY_SET)) flags.set(KEY_SET, keySet);
     const currentKey = event.key.toLowerCase();
-    if (set.has("meta")) {
+    if (keySet.has("meta")) {
       // 在 Mac 上，在 meta 按下时，其他非控制键的 keyup 不会触发，
       // 所以 meta 如按下了，再其他键清除所有「不会触发 keyup 的普通键」
-      Array.from(set).forEach((key) => !isControlKey(key) && set.delete(key));
+      Array.from(keySet).forEach(
+        (key) => !isControlKey(key) && keySet.delete(key)
+      );
     }
-    set.add(currentKey);
+    keySet.add(currentKey);
     const when: FingerShortcutEvent["detail"]["when"] = (keys, handler) => {
-      if (
-        keys.length === set.size &&
-        keys.every((key) => set.has(key.toLowerCase()))
-      ) {
-        event.preventDefault();
-        handler();
-      }
+      if (isMatch(keySet, keys)) handler(event);
     };
-    const keys = Array.from(set);
+    const keys = Array.from(keySet);
     const detail = { when, keys };
     const shortcutEvent = FingerKeyboardEvent("onShortcut", event, detail);
     events.onShortcut?.(shortcutEvent);

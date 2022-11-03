@@ -22,7 +22,10 @@ export type FingerShortcutEvent<T extends Element = Element> =
     T,
     {
       keys: string[];
-      when: (keys: string[], handler: () => void) => void;
+      when: (
+        keys: string[],
+        handler: (event?: HostKeyboardEvent<T>) => void
+      ) => void;
     }
   >;
 
