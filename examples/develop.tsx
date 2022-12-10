@@ -3,10 +3,11 @@ import React, { CSSProperties } from "react"
 
 import { FingerShortcutEvent } from '../src';
 import { createRoot } from "react-dom/client";
+// import styled from 'styled-components';
 
 const FingerBoxWrapper = FingerProxyContainer("div");
-const FingeredDiv = Finger('div');
-
+const FingeredDiv = (Finger('div'));
+ 
 const boxStyle: CSSProperties = {
   margin: 'auto',
   padding: 16,
@@ -41,6 +42,7 @@ export function App() {
       >
         Tap me
       </FingeredDiv >
+      <div>123</div>
     </FingerBoxWrapper>
   );
 }
