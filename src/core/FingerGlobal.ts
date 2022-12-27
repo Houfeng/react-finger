@@ -1,3 +1,8 @@
+/**
+ * @homepage https://github.com/Houfeng/react-finger
+ * @author Houfeng <houzhanfeng@gmail.com>
+ */
+
 import { clearAllEventTimers } from "./FingerEventTimer";
 import { FingerOptions } from "./FingerOptions";
 
