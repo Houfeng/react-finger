@@ -3,22 +3,22 @@ import React, { CSSProperties } from "react"
 
 import { FingerShortcutEvent } from '../src';
 import { createRoot } from "react-dom/client";
-// import styled from 'styled-components';
+// import styled from 'styled-components'; 
 
-const FingerBoxWrapper = FingerProxyContainer("div");
-const FingeredDiv = (Finger('div'));
- 
-const boxStyle: CSSProperties = {
+export const FingerBoxWrapper = FingerProxyContainer("div");
+export const FingeredDiv = (Finger('div'));
+
+export const boxStyle: CSSProperties = {
   margin: 'auto',
   padding: 16,
   borderRadius: 8,
   width: 600,
   height: 500,
   backgroundColor: '#fff',
-  cursor: 'pointer'
+  cursor: 'pointer',
 };
 
-const onShortcut = (event: FingerShortcutEvent) => {
+export const onShortcut = (event: FingerShortcutEvent) => {
   event.preventDefault();
   console.log('onShortcut', event.keys);
   event.when(["meta", "c"], () => {
@@ -32,7 +32,9 @@ const onShortcut = (event: FingerShortcutEvent) => {
 export function App() {
 
   return (
-    <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0}>
+    <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0} onPointerDown={(event) => {
+      console.log('onPointerDown', event.isPrimary);
+    }}>
       <FingerProxy onShortcut={onShortcut} onFingerMove={(event) => {
         console.log('onFingerMove movementX', event.movementX);
       }} />

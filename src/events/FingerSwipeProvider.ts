@@ -37,6 +37,7 @@ export const FingerSwipeProvider: FingerProvider = {
   ],
 
   handlePointerDown: ({ context, pointer }) => {
+    if (pointer.isPrimary) context.cleanFlags();
     const { flags, getPointers } = context;
     flags.set(CANCELED, getPointers().length > 1);
     flags.set(START_TIME, Date.now());

@@ -19,6 +19,9 @@ export type FingerContext = {
   getPointers: () => HostPointerEvent[];
   getChangedPointers: () => HostPointerEvent[];
   flags: Map<symbol, unknown>;
+  cleanPointers: () => void;
+  cleanFlags: () => void;
+  clean: () => void;
 };
 
 export type FingerPointerContext = FingerContext;
@@ -45,6 +48,15 @@ export function FingerContext(): FingerContext {
   const getChangedPointers = (): FingerPointer[] => {
     return Array.from(changedPointers.values());
   };
+  const cleanPointers = () => {
+    pointers.clear();
+    changedPointers.clear();
+  };
+  const cleanFlags = () => flags.clear();
+  const clean = () => {
+    cleanPointers();
+    cleanFlags();
+  };
   return {
     addPointer,
     updatePointer,
@@ -52,5 +64,8 @@ export function FingerContext(): FingerContext {
     getPointers,
     getChangedPointers,
     flags,
+    cleanPointers,
+    cleanFlags,
+    clean,
   };
 }

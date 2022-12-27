@@ -28,6 +28,7 @@ export const FingerPinchProvider: FingerProvider = {
   events: ["onPinchStart", "onPinch", "onPinchEnd"],
 
   handlePointerDown: ({ events, context, pointer }) => {
+    if (pointer.isPrimary) context.cleanFlags();
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();

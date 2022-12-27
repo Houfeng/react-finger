@@ -15,6 +15,7 @@ export const FingerBasicProvider: FingerProvider = {
   events: ["onFingerDown", "onFingerMove", "onFingerUp", "onFingerCancel"],
 
   handlePointerDown: ({ events, context, pointer }) => {
+    if (pointer.isPrimary) context.cleanFlags();
     context.flags.delete(LATEST_POS);
     if (!events.onFingerDown) return;
     const { getPointers, getChangedPointers } = context;

@@ -39,6 +39,7 @@ function createPointerDownListener(
   context: FingerPointerContext
 ): HostPointerEventListener {
   return (pointer: HostPointerEvent) => {
+    if (pointer.isPrimary) context.cleanPointers();
     events.onPointerDown?.(pointer);
     providers.forEach(
       (it) =>

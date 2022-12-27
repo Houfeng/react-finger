@@ -96,15 +96,38 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
  * FingerProxyBoundaryEventTarget
  * @returns events & Proxy EventTarget
  */
-function FingerProxyBoundaryOwner(): [HostEvents, FingerProxyEventTarget] {
+function FingerProxyBoundaryOwner(
+  props: Partial<HostEvents>
+): [HostEvents, FingerProxyEventTarget] {
+  if (!props) props = { ...props };
+  const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = props;
+  const { onKeyDown, onKeyUp } = props;
   const emitter = new EventEmitter<HostEvents>();
   const events: HostEvents = {
-    onPointerDown: (event) => emitter.emit("onPointerDown", event),
-    onPointerMove: (event) => emitter.emit("onPointerMove", event),
-    onPointerUp: (event) => emitter.emit("onPointerUp", event),
-    onPointerCancel: (event) => emitter.emit("onPointerCancel", event),
-    onKeyDown: (event) => emitter.emit("onKeyDown", event),
-    onKeyUp: (event) => emitter.emit("onKeyUp", event),
+    onPointerDown: (event) => {
+      if (onPointerDown) onPointerDown(event);
+      emitter.emit("onPointerDown", event);
+    },
+    onPointerMove: (event) => {
+      if (onPointerMove) onPointerMove(event);
+      emitter.emit("onPointerMove", event);
+    },
+    onPointerUp: (event) => {
+      if (onPointerUp) onPointerUp(event);
+      emitter.emit("onPointerUp", event);
+    },
+    onPointerCancel: (event) => {
+      if (onPointerCancel) onPointerCancel(event);
+      emitter.emit("onPointerCancel", event);
+    },
+    onKeyDown: (event) => {
+      if (onKeyDown) onKeyDown(event);
+      emitter.emit("onKeyDown", event);
+    },
+    onKeyUp: (event) => {
+      if (onKeyUp) onKeyUp(event);
+      emitter.emit("onKeyUp", event);
+    },
   };
   const addEventListener = (
     name: keyof HostEvents,
@@ -119,7 +142,7 @@ function FingerProxyBoundaryOwner(): [HostEvents, FingerProxyEventTarget] {
 
 export type FingerProxyBoundaryProps = {
   children: (events: HostEvents) => ReactNode;
-};
+} & Partial<HostEvents>;
 
 /**
  * 代理边界组件，能影响所有子组件中的 FingerProxy
@@ -131,8 +154,8 @@ export type FingerProxyBoundaryProps = {
 export const FingerProxyBoundary = memo(function FingerProxyBoundary(
   props: FingerProxyBoundaryProps
 ) {
-  const { children } = props;
-  const [events, target] = useMemo(() => FingerProxyBoundaryOwner(), []);
+  const { children, ...others } = props;
+  const [events, target] = useMemo(() => FingerProxyBoundaryOwner(others), []);
   return createElement(FingerProxyContext.Provider, {
     value: target,
     children: children(events),
@@ -158,6 +181,7 @@ export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
     const { eventBoundary, ...others } = props;
     if (eventBoundary === false) return createElement(type, { ...others, ref });
     return createElement(FingerProxyBoundary, {
+      ...others,
       children: (events) => createElement(type, { ...others, ...events, ref }),
     });
   });
