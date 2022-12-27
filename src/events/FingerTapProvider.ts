@@ -5,6 +5,7 @@
 
 import { FingerPointer } from "../core/FingerContext";
 import { clearEventTimer, createEventTimer } from "../core/FingerEventTimer";
+import { FingerGlobal } from "../core/FingerGlobal";
 
 import { FingerOptions } from "../core/FingerOptions";
 import { FingerPointerEvent } from "../core/FingerPointerEvents";
@@ -38,6 +39,7 @@ export const FingerTapProvider: FingerProvider = {
       HOLD_TIMER,
       createEventTimer(() => {
         context.clean();
+        if (FingerGlobal.primaryMoveDistance > tapMaxDistanceThreshold) return;
         flags.set(CANCELED, true);
         events.onTapHold?.(FingerPointerEvent("onTapHold", pointer, detail));
       }, holdDurationThreshold)
@@ -68,7 +70,9 @@ export const FingerTapProvider: FingerProvider = {
     const timeOut = Date.now() - prevTime > dblIntervalThreshold;
     const prevPointer = flags.get(DBL_PREV_POINTER) as FingerPointer;
     const dist = prevPointer && calcDistance(prevPointer, changedPointers[0]);
-    const distOut = dist && dist > tapMaxDistanceThreshold;
+    const distOut =
+      (dist && dist > tapMaxDistanceThreshold) ||
+      FingerGlobal.primaryMoveDistance > tapMaxDistanceThreshold;
     if (!flags.get(DBL_WAIT_NEXT) || timeOut || distOut) {
       flags.set(DBL_PREV_TIME, Date.now());
       flags.set(DBL_PREV_POINTER, changedPointers[0]);

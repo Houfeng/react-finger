@@ -22,7 +22,7 @@ export const FingerOptions = {
   /**
    * tap 最大距离阈值
    */
-  tapMaxDistanceThreshold: 5,
+  tapMaxDistanceThreshold: 10,
 
   /**
    * hold 触发时间阈值

@@ -5,21 +5,37 @@
 
 import { clearAllEventTimers } from "./FingerEventTimer";
 import { FingerOptions } from "./FingerOptions";
+import { calcDistance } from "./FingerUtils";
 
 export const FingerGlobal = {
   activePointersTotal: 0,
+  primaryStartPoint: { clientX: 0, clientY: 0 },
+  primaryEndPoint: { clientX: 0, clientY: 0 },
+  get primaryMoveDistance() {
+    const { primaryStartPoint, primaryEndPoint } = FingerGlobal;
+    return calcDistance(primaryStartPoint, primaryEndPoint);
+  },
 };
 
 function cleanGlobalEffects() {
   clearAllEventTimers();
 }
 
-function onPointerStart() {
+function onPointerStart(event: PointerEvent) {
   FingerGlobal.activePointersTotal++;
+  if (event.isPrimary) {
+    const { clientX, clientY } = event;
+    FingerGlobal.primaryStartPoint = { clientX, clientY };
+    FingerGlobal.primaryEndPoint = { clientX, clientY };
+  }
 }
 
-function onPointerEnd() {
+function onPointerEnd(event: PointerEvent) {
   FingerGlobal.activePointersTotal--;
+  if (event.isPrimary) {
+    const { clientX, clientY } = event;
+    FingerGlobal.primaryEndPoint = { clientX, clientY };
+  }
   if (FingerGlobal.activePointersTotal < 1) {
     setTimeout(cleanGlobalEffects, FingerOptions.cleanGlobalEffectsThreshold);
   }
