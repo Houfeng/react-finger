@@ -30,22 +30,33 @@ function onPointerStart(event: PointerEvent) {
   }
 }
 
+function onPointerMove(event: PointerEvent) {
+  if (event.isPrimary && FingerGlobal.activePointersTotal > 0) {
+    const { clientX, clientY } = event;
+    FingerGlobal.primaryEndPoint = { clientX, clientY };
+  }
+}
+
 function onPointerEnd(event: PointerEvent) {
-  FingerGlobal.activePointersTotal--;
   if (event.isPrimary) {
     const { clientX, clientY } = event;
     FingerGlobal.primaryEndPoint = { clientX, clientY };
   }
+  FingerGlobal.activePointersTotal--;
   if (FingerGlobal.activePointersTotal < 1) {
     setTimeout(cleanGlobalEffects, FingerOptions.cleanGlobalEffectsThreshold);
   }
 }
 
 export function bindFingerGlobalEvents() {
+  // unbind
   document.removeEventListener("pointerdown", onPointerStart, true);
+  document.removeEventListener("pointermove", onPointerMove, true);
   document.removeEventListener("pointerup", onPointerEnd, true);
   document.removeEventListener("pointercancel", onPointerEnd, true);
+  // bind
   document.addEventListener("pointerdown", onPointerStart, true);
+  document.addEventListener("pointermove", onPointerMove, true);
   document.addEventListener("pointerup", onPointerEnd, true);
   document.addEventListener("pointercancel", onPointerEnd, true);
 }
