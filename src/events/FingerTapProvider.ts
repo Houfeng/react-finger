@@ -38,8 +38,10 @@ export const FingerTapProvider: FingerProvider = {
     flags.set(
       HOLD_TIMER,
       createEventTimer(() => {
-        context.clean();
+        if (flags.get(CANCELED)) return;
+        if (FingerGlobal.activePointersTotal !== 1) return;
         if (FingerGlobal.primaryMoveDistance > tapMaxDistanceThreshold) return;
+        context.clean();
         flags.set(CANCELED, true);
         events.onTapHold?.(FingerPointerEvent("onTapHold", pointer, detail));
       }, holdDurationThreshold)
@@ -79,7 +81,6 @@ export const FingerTapProvider: FingerProvider = {
       flags.set(DBL_WAIT_NEXT, true);
     } else {
       if (!timeOut && !distOut) {
-        context.clean();
         events.onDoubleTap?.(
           FingerPointerEvent("onDoubleTap", pointer, detail)
         );
