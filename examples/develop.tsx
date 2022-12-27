@@ -30,16 +30,13 @@ export const onShortcut = (event: FingerShortcutEvent) => {
 };
 
 export function App() {
-
   return (
-    <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0} onPointerDown={(event) => {
-      console.log('onPointerDown', event.isPrimary);
-    }}>
+    <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0}>
       <FingerProxy onShortcut={onShortcut} onFingerMove={(event) => {
         console.log('onFingerMove movementX', event.movementX);
       }} />
       <FingeredDiv
-        onTap={(event) => console.log('onTap', event)}
+        onTapHold={(event) => console.log('onTapHold', event)}
         onDoubleTap={event => console.log('onDoubleTap', event)}
       >
         Tap me

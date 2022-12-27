@@ -5,6 +5,7 @@
 
 import { HostPointerEvent } from "./FingerHostEvents";
 import { createEventWrapper } from "./FingerEventWrapper";
+import { clearAllEventTimers } from "./FingerEventTimer";
 
 export type FingerPointer = HostPointerEvent;
 
@@ -19,6 +20,7 @@ export type FingerContext = {
   getPointers: () => HostPointerEvent[];
   getChangedPointers: () => HostPointerEvent[];
   flags: Map<symbol, unknown>;
+  cleanTimers: () => void;
   cleanPointers: () => void;
   cleanFlags: () => void;
   clean: () => void;
@@ -48,12 +50,14 @@ export function FingerContext(): FingerContext {
   const getChangedPointers = (): FingerPointer[] => {
     return Array.from(changedPointers.values());
   };
+  const cleanTimers = () => clearAllEventTimers();
   const cleanPointers = () => {
     pointers.clear();
     changedPointers.clear();
   };
   const cleanFlags = () => flags.clear();
   const clean = () => {
+    cleanTimers();
     cleanPointers();
     cleanFlags();
   };
@@ -64,6 +68,7 @@ export function FingerContext(): FingerContext {
     getPointers,
     getChangedPointers,
     flags,
+    cleanTimers,
     cleanPointers,
     cleanFlags,
     clean,

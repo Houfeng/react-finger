@@ -25,6 +25,7 @@ export const FingerTapProvider: FingerProvider = {
   events: ["onTap", "onTapHold", "onDoubleTap"],
 
   handlePointerDown: ({ events, context, pointer }) => {
+    if (pointer.isPrimary) context.cleanTimers();
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();

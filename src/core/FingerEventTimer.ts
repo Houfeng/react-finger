@@ -21,6 +21,6 @@ export function clearEventTimer(timer: Timer) {
   return eventTimerOwner.delete(timer);
 }
 
-export function clearAllEventTimer() {
+export function clearAllEventTimers() {
   Array.from(eventTimerOwner).forEach((timer) => clearEventTimer(timer));
 }

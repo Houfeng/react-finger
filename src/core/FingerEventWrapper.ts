@@ -5,7 +5,7 @@
 
 import { HostKeyboardEvent, HostPointerEvent } from "./FingerHostEvents";
 
-import { clearAllEventTimer } from "./FingerEventTimer";
+import { clearAllEventTimers } from "./FingerEventTimer";
 import { isFunction } from "./FingerUtils";
 
 /**
@@ -67,11 +67,11 @@ const POINTER_EVENT_KEYS = [
 
 const EventWrapperPrototype = {
   stopImmediatePropagation() {
-    clearAllEventTimer();
+    clearAllEventTimers();
     this.hostEvent?.stopImmediatePropagation?.();
   },
   stopPropagation() {
-    clearAllEventTimer();
+    clearAllEventTimers();
     this.hostEvent?.stopPropagation?.();
   },
 };
