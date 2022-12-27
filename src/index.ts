@@ -3,6 +3,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import "./core/FingerGlobal";
+
 import { registerFingerProvider } from "./core/FingerProviders";
 
 import { FingerPinchProvider } from "./events/FingerPinchProvider";
@@ -10,6 +12,8 @@ import { FingerBasicProvider } from "./events/FingerBasicProvider";
 import { FingerSwipeProvider } from "./events/FingerSwipeProvider";
 import { FingerTapProvider } from "./events/FingerTapProvider";
 import { FingerShortcutProvider } from "./events/FingerShortcutProvider";
+
+export { FingerGlobal, bindFingerGlobalEvents } from "./core/FingerGlobal";
 
 export {
   type HostPointerEvent,

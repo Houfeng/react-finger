@@ -5,6 +5,11 @@
 
 export const FingerOptions = {
   /**
+   * 清理全局副作用时间阈值
+   */
+  cleanGlobalEffectsThreshold: 100,
+
+  /**
    * swipe 最大时间阈值
    */
   swipeMaxDurationThreshold: 600,
