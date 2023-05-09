@@ -185,6 +185,15 @@ export type FingerProxyHTMLContainerProps<T extends HostElement = HostElement> =
 export type FingerProxySVGContainerProps<T extends HostElement = HostElement> =
   SVGAttributes<T> & { children?: ReactNode; eventBoundary?: boolean };
 
+const FingerProxyContainerCache = new Map<
+  string,
+  FingerForwardRefExoticComponent<
+    HostElement,
+    | FingerProxyHTMLContainerProps<HostElement>
+    | FingerProxySVGContainerProps<HostElement>
+  >
+>();
+
 /**
  * 将一个原生 HTML 标签，转换为具备 FingerProxyBoundary 能力的高阶容器组件
  *
@@ -206,7 +215,10 @@ export function FingerProxyContainer<T extends keyof SVGElementTagNameMap>(
 export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
   type: T
 ) {
-  return forwardRef<
+  if (FingerProxyContainerCache.has(type)) {
+    return FingerProxyContainerCache.get(type);
+  }
+  const FC = forwardRef<
     HTMLElementTagNameMap[T],
     FingerProxyHTMLContainerProps<HTMLElementTagNameMap[T]>
   >(function FingerProxyContainerComponent(props, ref) {
@@ -224,4 +236,6 @@ export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
       }
     );
   });
+  FingerProxyContainerCache.set(type, FC);
+  return FC;
 }

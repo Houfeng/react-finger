@@ -31,6 +31,14 @@ export type FingerSVGProps<T extends HostElement = HostElement> =
       children?: ReactNode;
     };
 
+const FingerCache = new Map<
+  string,
+  FingerForwardRefExoticComponent<
+    HostElement,
+    FingerHTMLProps<HostElement> | FingerSVGProps<HostElement>
+  >
+>();
+
 /**
  * 将一个原生 HTML 标签，转换为具备「手势事件」的高阶组件
  *
@@ -50,7 +58,8 @@ export function Finger<T extends keyof SVGElementTagNameMap>(
   FingerSVGProps<SVGElementTagNameMap[T]>
 >;
 export function Finger<T extends keyof HTMLElementTagNameMap>(type: T) {
-  return forwardRef<
+  if (FingerCache.has(type)) return FingerCache.get(type);
+  const FC = forwardRef<
     HTMLElementTagNameMap[T],
     FingerHTMLProps<HTMLElementTagNameMap[T]>
   >(function FingerComponent(props, ref) {
@@ -58,4 +67,6 @@ export function Finger<T extends keyof HTMLElementTagNameMap>(type: T) {
     const events = useFingerEvents(eventProps);
     return createElement(type, { ...otherProps, ...events, ref });
   });
+  FingerCache.set(type, FC);
+  return FC;
 }
