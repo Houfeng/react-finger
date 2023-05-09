@@ -3,27 +3,29 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-export type HostPointerEvent<T extends Element = Element> = Omit<
+export type HostElement = HTMLElement | SVGElement;
+
+export type HostPointerEvent<T extends HostElement = HostElement> = Omit<
   React.PointerEvent<T>,
   "detail"
->;
+> & { target: Pick<T, "setPointerCapture" | "releasePointerCapture"> };
 
 export type HostPointerEventLike = { pointerId: number };
 
-export type HostPointerEventListener<T extends Element = Element> = (
+export type HostPointerEventListener<T extends HostElement = HostElement> = (
   event: HostPointerEvent<T>
 ) => void;
 
-export type HostKeyboardEvent<T extends Element = Element> = Omit<
+export type HostKeyboardEvent<T extends HostElement = HostElement> = Omit<
   React.KeyboardEvent<T>,
   "detail"
 >;
 
-export type HostKeyboardEventListener<T extends Element = Element> = (
+export type HostKeyboardEventListener<T extends HostElement = HostElement> = (
   event: HostKeyboardEvent<T>
 ) => void;
 
-export type HostEvents<T extends Element = Element> = {
+export type HostEvents<T extends HostElement = HostElement> = {
   onPointerDown: HostPointerEventListener<T>;
   onPointerMove: HostPointerEventListener<T>;
   onPointerUp: HostPointerEventListener<T>;

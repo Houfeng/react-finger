@@ -10,6 +10,7 @@ import {
 } from "./FingerContext";
 import { FingerProvider, getAllFingerProviders } from "./FingerProviders";
 import {
+  HostElement,
   HostEvents,
   HostKeyboardEvent,
   HostKeyboardEventListener,
@@ -181,7 +182,7 @@ function createKeyUpListener(
  * @param events events 要绑定的手势事件 map
  * @returns 合成后的 pointer events
  */
-export function composeFingerEvents<T extends Element = Element>(
+export function composeFingerEvents<T extends HostElement = HostElement>(
   events: Partial<FingerMixEvents<T>>
 ): HostEvents<T> {
   // 一组合成事件的上下文对象

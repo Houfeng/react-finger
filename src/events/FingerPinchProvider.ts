@@ -59,8 +59,7 @@ export const FingerPinchProvider: FingerProvider = {
       events.onPinchStart?.(
         FingerPointerEvent("onPinchStart", pointer, detail)
       );
-      const target = pointer.target as HTMLElement | SVGElement;
-      target.setPointerCapture?.(pointer.pointerId);
+      pointer.target.setPointerCapture?.(pointer.pointerId);
     }
   },
 

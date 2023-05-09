@@ -8,9 +8,14 @@ import {
   FingerPointerEventListener,
 } from "../core/FingerPointerEvents";
 import {
+  ForwardRefExoticComponent,
   Fragment,
+  FunctionComponent,
   HTMLAttributes,
+  PropsWithoutRef,
   ReactNode,
+  RefAttributes,
+  SVGAttributes,
   createContext,
   createElement,
   forwardRef,
@@ -23,8 +28,9 @@ import {
 import { AnyFunction } from "../core/FingerUtils";
 import { EventEmitter } from "eify";
 import { FingerMixEvents } from "../core/FingerMixEvents";
-import { HostEvents } from "../core/FingerHostEvents";
+import { HostEvents, HostElement } from "../core/FingerHostEvents";
 import { useFingerEvents } from "./FingerHook";
+import { splitProps } from "./FingerHelperUtils";
 
 type FingerProxyEventTarget = {
   addEventListener: (
@@ -96,14 +102,14 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
  * FingerProxyBoundaryEventTarget
  * @returns events & Proxy EventTarget
  */
-function FingerProxyBoundaryOwner(
-  props: Partial<HostEvents>
-): [HostEvents, FingerProxyEventTarget] {
+function FingerProxyBoundaryOwner<T extends HostElement = HostElement>(
+  props: Partial<HostEvents<T>>
+): [HostEvents<T>, FingerProxyEventTarget] {
   if (!props) props = { ...props };
   const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = props;
   const { onKeyDown, onKeyUp } = props;
-  const emitter = new EventEmitter<HostEvents>();
-  const events: HostEvents = {
+  const emitter = new EventEmitter<HostEvents<T>>();
+  const events: HostEvents<T> = {
     onPointerDown: (event) => {
       if (onPointerDown) onPointerDown(event);
       emitter.emit("onPointerDown", event);
@@ -130,19 +136,19 @@ function FingerProxyBoundaryOwner(
     },
   };
   const addEventListener = (
-    name: keyof HostEvents,
-    listener: FingerPointerEventListener<FingerPointerEvent>
+    name: keyof HostEvents<T>,
+    listener: FingerPointerEventListener<FingerPointerEvent<T>>
   ) => emitter.addListener(name, listener);
   const removeEventListener = (
-    name: keyof HostEvents,
-    listener: FingerPointerEventListener<FingerPointerEvent>
+    name: keyof HostEvents<T>,
+    listener: FingerPointerEventListener<FingerPointerEvent<T>>
   ) => emitter.removeListener(name, listener);
   return [events, { addEventListener, removeEventListener }];
 }
 
-export type FingerProxyBoundaryProps = {
-  children: (events: HostEvents) => ReactNode;
-} & Partial<HostEvents>;
+export type FingerProxyBoundaryProps<T extends HostElement = HostElement> = {
+  children: (events: HostEvents<T>) => ReactNode;
+} & Partial<HostEvents<T>>;
 
 /**
  * 代理边界组件，能影响所有子组件中的 FingerProxy
@@ -151,19 +157,29 @@ export type FingerProxyBoundaryProps = {
  * @param props 属性
  * @returns JSX.Element
  */
-export const FingerProxyBoundary = memo(function FingerProxyBoundary(
-  props: FingerProxyBoundaryProps
-) {
+export const FingerProxyBoundary = memo(function FingerProxyBoundary<
+  T extends HostElement = HostElement
+>(props: FingerProxyBoundaryProps<T>) {
   const { children, ...others } = props;
-  const [events, target] = useMemo(() => FingerProxyBoundaryOwner(others), []);
+  const [events, target] = useMemo(
+    () => FingerProxyBoundaryOwner<T>(others),
+    []
+  );
   return createElement(FingerProxyContext.Provider, {
     value: target,
     children: children(events),
   });
 });
 
-export type FingerProxyContainerProps<T extends Element = Element> =
+export type FingerProxyHTMLContainerProps<T extends HostElement = HostElement> =
   HTMLAttributes<T> & { children?: ReactNode; eventBoundary?: boolean };
+
+export type FingerProxySVGContainerProps<T extends HostElement = HostElement> =
+  SVGAttributes<T> & { children?: ReactNode; eventBoundary?: boolean };
+
+type FingerForwardRefExoticComponent<T, P> = ForwardRefExoticComponent<
+  PropsWithoutRef<P> & RefAttributes<T>
+>;
 
 /**
  * 将一个原生 HTML 标签，转换为具备 FingerProxyBoundary 能力的高阶容器组件
@@ -173,16 +189,35 @@ export type FingerProxyContainerProps<T extends Element = Element> =
  */
 export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
   type: T
+): FingerForwardRefExoticComponent<
+  HTMLElementTagNameMap[T],
+  FingerProxyHTMLContainerProps<HTMLElementTagNameMap[T]>
+>;
+export function FingerProxyContainer<T extends keyof SVGElementTagNameMap>(
+  type: T
+): FingerForwardRefExoticComponent<
+  SVGElementTagNameMap[T],
+  FingerProxySVGContainerProps<SVGElementTagNameMap[T]>
+>;
+export function FingerProxyContainer<T extends keyof HTMLElementTagNameMap>(
+  type: T
 ) {
   return forwardRef<
     HTMLElementTagNameMap[T],
-    FingerProxyContainerProps<HTMLElementTagNameMap[T]>
+    FingerProxyHTMLContainerProps<HTMLElementTagNameMap[T]>
   >(function FingerProxyContainerComponent(props, ref) {
     const { eventBoundary, ...others } = props;
     if (eventBoundary === false) return createElement(type, { ...others, ref });
-    return createElement(FingerProxyBoundary, {
-      ...others,
-      children: (events) => createElement(type, { ...others, ...events, ref }),
-    });
+    const { eventProps } = splitProps(others);
+    return createElement(
+      FingerProxyBoundary as FunctionComponent<
+        FingerProxyBoundaryProps<HTMLElementTagNameMap[T]>
+      >,
+      {
+        ...eventProps,
+        children: (events) =>
+          createElement(type, { ...others, ...events, ref }),
+      }
+    );
   });
 }

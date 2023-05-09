@@ -42,8 +42,7 @@ export const FingerSwipeProvider: FingerProvider = {
     flags.set(CANCELED, getPointers().length > 1);
     flags.set(START_TIME, Date.now());
     if (!flags.get(CANCELED)) {
-      const target = pointer.target as HTMLElement | SVGElement;
-      target.setPointerCapture?.(pointer.pointerId);
+      pointer.target.setPointerCapture?.(pointer.pointerId);
     }
   },
 

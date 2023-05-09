@@ -5,6 +5,7 @@
 
 import { FingerMixEvents } from "../core/FingerMixEvents";
 import { composeFingerEvents } from "../core/FingerCompose";
+import { HostElement } from "../core/FingerHostEvents";
 
 /**
  * 通过「方法」创建可用于 element 的 events，通常用于类组件，
@@ -14,7 +15,7 @@ import { composeFingerEvents } from "../core/FingerCompose";
  * @param events 要绑定的手势事件 map
  * @returns 合成后的 pointer events，需要直接解构到一个元素的 props 上
  */
-export function createFingerEvents<T extends Element = Element>(
+export function createFingerEvents<T extends HostElement = HostElement>(
   events: Partial<FingerMixEvents<T>>
 ) {
   return composeFingerEvents(events);

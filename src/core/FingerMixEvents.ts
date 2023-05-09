@@ -5,8 +5,7 @@
 
 import { FingerKeyboardEvents } from "./FingerKeyboardEvents";
 import { FingerPointerEvents } from "./FingerPointerEvents";
-import { HostEvents } from "./FingerHostEvents";
+import { HostElement, HostEvents } from "./FingerHostEvents";
 
-export type FingerMixEvents<T extends Element = Element> = HostEvents<T> &
-  FingerPointerEvents<T> &
-  FingerKeyboardEvents;
+export type FingerMixEvents<T extends HostElement = HostElement> =
+  HostEvents<T> & FingerPointerEvents<T> & FingerKeyboardEvents<T>;
