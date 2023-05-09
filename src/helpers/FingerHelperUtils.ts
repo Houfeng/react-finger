@@ -3,8 +3,17 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+import {
+  ForwardRefExoticComponent,
+  PropsWithoutRef,
+  RefAttributes,
+} from "react";
 import { getAllEventNames } from "../core/FingerProviders";
 import { AnyFunction, isFunction } from "../core/FingerUtils";
+
+export type FingerForwardRefExoticComponent<T, P> = ForwardRefExoticComponent<
+  PropsWithoutRef<P> & RefAttributes<T>
+>;
 
 export function splitProps(props: Record<string, any>) {
   const eventNames = getAllEventNames();

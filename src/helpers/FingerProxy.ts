@@ -8,13 +8,10 @@ import {
   FingerPointerEventListener,
 } from "../core/FingerPointerEvents";
 import {
-  ForwardRefExoticComponent,
   Fragment,
   FunctionComponent,
   HTMLAttributes,
-  PropsWithoutRef,
   ReactNode,
-  RefAttributes,
   SVGAttributes,
   createContext,
   createElement,
@@ -30,7 +27,10 @@ import { EventEmitter } from "eify";
 import { FingerMixEvents } from "../core/FingerMixEvents";
 import { HostEvents, HostElement } from "../core/FingerHostEvents";
 import { useFingerEvents } from "./FingerHook";
-import { splitProps } from "./FingerHelperUtils";
+import {
+  FingerForwardRefExoticComponent,
+  splitProps,
+} from "./FingerHelperUtils";
 
 type FingerProxyEventTarget = {
   addEventListener: (
@@ -184,10 +184,6 @@ export type FingerProxyHTMLContainerProps<T extends HostElement = HostElement> =
 
 export type FingerProxySVGContainerProps<T extends HostElement = HostElement> =
   SVGAttributes<T> & { children?: ReactNode; eventBoundary?: boolean };
-
-type FingerForwardRefExoticComponent<T, P> = ForwardRefExoticComponent<
-  PropsWithoutRef<P> & RefAttributes<T>
->;
 
 /**
  * 将一个原生 HTML 标签，转换为具备 FingerProxyBoundary 能力的高阶容器组件

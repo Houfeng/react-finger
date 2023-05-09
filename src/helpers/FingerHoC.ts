@@ -9,15 +9,15 @@ import {
   ReactNode,
   createElement,
   forwardRef,
-  ForwardRefExoticComponent,
-  PropsWithoutRef,
-  RefAttributes,
 } from "react";
 
 import { FingerMixEvents } from "../core/FingerMixEvents";
 import { useFingerEvents } from "./FingerHook";
 import { HostElement } from "../core/FingerHostEvents";
-import { splitProps } from "./FingerHelperUtils";
+import {
+  FingerForwardRefExoticComponent,
+  splitProps,
+} from "./FingerHelperUtils";
 
 export type FingerHTMLProps<T extends HostElement = HostElement> =
   HTMLAttributes<T> &
@@ -30,10 +30,6 @@ export type FingerSVGProps<T extends HostElement = HostElement> =
     Partial<FingerMixEvents<T>> & {
       children?: ReactNode;
     };
-
-type FingerForwardRefExoticComponent<T, P> = ForwardRefExoticComponent<
-  PropsWithoutRef<P> & RefAttributes<T>
->;
 
 /**
  * 将一个原生 HTML 标签，转换为具备「手势事件」的高阶组件

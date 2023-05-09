@@ -16,11 +16,14 @@ import { FingerShortcutProvider } from "./events/FingerShortcutProvider";
 export { FingerGlobal, bindFingerGlobalEvents } from "./core/FingerGlobal";
 
 export {
+  type HostElement,
   type HostPointerEvent,
   type HostPointerEventLike,
   type HostPointerEventListener,
   type HostKeyboardEvent,
   type HostKeyboardEventListener,
+  type HostFocusEvent,
+  type HostFocusEventListener,
   type HostEvents,
 } from "./core/FingerHostEvents";
 
@@ -48,12 +51,24 @@ export { FingerOptions } from "./core/FingerOptions";
 
 export { createFingerEvents } from "./helpers/FingerFactory";
 export { useFingerEvents } from "./helpers/FingerHook";
-export { Finger } from "./helpers/FingerHoC";
+
+export {
+  Finger,
+  type FingerHTMLProps,
+  type FingerSVGProps,
+} from "./helpers/FingerHoC";
+
 export {
   FingerProxy,
+  type FingerProxyProps,
   FingerProxyBoundary,
+  type FingerProxyBoundaryProps,
   FingerProxyContainer,
+  type FingerProxyHTMLContainerProps,
+  type FingerProxySVGContainerProps,
 } from "./helpers/FingerProxy";
+
+export { type FingerForwardRefExoticComponent } from "./helpers/FingerHelperUtils";
 
 registerFingerProvider(FingerPinchProvider);
 registerFingerProvider(FingerSwipeProvider);
