@@ -37,16 +37,15 @@ export const FingerSwipeProvider: FingerProvider = {
   ],
 
   handlePointerDown: ({ context, pointer }) => {
+    pointer.target.setPointerCapture?.(pointer.pointerId);
     if (pointer.isPrimary) context.cleanFlags();
     const { flags, getPointers } = context;
     flags.set(CANCELED, getPointers().length > 1);
     flags.set(START_TIME, Date.now());
-    if (!flags.get(CANCELED)) {
-      pointer.target.setPointerCapture?.(pointer.pointerId);
-    }
   },
 
   handlePointerWillUp: ({ events, context, pointer }) => {
+    pointer.target.releasePointerCapture?.(pointer.pointerId);
     const { flags, getPointers, getChangedPointers } = context;
     const invalidTime =
       Date.now() - (flags.get(START_TIME) as number) >
@@ -78,7 +77,8 @@ export const FingerSwipeProvider: FingerProvider = {
     events[eventName]?.(FingerPointerEvent(eventName, pointer, detail));
   },
 
-  handlePointerCancel: ({ context }) => {
+  handlePointerCancel: ({ context, pointer }) => {
+    pointer.target.releasePointerCapture?.(pointer.pointerId);
     const { flags } = context;
     flags.set(CANCELED, true);
   },

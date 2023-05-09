@@ -34,6 +34,7 @@ export const FingerTapProvider: FingerProvider = {
     if (flags.get(CANCELED)) {
       return clearEventTimer(flags.get(HOLD_TIMER) as number);
     }
+    pointer.target.setPointerCapture?.(pointer.pointerId);
     const detail = { pointers, changedPointers };
     flags.set(
       HOLD_TIMER,
@@ -64,6 +65,7 @@ export const FingerTapProvider: FingerProvider = {
     const { flags, getPointers, getChangedPointers } = context;
     clearEventTimer(flags.get(HOLD_TIMER) as number);
     if (flags.get(CANCELED)) return;
+    pointer.target.releasePointerCapture?.(pointer.pointerId);
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     const detail = { pointers, changedPointers };
@@ -89,7 +91,8 @@ export const FingerTapProvider: FingerProvider = {
     }
   },
 
-  handlePointerCancel: ({ context }) => {
+  handlePointerCancel: ({ context, pointer }) => {
+    pointer.target.releasePointerCapture?.(pointer.pointerId);
     const { flags } = context;
     flags.set(CANCELED, true);
     clearEventTimer(flags.get(HOLD_TIMER) as number);

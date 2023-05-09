@@ -28,6 +28,7 @@ export const FingerPinchProvider: FingerProvider = {
   events: ["onPinchStart", "onPinch", "onPinchEnd"],
 
   handlePointerDown: ({ events, context, pointer }) => {
+    pointer.target.setPointerCapture?.(pointer.pointerId);
     if (pointer.isPrimary) context.cleanFlags();
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
@@ -59,7 +60,6 @@ export const FingerPinchProvider: FingerProvider = {
       events.onPinchStart?.(
         FingerPointerEvent("onPinchStart", pointer, detail)
       );
-      pointer.target.setPointerCapture?.(pointer.pointerId);
     }
   },
 
@@ -101,6 +101,7 @@ export const FingerPinchProvider: FingerProvider = {
   },
 
   handlePointerWillUp: ({ events, context, pointer }) => {
+    pointer.target.releasePointerCapture?.(pointer.pointerId);
     const { flags, getPointers } = context;
     const pointers = getPointers();
     if (pointers.length === 2 && flags.get(PINCHING)) {
@@ -111,6 +112,7 @@ export const FingerPinchProvider: FingerProvider = {
   },
 
   handlePointerWillCancel: ({ events, context, pointer }) => {
+    pointer.target.releasePointerCapture?.(pointer.pointerId);
     const { flags, getPointers } = context;
     const pointers = getPointers();
     if (pointers.length === 2 && flags.get(PINCHING)) {
