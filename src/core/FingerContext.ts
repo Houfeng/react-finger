@@ -28,6 +28,7 @@ export type FingerContext = {
 
 export type FingerPointerContext = FingerContext;
 export type FingerKeyboardContext = Pick<FingerContext, "flags">;
+export type FingerFocusContext = Pick<FingerContext, "flags">;
 
 export function FingerContext(): FingerContext {
   const flags = new Map<symbol, unknown>();

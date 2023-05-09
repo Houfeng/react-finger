@@ -4,7 +4,11 @@
  */
 
 import { FingerKeyboardContext, FingerPointerContext } from "./FingerContext";
-import { HostKeyboardEvent, HostPointerEvent } from "./FingerHostEvents";
+import {
+  HostFocusEvent,
+  HostKeyboardEvent,
+  HostPointerEvent,
+} from "./FingerHostEvents";
 
 import { FingerKeyboardEvents } from "./FingerKeyboardEvents";
 import { FingerPointerEvents } from "./FingerPointerEvents";
@@ -29,6 +33,16 @@ export type FingerProviderKeyboardHandler = (
   params: FingerProviderKeyboardParams
 ) => void;
 
+export type FingerProviderFocusParams = {
+  events: Partial<FingerKeyboardEvents>;
+  context: FingerKeyboardContext;
+  event: HostFocusEvent;
+};
+
+export type FingerProviderFocusHandler = (
+  params: FingerProviderFocusParams
+) => void;
+
 export type FingerProvider<
   N extends string = string,
   E extends string = string
@@ -43,6 +57,8 @@ export type FingerProvider<
   handlePointerCancel: FingerProviderPointerHandler;
   handleKeyDown: FingerProviderKeyboardHandler;
   handleKeyUp: FingerProviderKeyboardHandler;
+  handleFocus: FingerProviderFocusHandler;
+  handleBlur: FingerProviderFocusHandler;
 }> & { name: N; events: E[] };
 
 const providers = new Set<FingerProvider<string, string>>();
@@ -54,6 +70,8 @@ const eventNames = new Set([
   "onPointerCancel",
   "onKeyDown",
   "onKeyUp",
+  "onFocus",
+  "onBlur",
 ]);
 
 export function registerFingerProvider(

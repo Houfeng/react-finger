@@ -107,7 +107,7 @@ function FingerProxyBoundaryOwner<T extends HostElement = HostElement>(
 ): [HostEvents<T>, FingerProxyEventTarget] {
   if (!props) props = { ...props };
   const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = props;
-  const { onKeyDown, onKeyUp } = props;
+  const { onKeyDown, onKeyUp, onFocus, onBlur } = props;
   const emitter = new EventEmitter<HostEvents<T>>();
   const events: HostEvents<T> = {
     onPointerDown: (event) => {
@@ -133,6 +133,14 @@ function FingerProxyBoundaryOwner<T extends HostElement = HostElement>(
     onKeyUp: (event) => {
       if (onKeyUp) onKeyUp(event);
       emitter.emit("onKeyUp", event);
+    },
+    onFocus: (event) => {
+      if (onFocus) onFocus(event);
+      emitter.emit("onFocus", event);
+    },
+    onBlur: (event) => {
+      if (onBlur) onBlur(event);
+      emitter.emit("onBlur", event);
     },
   };
   const addEventListener = (

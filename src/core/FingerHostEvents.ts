@@ -25,6 +25,15 @@ export type HostKeyboardEventListener<T extends HostElement = HostElement> = (
   event: HostKeyboardEvent<T>
 ) => void;
 
+export type HostFocusEvent<T extends HostElement = HostElement> = Omit<
+  React.FocusEvent<T>,
+  "detail"
+>;
+
+export type HostFocusEventListener<T extends HostElement = HostElement> = (
+  event: HostFocusEvent<T>
+) => void;
+
 export type HostEvents<T extends HostElement = HostElement> = {
   onPointerDown: HostPointerEventListener<T>;
   onPointerMove: HostPointerEventListener<T>;
@@ -32,4 +41,6 @@ export type HostEvents<T extends HostElement = HostElement> = {
   onPointerCancel: HostPointerEventListener<T>;
   onKeyDown: HostKeyboardEventListener<T>;
   onKeyUp: HostKeyboardEventListener<T>;
+  onFocus: HostFocusEventListener<T>;
+  onBlur: HostFocusEventListener<T>;
 };

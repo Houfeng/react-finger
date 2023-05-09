@@ -5,6 +5,7 @@
 
 import {
   FingerContext,
+  FingerFocusContext,
   FingerKeyboardContext,
   FingerPointerContext,
 } from "./FingerContext";
@@ -12,6 +13,8 @@ import { FingerProvider, getAllFingerProviders } from "./FingerProviders";
 import {
   HostElement,
   HostEvents,
+  HostFocusEvent,
+  HostFocusEventListener,
   HostKeyboardEvent,
   HostKeyboardEventListener,
   HostPointerEvent,
@@ -176,6 +179,45 @@ function createKeyUpListener(
 }
 
 /**
+ * 创建包含合成处理逻辑的 focus Listener
+ * @param events
+ * @param context
+ * @returns
+ */
+function createFocusListener(
+  events: Partial<FingerMixEvents>,
+  context: FingerFocusContext
+): HostFocusEventListener {
+  return (event: HostFocusEvent) => {
+    events.onFocus?.(event);
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) &&
+        it.handleFocus?.({ events, context, event })
+    );
+  };
+}
+
+/**
+ * 创建包含合成处理逻辑的 blur Listener
+ * @param events
+ * @param context
+ * @returns
+ */
+function createBlurListener(
+  events: Partial<FingerMixEvents>,
+  context: FingerFocusContext
+): HostFocusEventListener {
+  return (event: HostFocusEvent) => {
+    events.onBlur?.(event);
+    providers.forEach(
+      (it) =>
+        shouldTrigger(it, events) && it.handleBlur?.({ events, context, event })
+    );
+  };
+}
+
+/**
  * 将一组手手势事件转换为可直接用 element 的 pointer events
  * 注意：上层应用通常不要直接使用此 API
  * @internal
@@ -193,6 +235,8 @@ export function composeFingerEvents<T extends HostElement = HostElement>(
   const onPointerCancel = createPointerCancelListener(events, context);
   const onKeyDown = createKeyDownListener(events, context);
   const onKeyUp = createKeyUpListener(events, context);
+  const onFocus = createFocusListener(events, context);
+  const onBlur = createBlurListener(events, context);
   return {
     onPointerDown,
     onPointerMove,
@@ -200,5 +244,7 @@ export function composeFingerEvents<T extends HostElement = HostElement>(
     onPointerCancel,
     onKeyDown,
     onKeyUp,
+    onFocus,
+    onBlur,
   };
 }

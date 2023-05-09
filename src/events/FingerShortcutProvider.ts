@@ -99,4 +99,10 @@ export const FingerShortcutProvider: FingerProvider = {
     ks.delete(event.key.toLowerCase());
     fixMacMetaKeyUp(ks, event);
   },
+
+  handleBlur: ({ context }) => {
+    const { flags } = context;
+    flags.delete(KEY_SET);
+    flags.delete(LAST_ACTION);
+  },
 };
