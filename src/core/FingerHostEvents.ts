@@ -8,7 +8,7 @@ export type HostElement = HTMLElement | SVGElement;
 export type HostPointerEvent<T extends HostElement = HostElement> = Omit<
   React.PointerEvent<T>,
   "detail"
-> & { target: Pick<T, "setPointerCapture" | "releasePointerCapture"> };
+> & { target: Partial<Pick<T, "setPointerCapture" | "releasePointerCapture">> };
 
 export type HostPointerEventLike = { pointerId: number };
 

@@ -1,6 +1,6 @@
 {
   "name": "react-finger",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "React Finger is a library of gesture events for React that allows developers to use a single set of events for both desktop and mobile devices.",
   "keywords": [
     "Gesture",
