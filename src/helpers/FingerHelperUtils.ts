@@ -9,7 +9,7 @@ import {
   RefAttributes,
 } from "react";
 import { getAllEventNames } from "../core/FingerProviders";
-import { AnyFunction, isFunction } from "../core/FingerUtils";
+import { AnyFunction } from "../core/FingerUtils";
 
 export type FingerForwardRefExoticComponent<T, P> = ForwardRefExoticComponent<
   PropsWithoutRef<P> & RefAttributes<T>
@@ -20,7 +20,7 @@ export function splitProps(props: Record<string, any>) {
   const eventProps: Record<string, AnyFunction> = {};
   const otherProps: Record<string, any> = {};
   Object.entries(props).forEach(([key, value]) => {
-    if (eventNames.has(key) && isFunction(value)) eventProps[key] = value;
+    if (eventNames.has(key)) eventProps[key] = value;
     else otherProps[key] = value;
   });
   return { eventProps, otherProps };
