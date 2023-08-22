@@ -12,6 +12,8 @@ const { swipeMinDistanceThreshold, swipeMaxDurationThreshold } = FingerOptions;
 const CANCELED = Symbol();
 const START_TIME = Symbol();
 
+const ALL_FLAGS = [CANCELED, START_TIME];
+
 type SwipeDirection = "up" | "down" | "left" | "right";
 type SwipeEventNames =
   | "onSwipeUp"
@@ -38,7 +40,7 @@ export const FingerSwipeProvider: FingerProvider = {
 
   handlePointerDown: ({ context, pointer }) => {
     pointer.target.setPointerCapture?.(pointer.pointerId);
-    if (pointer.isPrimary) context.cleanFlags();
+    if (pointer.isPrimary) context.cleanFlags(ALL_FLAGS);
     const { flags, getPointers } = context;
     flags.set(CANCELED, getPointers().length > 1);
     flags.set(START_TIME, Date.now());

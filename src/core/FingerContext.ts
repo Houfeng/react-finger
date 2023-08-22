@@ -22,7 +22,7 @@ export type FingerContext = {
   flags: Map<symbol, unknown>;
   cleanTimers: () => void;
   cleanPointers: () => void;
-  cleanFlags: () => void;
+  cleanFlags: (flags?: symbol[]) => void;
   clean: () => void;
 };
 
@@ -56,7 +56,10 @@ export function FingerContext(): FingerContext {
     pointers.clear();
     changedPointers.clear();
   };
-  const cleanFlags = () => flags.clear();
+  const cleanFlags = (flagKeys?: symbol[]) => {
+    if (!flagKeys || flagKeys.length < 1) return flags.clear();
+    flagKeys.forEach((key) => flags.delete(key));
+  };
   const clean = () => {
     cleanTimers();
     cleanPointers();

@@ -10,12 +10,14 @@ import { FingerProvider } from "../core/FingerProviders";
 
 const LATEST_POS = Symbol();
 
+const ALL_FLAGS = [LATEST_POS];
+
 export const FingerBasicProvider: FingerProvider = {
   name: "Basic",
   events: ["onFingerDown", "onFingerMove", "onFingerUp", "onFingerCancel"],
 
   handlePointerDown: ({ events, context, pointer }) => {
-    if (pointer.isPrimary) context.cleanFlags();
+    if (pointer.isPrimary) context.cleanFlags(ALL_FLAGS);
     context.flags.delete(LATEST_POS);
     if (!events.onFingerDown) return;
     const { getPointers, getChangedPointers } = context;

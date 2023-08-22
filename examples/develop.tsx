@@ -1,4 +1,4 @@
-import { Finger, FingerProxy, FingerProxyContainer, HostPointerEvent } from '../src';
+import { Finger, FingerProxy, FingerProxyContainer } from '../src';
 import React, { CSSProperties } from "react"
 
 import { FingerShortcutEvent } from '../src';
@@ -29,18 +29,16 @@ export const onShortcut = (event: FingerShortcutEvent) => {
   });
 };
 
-function onPointerDown(event: HostPointerEvent) {
-  console.log('event', event);
-}
-
 export function App() {
   return (
     <FingerBoxWrapper className='box' style={boxStyle} tabIndex={0}>
       <FingerProxy onShortcut={onShortcut} />
       <FingeredDiv
-        onTapHold={(event) => console.log('onTapHold', event)}
+        onTapHold={event => console.log('onTapHold', event)}
         onDoubleTap={event => console.log('onDoubleTap', event)}
-        onPointerDown={onPointerDown}
+        onFingerDown={event => console.log('onFingerDown', event)}
+        onPinch={event => console.log('onPinch', event)}
+        onPointerDown={event => console.log('onPointerDown', event)}
       >
         Tap me
       </FingeredDiv >

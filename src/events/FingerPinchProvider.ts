@@ -23,13 +23,22 @@ const ORIGIN_CENTER = Symbol();
 const LATEST_CENTER = Symbol();
 const ORIGIN_ROTATE = Symbol();
 
+const ALL_FLAGS = [
+  PINCHING,
+  DETAIL,
+  ORIGIN_DIST,
+  ORIGIN_CENTER,
+  LATEST_CENTER,
+  ORIGIN_ROTATE,
+];
+
 export const FingerPinchProvider: FingerProvider = {
   name: "Pinch",
   events: ["onPinchStart", "onPinch", "onPinchEnd"],
 
   handlePointerDown: ({ events, context, pointer }) => {
     pointer.target.setPointerCapture?.(pointer.pointerId);
-    if (pointer.isPrimary) context.cleanFlags();
+    if (pointer.isPrimary) context.cleanFlags(ALL_FLAGS);
     const { flags, getPointers, getChangedPointers } = context;
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
