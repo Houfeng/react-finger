@@ -12,7 +12,7 @@ dev:
       - rollup -w -c ./rollup.config.dev.js
   - name: server
     public: ./dist/
-    port: 6009
+    port: 9001
 
 build:
   - name: clean

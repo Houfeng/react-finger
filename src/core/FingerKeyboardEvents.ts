@@ -21,9 +21,9 @@ export type FingerShortcutEvent<T extends HostElement = HostElement> =
   FingerKeyboardEvent<
     T,
     {
-      keys: string[];
+      keys: Set<string>;
       when: (
-        keys: string[],
+        matchKeys: string[],
         handler: (event?: HostKeyboardEvent<T>) => void
       ) => void;
     }
