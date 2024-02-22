@@ -3,7 +3,7 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { PointerPointLike, isIOS } from "../core/FingerUtils";
+import { PointerPointLike } from "../core/FingerUtils";
 
 import { FingerPointerEvent } from "../core/FingerPointerEvents";
 import { FingerProvider } from "../core/FingerProviders";
@@ -33,11 +33,11 @@ export const FingerBasicProvider: FingerProvider = {
     const pointers = getPointers();
     const changedPointers = getChangedPointers();
     if (
-      isIOS &&
+      // isIOS &&
       pointer.pointerType !== "mouse" &&
-      pointers.length === 1 &&
-      !pointer.movementX &&
-      !pointer.movementY
+      pointers.length === 1
+      // !pointer.movementX &&
+      // !pointer.movementY
     ) {
       // 让 ios 在上 pointerType !== 'mouse' 但仅单指时兼容 movementX/Y
       const { clientX, clientY } = pointer;
