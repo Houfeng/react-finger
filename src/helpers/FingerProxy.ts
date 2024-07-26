@@ -76,7 +76,10 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   // * 在 FingerProxy 上直接使用事件，便不会两次。此外，进入两次并不会产生问题。
   const contextTarget = useContext(FingerProxyContext);
   const {
-    target = contextTarget || (document as FingerProxyEventTarget),
+    target = contextTarget ||
+      (typeof document !== "undefined"
+        ? (document as FingerProxyEventTarget)
+        : void 0),
     passive = true,
     ...others
   } = props;

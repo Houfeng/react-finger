@@ -49,6 +49,7 @@ function onPointerEnd(event: PointerEvent) {
 }
 
 export function bindFingerGlobalEvents() {
+  if (typeof document === "undefined") return;
   // unbind
   document.removeEventListener("pointerdown", onPointerStart, true);
   document.removeEventListener("pointermove", onPointerMove, true);

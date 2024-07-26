@@ -47,7 +47,11 @@ export function calcRotate(
 }
 
 export const isIPadPro =
-  navigator.platform.match("Mac") && (navigator.maxTouchPoints || 0) > 1;
+  typeof navigator !== "undefined" &&
+  navigator.platform?.match("Mac") &&
+  (navigator.maxTouchPoints || 0) > 1;
 
 export const isIOS =
-  /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || isIPadPro;
+  (typeof navigator !== "undefined" &&
+    /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) ||
+  isIPadPro;
