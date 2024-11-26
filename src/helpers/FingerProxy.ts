@@ -54,6 +54,19 @@ function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
 }
 
+const GlobalTarget = ((): FingerProxyEventTarget | undefined => {
+  if (typeof document === 'undefined') return;
+  const addEventListener = (e: string, f: AnyFunction, o: unknown) => {
+    const name = toNativeEventName(e);
+    document.addEventListener(name, f, o);
+  };
+  const removeEventListener = (e: string, f: AnyFunction, o: unknown) => {
+    const name = toNativeEventName(e);
+    document.removeEventListener(name, f, o);
+  };
+  return { addEventListener, removeEventListener };
+})();
+
 const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
 
 /**
@@ -75,25 +88,15 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   // * 在 Provider 中的 handle 方法看起来会进入两次，是因为经历了两次 compose
   // * 在 FingerProxy 上直接使用事件，便不会两次。此外，进入两次并不会产生问题。
   const contextTarget = useContext(FingerProxyContext);
-  const {
-    target = contextTarget ||
-      (typeof document !== "undefined"
-        ? (document as FingerProxyEventTarget)
-        : void 0),
-    passive = true,
-    ...others
-  } = props;
+  const { target = contextTarget || GlobalTarget, passive, ...others } = props;
   const events = useFingerEvents(others);
   useLayoutEffect(() => {
-    const isProxyBoundary = !!contextTarget;
     const eventEntries = Object.entries<AnyFunction>(events);
     eventEntries.forEach(([name, listener]) => {
-      name = isProxyBoundary ? name : toNativeEventName(name);
-      target.addEventListener(name, listener, { passive });
+      target.addEventListener(name, listener, { passive: passive ?? true });
     }, false);
     return () => {
       eventEntries.forEach(([name, listener]) => {
-        name = isProxyBoundary ? name : toNativeEventName(name);
         target.removeEventListener(name, listener);
       }, false);
     };
