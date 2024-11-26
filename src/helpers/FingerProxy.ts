@@ -22,7 +22,7 @@ import {
   useMemo,
 } from "react";
 
-import { AnyFunction } from "../core/FingerUtils";
+import { AnyFunction, isString } from "../core/FingerUtils";
 import { EventEmitter } from "eify";
 import { FingerMixEvents } from "../core/FingerMixEvents";
 import { HostEvents, HostElement } from "../core/FingerHostEvents";
@@ -33,6 +33,7 @@ import {
 } from "./FingerHelperUtils";
 
 type FingerProxyEventTarget = {
+  parent?: FingerProxyEventTarget;
   addEventListener: (
     name: string,
     listener: AnyFunction,
@@ -45,29 +46,44 @@ type FingerProxyEventTarget = {
   ) => void;
 };
 
-export type FingerProxyProps = Partial<FingerMixEvents> & {
-  target?: FingerProxyEventTarget;
-  passive?: boolean;
-};
-
 function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
 }
 
-const GlobalTarget = ((): FingerProxyEventTarget | undefined => {
-  if (typeof document === 'undefined') return;
+function createDOMTarget(node: EventTarget): FingerProxyEventTarget | undefined {
   const addEventListener = (e: string, f: AnyFunction, o: unknown) => {
     const name = toNativeEventName(e);
-    document.addEventListener(name, f, o);
+    node.addEventListener(name, f, o);
   };
   const removeEventListener = (e: string, f: AnyFunction, o: unknown) => {
     const name = toNativeEventName(e);
-    document.removeEventListener(name, f, o);
+    node.removeEventListener(name, f, o);
   };
   return { addEventListener, removeEventListener };
-})();
+}
+
+const GlobalTarget = typeof document !== 'undefined'
+  ? createDOMTarget(document) : void 0;
 
 const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
+
+export type FingerProxyProps = Partial<FingerMixEvents> & {
+  target?: FingerProxyEventTarget | "nearest" | "farthest";
+  passive?: boolean;
+};
+
+function useFingerProxyTarget(target: FingerProxyProps["target"]) {
+  target = target ?? "nearest";
+  let contextTarget = useContext(FingerProxyContext);
+  const domTarget = useMemo(() => {
+    return target instanceof EventTarget ? createDOMTarget(target) : void 0;
+  }, [target]);
+  if (domTarget) return domTarget;
+  if (target && !isString(target)) return target;
+  if (target === "nearest") return contextTarget || GlobalTarget;
+  while (contextTarget?.parent) contextTarget = contextTarget.parent;
+  return contextTarget || GlobalTarget;
+}
 
 /**
  * 手势事件代理组件，主要有两个能力
@@ -87,8 +103,8 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   // * 当使用 useFingerEvents 返回结果再作为属性用于 FingerProxy 时,
   // * 在 Provider 中的 handle 方法看起来会进入两次，是因为经历了两次 compose
   // * 在 FingerProxy 上直接使用事件，便不会两次。此外，进入两次并不会产生问题。
-  const contextTarget = useContext(FingerProxyContext);
-  const { target = contextTarget || GlobalTarget, passive, ...others } = props;
+  const { target: _target, passive, ...others } = props;
+  const target = useFingerProxyTarget(_target);
   const events = useFingerEvents(others);
   useLayoutEffect(() => {
     const eventEntries = Object.entries<AnyFunction>(events);
@@ -179,6 +195,7 @@ export const FingerProxyBoundary = memo(function FingerProxyBoundary<
     () => FingerProxyBoundaryOwner<T>(others),
     []
   );
+  target.parent = useContext(FingerProxyContext);
   return createElement(FingerProxyContext.Provider, {
     value: target,
     children: children(events),
