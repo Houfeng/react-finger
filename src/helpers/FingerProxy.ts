@@ -73,7 +73,7 @@ export type FingerProxyProps = Partial<FingerMixEvents> & {
 };
 
 function useFingerProxyTarget(target: FingerProxyProps["target"]) {
-  target = target ?? "nearest";
+  target = target || "nearest";
   let contextTarget = useContext(FingerProxyContext);
   const domTarget = useMemo(() => {
     return target instanceof EventTarget ? createDOMTarget(target) : void 0;
@@ -103,17 +103,17 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   // * 当使用 useFingerEvents 返回结果再作为属性用于 FingerProxy 时,
   // * 在 Provider 中的 handle 方法看起来会进入两次，是因为经历了两次 compose
   // * 在 FingerProxy 上直接使用事件，便不会两次。此外，进入两次并不会产生问题。
-  const { target: _target, passive, ...others } = props;
-  const target = useFingerProxyTarget(_target);
+  const { target = 'nearest', passive = true, ...others } = props;
+  const normalizeTarget = useFingerProxyTarget(target);
   const events = useFingerEvents(others);
   useLayoutEffect(() => {
     const eventEntries = Object.entries<AnyFunction>(events);
     eventEntries.forEach(([name, listener]) => {
-      target.addEventListener(name, listener, { passive: passive ?? true });
+      normalizeTarget.addEventListener(name, listener, { passive });
     }, false);
     return () => {
       eventEntries.forEach(([name, listener]) => {
-        target.removeEventListener(name, listener);
+        normalizeTarget.removeEventListener(name, listener);
       }, false);
     };
   }, Object.values(props));
