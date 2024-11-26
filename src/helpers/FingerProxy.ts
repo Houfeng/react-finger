@@ -50,7 +50,9 @@ function toNativeEventName(name: string) {
   return name.slice(2).toLocaleLowerCase();
 }
 
-function createDOMTarget(node: EventTarget): FingerProxyEventTarget | undefined {
+function createDOMTarget(
+  node: EventTarget
+): FingerProxyEventTarget | undefined {
   const addEventListener = (e: string, f: AnyFunction, o: unknown) => {
     const name = toNativeEventName(e);
     node.addEventListener(name, f, o);
@@ -62,8 +64,8 @@ function createDOMTarget(node: EventTarget): FingerProxyEventTarget | undefined 
   return { addEventListener, removeEventListener };
 }
 
-const GlobalTarget = typeof document !== 'undefined'
-  ? createDOMTarget(document) : void 0;
+const GlobalTarget =
+  typeof document !== "undefined" ? createDOMTarget(document) : void 0;
 
 const FingerProxyContext = createContext<FingerProxyEventTarget>(null);
 
@@ -103,7 +105,7 @@ export const FingerProxy = memo(function FingerProxy(props: FingerProxyProps) {
   // * 当使用 useFingerEvents 返回结果再作为属性用于 FingerProxy 时,
   // * 在 Provider 中的 handle 方法看起来会进入两次，是因为经历了两次 compose
   // * 在 FingerProxy 上直接使用事件，便不会两次。此外，进入两次并不会产生问题。
-  const { target = 'nearest', passive = true, ...others } = props;
+  const { target = "nearest", passive = true, ...others } = props;
   const normalizeTarget = useFingerProxyTarget(target);
   const events = useFingerEvents(others);
   useLayoutEffect(() => {
